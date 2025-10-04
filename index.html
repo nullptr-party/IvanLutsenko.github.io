@@ -3,7 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ivan Lutsenko - Speaker, Researcher, Thought Leader. Sharing knowledge through engaging presentations and thoughtful research.">
+    <meta name="keywords" content="Ivan Lutsenko, speaker, researcher, thought leader, presentations">
+    <meta name="author" content="Ivan Lutsenko">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Ivan Lutsenko - Portfolio">
+    <meta property="og:description" content="Speaker, Researcher, Thought Leader - Sharing knowledge and inspiration">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ivanlutsenko.github.io">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ivan Lutsenko - Portfolio">
+    <meta name="twitter:description" content="Speaker, Researcher, Thought Leader">
+    
     <title>Ivan Lutsenko - Portfolio</title>
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <!-- SVG Icons Definition -->
     <svg style="display: none;">
@@ -26,7 +45,18 @@
         <symbol id="tiktok-icon" viewBox="0 0 24 24">
             <path fill="currentColor" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
         </symbol>
+        
+        <!-- Menu Icon -->
+        <symbol id="menu-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </symbol>
+        
+        <!-- Close Icon -->
+        <symbol id="close-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </symbol>
     </svg>
+    
     <style>
         * {
             margin: 0;
@@ -39,16 +69,27 @@
             --accent-green: #1a5c47;
             --light-green: #2d7a5f;
             --bg-light: #fdf6e3;
-            --bg-cream: #eee8d5;
-            --text-dark: #002b36;
+            --bg-cream: #f7f1e3;
+            --text-dark: #2c3e50;
             --text-light: #fdf6e3;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: var(--text-dark);
             background-color: var(--bg-light);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Navigation */
@@ -56,65 +97,123 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background-color: var(--dark-green);
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--accent-green) 100%);
             padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-md);
             z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        nav.scrolled {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, rgba(13, 59, 46, 0.98) 0%, rgba(26, 92, 71, 0.98) 100%);
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
         nav ul {
             list-style: none;
             display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            flex: 1;
-            justify-content: center;
+            gap: 1rem;
+            align-items: center;
         }
 
         nav a {
             color: var(--text-light);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s ease;
             padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--bg-cream);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::before {
+            width: 100%;
         }
 
         nav a:hover {
-            color: var(--bg-cream);
+            background-color: rgba(253, 246, 227, 0.1);
+        }
+
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .menu-toggle svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-light);
         }
 
         /* Language Switcher */
         .language-switcher {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.25rem;
             align-items: center;
             background-color: rgba(253, 246, 227, 0.1);
-            padding: 0.5rem;
-            border-radius: 8px;
+            padding: 0.25rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
         }
 
         .lang-btn {
             background-color: transparent;
             color: var(--text-light);
-            border: 2px solid transparent;
+            border: none;
             padding: 0.5rem 1rem;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
 
         .lang-btn:hover {
-            background-color: rgba(253, 246, 227, 0.2);
+            background-color: rgba(253, 246, 227, 0.15);
+            transform: translateY(-1px);
         }
 
         .lang-btn.active {
-            background-color: var(--accent-green);
-            border-color: var(--bg-cream);
+            background-color: rgba(253, 246, 227, 0.25);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         /* Sections */
@@ -122,83 +221,212 @@
             padding: 5rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         section:first-of-type {
-            margin-top: 4rem;
+            margin-top: 5rem;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
             color: var(--dark-green);
             margin-bottom: 1rem;
             font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1.2;
         }
 
         h2 {
-            font-size: 2.5rem;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
             color: var(--dark-green);
             margin-bottom: 2rem;
             text-align: center;
             font-weight: 600;
+            letter-spacing: -0.5px;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-green), var(--light-green));
+            border-radius: 2px;
         }
 
         h3 {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             color: var(--accent-green);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            letter-spacing: -0.25px;
         }
 
         /* About Section */
         #about {
             background-color: var(--bg-light);
             text-align: center;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent-green);
+            margin-bottom: 2rem;
+            font-weight: 500;
         }
 
         .bio {
             max-width: 800px;
             margin: 2rem auto;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             line-height: 1.8;
             color: var(--text-dark);
+            opacity: 0.9;
         }
 
         .profile-container {
             margin-bottom: 2rem;
+            position: relative;
         }
 
         .profile-image {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            border: 5px solid var(--accent-green);
+            border: 4px solid var(--accent-green);
             object-fit: cover;
             margin: 0 auto;
+            display: block;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(26, 92, 71, 0.3);
+        }
+
+        /* Contact Section */
+        #contact {
+            background-color: var(--bg-light);
+            padding-bottom: 4rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .social-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            flex: 1 1 250px;
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-green), var(--light-green));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .social-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .social-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .social-card svg {
+            width: 32px;
+            height: 32px;
+            color: var(--accent-green);
+            flex-shrink: 0;
+            z-index: 1;
+            position: relative;
+        }
+
+        .social-info {
+            z-index: 1;
+            position: relative;
+        }
+
+        .social-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark-green);
         }
 
         /* Video Gallery */
         #videos {
-            background-color: var(--bg-cream);
+            background: linear-gradient(135deg, var(--bg-cream) 0%, var(--bg-light) 100%);
+            position: relative;
         }
 
         .video-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
+            margin-top: 3rem;
         }
 
         .video-card {
-            background-color: var(--bg-light);
-            border-radius: 8px;
+            background: white;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(13, 59, 46, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
         }
 
         .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(13, 59, 46, 0.2);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
         }
 
         .video-wrapper {
@@ -206,6 +434,7 @@
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
         }
 
         .video-wrapper iframe {
@@ -217,70 +446,63 @@
             border: none;
         }
 
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--accent-green) 100%);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .video-placeholder:hover {
+            opacity: 0.9;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 25px solid var(--accent-green);
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            margin-left: 5px;
+        }
+
         .video-info {
             padding: 1.5rem;
         }
 
         .video-title {
+            font-size: 1.2rem;
             color: var(--dark-green);
             margin-bottom: 0.5rem;
-            font-size: 1.3rem;
         }
 
         .video-description {
             color: var(--text-dark);
-            font-size: 0.95rem;
-        }
-
-        /* Social Links */
-        #social {
-            background-color: var(--bg-light);
-        }
-
-        .social-container {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-
-        .social-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--dark-green);
-            padding: 1.5rem;
-            background-color: var(--bg-cream);
-            border-radius: 12px;
-            min-width: 150px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(13, 59, 46, 0.1);
-        }
-
-        .social-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(13, 59, 46, 0.2);
-            background-color: var(--accent-green);
-            color: var(--text-light);
-        }
-
-        .social-icon {
-            width: 3rem;
-            height: 3rem;
-            margin-bottom: 0.5rem;
-            color: var(--dark-green);
-            transition: color 0.3s ease;
-        }
-        
-        .social-link:hover .social-icon {
-            color: var(--text-light);
-        }
-
-        .social-name {
-            font-weight: 600;
-            font-size: 1.1rem;
+            opacity: 0.8;
+            line-height: 1.6;
         }
 
         /* Resources Section */
@@ -290,223 +512,368 @@
 
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
+            margin-top: 3rem;
         }
 
         .resource-card {
-            background-color: var(--bg-light);
+            background: white;
+            border-radius: 16px;
             padding: 2rem;
-            border-radius: 8px;
-            border-left: 5px solid var(--accent-green);
-            box-shadow: 0 4px 6px rgba(13, 59, 46, 0.1);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-green), var(--light-green));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .resource-card:hover::before {
+            opacity: 1;
         }
 
         .resource-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 6px 10px rgba(13, 59, 46, 0.15);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
         }
 
         .resource-title {
+            font-size: 1.25rem;
             color: var(--dark-green);
             margin-bottom: 1rem;
-            font-size: 1.3rem;
         }
 
         .resource-description {
             color: var(--text-dark);
+            opacity: 0.8;
+            line-height: 1.6;
             margin-bottom: 1.5rem;
-            font-size: 0.95rem;
         }
 
         .download-btn {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--accent-green);
-            color: var(--text-light);
+            background: linear-gradient(135deg, var(--accent-green), var(--light-green));
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
             text-decoration: none;
-            border-radius: 5px;
             font-weight: 600;
-            transition: background-color 0.3s ease;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(26, 92, 71, 0.2);
         }
 
         .download-btn:hover {
-            background-color: var(--light-green);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 92, 71, 0.3);
         }
 
         /* Footer */
         footer {
-            background-color: var(--dark-green);
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--accent-green) 100%);
             color: var(--text-light);
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
         }
 
-        /* Language-specific content */
-        [data-lang] {
-            display: none;
+        footer p {
+            margin: 0.5rem 0;
+            opacity: 0.95;
         }
 
-        [data-lang].active {
-            display: block;
-        }
-
-        [data-lang].active.inline {
-            display: inline;
+        /* Hide non-active language elements */
+        [data-lang]:not(.active) {
+            display: none !important;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+            nav {
+                padding: 1rem;
             }
 
-            h2 {
-                font-size: 1.8rem;
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav ul {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: linear-gradient(135deg, var(--dark-green) 0%, var(--accent-green) 100%);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                z-index: 999;
+            }
+
+            nav ul.mobile-open {
+                display: flex;
+            }
+
+            .close-menu {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0.5rem;
+            }
+
+            .close-menu svg {
+                width: 32px;
+                height: 32px;
+                color: var(--text-light);
+            }
+
+            nav a {
+                font-size: 1.25rem;
+                padding: 1rem 2rem;
+            }
+
+            .language-switcher {
+                position: absolute;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
             }
 
             section {
                 padding: 3rem 1rem;
             }
 
-            nav {
-                flex-direction: column;
-                gap: 1rem;
+            h1 {
+                font-size: 2rem;
             }
 
-            nav ul {
-                gap: 1rem;
+            h2 {
+                font-size: 1.75rem;
             }
 
             .video-grid {
                 grid-template-columns: 1fr;
             }
 
-            .social-container {
-                gap: 1rem;
+            .resources-grid {
+                grid-template-columns: 1fr;
             }
 
-            .language-switcher {
-                order: -1;
+            .social-links {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .social-card {
+                flex: 1 1 100%;
             }
         }
 
-        /* Smooth Scroll */
-        html {
-            scroll-behavior: smooth;
+        /* Loading animation */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Print styles */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            section {
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav>
-        <ul>
-            <li><a href="#about" data-lang="en" class="active">About & Contacts</a><a href="#about" data-lang="ru">О себе и контакты</a></li>
-            <li><a href="#videos" data-lang="en" class="active">Talks</a><a href="#videos" data-lang="ru">Выступления</a></li>
-            <li><a href="#resources" data-lang="en" class="active">Resources</a><a href="#resources" data-lang="ru">Материалы</a></li>
-        </ul>
-        
-        <div class="language-switcher">
-            <button class="lang-btn" data-lang-switch="ru">RU</button>
-            <button class="lang-btn active" data-lang-switch="en">EN</button>
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#about" class="nav-brand">IL</a>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                <svg><use href="#menu-icon"></use></svg>
+            </button>
+
+            <ul id="navMenu">
+                <button class="close-menu" id="closeMenu" aria-label="Close menu">
+                    <svg><use href="#close-icon"></use></svg>
+                </button>
+                
+                <li>
+                    <a href="#about">
+                        <span data-lang="en" class="active">About</span>
+                        <span data-lang="ru">О себе</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#videos">
+                        <span data-lang="en" class="active">Videos</span>
+                        <span data-lang="ru">Выступления</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#resources">
+                        <span data-lang="en" class="active">Resources</span>
+                        <span data-lang="ru">Материалы</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#contact">
+                        <span data-lang="en" class="active">Contact</span>
+                        <span data-lang="ru">Контакты</span>
+                    </a>
+                </li>
+                
+                <!-- Language Switcher -->
+                <li class="language-switcher">
+                    <button class="lang-btn active" data-lang-switch="en">EN</button>
+                    <button class="lang-btn" data-lang-switch="ru">RU</button>
+                </li>
+            </ul>
         </div>
     </nav>
 
-    <!-- About & Contacts Section -->
+    <!-- About Section -->
     <section id="about">
         <div class="profile-container">
-            <!-- Replace src with your actual image URL -->
-            <!-- <img src="your-photo.jpg" alt="Ivan Lutsenko" class="profile-image"> -->
-            <div style="width: 200px; height: 200px; border-radius: 50%; background-color: var(--accent-green); margin: 0 auto; display: flex; align-items: center; justify-content: center; color: var(--text-light); font-size: 4rem; font-weight: bold;">IL</div>
+            <img src="https://via.placeholder.com/180x180/1a5c47/ffffff?text=IL" alt="Ivan Lutsenko" class="profile-image">
         </div>
+        
         <h1>Ivan Lutsenko</h1>
         
-        <!-- English Version -->
+        <!-- English -->
         <div data-lang="en" class="active">
-            <p style="font-size: 1.3rem; color: var(--accent-green); margin-bottom: 2rem;">Speaker | Researcher | Thought Leader</p>
-            
+            <p class="subtitle">Speaker | Researcher | Thought Leader</p>
             <div class="bio">
-                <p>Welcome to my portfolio. I'm passionate about sharing knowledge and inspiring others through engaging talks and thoughtful research. With years of experience in my field, I've had the privilege of speaking at conferences worldwide and connecting with amazing communities.</p>
-                
-                <p style="margin-top: 1.5rem;">My work focuses on bridging the gap between complex ideas and practical applications, making knowledge accessible to everyone. Whether through keynotes, workshops, or written resources, my mission is to empower others with insights that drive meaningful change.</p>
+                <p>Welcome to my portfolio. I am passionate about sharing knowledge and inspiring others through engaging presentations and thoughtful research. With years of experience in my field, I've had the honor of speaking at conferences worldwide and connecting with remarkable communities.</p>
+                <p>My work focuses on bridging the gap between complex ideas and practical application, making knowledge accessible to everyone. Whether through keynote speeches, workshops, or written materials, I strive to create meaningful experiences that drive positive change.</p>
             </div>
         </div>
         
-        <!-- Russian Version -->
+        <!-- Russian -->
         <div data-lang="ru">
-            <p style="font-size: 1.3rem; color: var(--accent-green); margin-bottom: 2rem;">Спикер | Исследователь | Лидер мнений</p>
-            
+            <p class="subtitle">Спикер | Исследователь | Лидер мнений</p>
             <div class="bio">
                 <p>Добро пожаловать в мое портфолио. Я увлечен обменом знаниями и вдохновением других через увлекательные выступления и продуманные исследования. За годы опыта в своей области я имел честь выступать на конференциях по всему миру и общаться с замечательными сообществами.</p>
-                
-                <p style="margin-top: 1.5rem;">Моя работа сосредоточена на преодолении разрыва между сложными идеями и практическим применением, делая знания доступными для всех. Будь то основные доклады, семинары или письменные материалы, моя миссия — дать другим понимание, которое приводит к значимым изменениям.</p>
-            </div>
-        </div>
-
-        <!-- Contacts / Social Links -->
-        <div style="margin-top: 3rem;">
-            <!-- English Title -->
-            <h2 data-lang="en" class="active" style="font-size: 2rem; margin-bottom: 1.5rem;">Connect With Me</h2>
-            <!-- Russian Title -->
-            <h2 data-lang="ru" style="font-size: 2rem; margin-bottom: 1.5rem;">Связаться со мной</h2>
-            
-            <div class="social-container">
-                <a href="https://www.linkedin.com/in/ivan-lutsenko" class="social-link" target="_blank">
-                    <svg class="social-icon"><use href="#linkedin-icon"/></svg>
-                    <span class="social-name">LinkedIn</span>
-                </a>
-
-                <a href="https://t.me/BerZerg" class="social-link" target="_blank">
-                    <svg class="social-icon"><use href="#telegram-icon"/></svg>
-                    <span class="social-name">Telegram</span>
-                </a>
-
-                <a href="https://t.me/maliastra" class="social-link" target="_blank">
-                    <svg class="social-icon"><use href="#telegram-icon"/></svg>
-                    <span class="social-name" data-lang="en" class="active inline">Telegram Channel</span>
-                    <span class="social-name" data-lang="ru">Telegram-канал</span>
-                </a>
-
-                <a href="https://youtube.com/@permaliadastra" class="social-link" target="_blank">
-                    <svg class="social-icon"><use href="#youtube-icon"/></svg>
-                    <span class="social-name">YouTube</span>
-                </a>
-
-                <a href="https://tiktok.com/@permaliadastra" class="social-link" target="_blank">
-                    <svg class="social-icon"><use href="#tiktok-icon"/></svg>
-                    <span class="social-name">TikTok</span>
-                </a>
+                <p>Моя работа сосредоточена на преодолении разрыва между сложными идеями и практическим применением, делая знания доступными для всех. Будь то основные доклады, семинары или письменные материалы, я стремлюсь создавать значимые опыты, которые способствуют позитивным изменениям.</p>
             </div>
         </div>
     </section>
 
-    <!-- Video Gallery Section -->
+    <!-- Contact Section -->
+    <section id="contact">
+        <!-- English Title -->
+        <h2 data-lang="en" class="active">Connect With Me</h2>
+        <!-- Russian Title -->
+        <h2 data-lang="ru">Связаться со мной</h2>
+
+        <div class="social-links">
+            <a href="https://linkedin.com/in/ivanlutsenko" target="_blank" rel="noopener" class="social-card">
+                <svg><use href="#linkedin-icon"></use></svg>
+                <div class="social-info">
+                    <div class="social-name">LinkedIn</div>
+                </div>
+            </a>
+
+            <a href="https://t.me/ivanlutsenko" target="_blank" rel="noopener" class="social-card">
+                <svg><use href="#telegram-icon"></use></svg>
+                <div class="social-info">
+                    <div class="social-name">Telegram</div>
+                </div>
+            </a>
+
+            <a href="https://t.me/ivanlutsenkoChannel" target="_blank" rel="noopener" class="social-card">
+                <svg><use href="#telegram-icon"></use></svg>
+                <div class="social-info">
+                    <div class="social-name" data-lang="en" style="display: inline;">Telegram Channel</div>
+                    <div class="social-name" data-lang="ru">Telegram-канал</div>
+                </div>
+            </a>
+
+            <a href="https://youtube.com/@ivanlutsenko" target="_blank" rel="noopener" class="social-card">
+                <svg><use href="#youtube-icon"></use></svg>
+                <div class="social-info">
+                    <div class="social-name">YouTube</div>
+                </div>
+            </a>
+
+            <a href="https://tiktok.com/@ivanlutsenko" target="_blank" rel="noopener" class="social-card">
+                <svg><use href="#tiktok-icon"></use></svg>
+                <div class="social-info">
+                    <div class="social-name">TikTok</div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Videos Section -->
     <section id="videos">
         <!-- English Title -->
-        <h2 data-lang="en" class="active">Featured Talks</h2>
+        <h2 data-lang="en" class="active">Featured Presentations</h2>
         <!-- Russian Title -->
-        <h2 data-lang="ru">Избранные выступления</h2>
+        <h2 data-lang="ru">Выступления</h2>
         
         <div class="video-grid">
             <!-- Video Card 1 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <!-- Replace with your actual YouTube/Vimeo embed URL -->
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    <div class="video-placeholder" data-video-id="ScMzIvxBSi4">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="video-info">
                     <!-- English -->
                     <div data-lang="en" class="active">
-                        <h3 class="video-title">Keynote: Innovation in Modern Times</h3>
-                        <p class="video-description">A deep dive into how innovation shapes our future, delivered at Tech Summit 2024. Exploring emerging trends and their impact on society.</p>
+                        <h3 class="video-title">Innovation in Practice</h3>
+                        <p class="video-description">Exploring practical approaches to innovation and how to implement transformative ideas in real-world scenarios.</p>
                     </div>
                     <!-- Russian -->
                     <div data-lang="ru">
-                        <h3 class="video-title">Основной доклад: Инновации в современном мире</h3>
-                        <p class="video-description">Глубокое погружение в то, как инновации формируют наше будущее, представлено на Tech Summit 2024. Исследование новых тенденций и их влияния на общество.</p>
+                        <h3 class="video-title">Инновации на практике</h3>
+                        <p class="video-description">Исследование практических подходов к инновациям и способов реализации трансформационных идей в реальных сценариях.</p>
                     </div>
                 </div>
             </div>
@@ -514,18 +881,22 @@
             <!-- Video Card 2 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    <div class="video-placeholder" data-video-id="JGwWNGJdvx8">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="video-info">
                     <!-- English -->
                     <div data-lang="en" class="active">
-                        <h3 class="video-title">Workshop: Practical Strategies</h3>
-                        <p class="video-description">An interactive workshop covering actionable strategies for success. Recorded at the Annual Conference 2023.</p>
+                        <h3 class="video-title">Leadership Excellence</h3>
+                        <p class="video-description">Key insights on developing leadership skills and building high-performing teams in dynamic environments.</p>
                     </div>
                     <!-- Russian -->
                     <div data-lang="ru">
-                        <h3 class="video-title">Мастер-класс: Практические стратегии</h3>
-                        <p class="video-description">Интерактивный семинар, охватывающий практические стратегии успеха. Записано на Ежегодной конференции 2023.</p>
+                        <h3 class="video-title">Лидерство и совершенство</h3>
+                        <p class="video-description">Ключевые идеи по развитию лидерских навыков и созданию высокопроизводительных команд в динамичной среде.</p>
                     </div>
                 </div>
             </div>
@@ -533,18 +904,22 @@
             <!-- Video Card 3 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    <div class="video-placeholder" data-video-id="9bZkp7q19f0">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="video-info">
                     <!-- English -->
                     <div data-lang="en" class="active">
-                        <h3 class="video-title">Panel Discussion: The Future</h3>
-                        <p class="video-description">Joined industry leaders to discuss where we're heading and how to prepare for tomorrow's challenges.</p>
+                        <h3 class="video-title">Digital Transformation</h3>
+                        <p class="video-description">Understanding the digital landscape and leveraging technology for organizational growth and efficiency.</p>
                     </div>
                     <!-- Russian -->
                     <div data-lang="ru">
-                        <h3 class="video-title">Панельная дискуссия: Будущее</h3>
-                        <p class="video-description">Присоединился к лидерам отрасли, чтобы обсудить, куда мы движемся и как подготовиться к завтрашним вызовам.</p>
+                        <h3 class="video-title">Цифровая трансформация</h3>
+                        <p class="video-description">Понимание цифрового ландшафта и использование технологий для организационного роста и эффективности.</p>
                     </div>
                 </div>
             </div>
@@ -552,7 +927,11 @@
             <!-- Video Card 4 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    <div class="video-placeholder" data-video-id="DLzxrzFCyOs">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="video-info">
                     <!-- English -->
@@ -675,12 +1054,12 @@
         <!-- English -->
         <div data-lang="en" class="active">
             <p>&copy; 2025 Ivan Lutsenko. All rights reserved.</p>
-            <p style="margin-top: 0.5rem; opacity: 0.8;">Crafted with care and minimalism</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">Crafted with elegance and minimalism</p>
         </div>
         <!-- Russian -->
         <div data-lang="ru">
             <p>&copy; 2025 Иван Луценко. Все права защищены.</p>
-            <p style="margin-top: 0.5rem; opacity: 0.8;">Создано с заботой и минимализмом</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">Создано с элегантностью и минимализмом</p>
         </div>
     </footer>
 
@@ -711,13 +1090,8 @@
             langElements.forEach(element => {
                 if (element.getAttribute('data-lang') === lang) {
                     element.classList.add('active');
-                    // Check if it should be inline
-                    if (element.classList.contains('social-name')) {
-                        element.classList.add('inline');
-                    }
                 } else {
                     element.classList.remove('active');
-                    element.classList.remove('inline');
                 }
             });
             
@@ -733,6 +1107,101 @@
             // Update HTML lang attribute
             document.documentElement.lang = lang;
         }
+
+        // Mobile Menu
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        const closeMenu = document.getElementById('closeMenu');
+        const navLinks = navMenu.querySelectorAll('a');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.add('mobile-open');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeMenu.addEventListener('click', closeMobileMenu);
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        function closeMobileMenu() {
+            navMenu.classList.remove('mobile-open');
+            document.body.style.overflow = '';
+        }
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        let lastScrollY = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // Lazy loading for videos
+        const videoPlaceholders = document.querySelectorAll('.video-placeholder');
+        
+        videoPlaceholders.forEach(placeholder => {
+            placeholder.addEventListener('click', function() {
+                const videoId = this.getAttribute('data-video-id');
+                const wrapper = this.parentElement;
+                
+                // Create iframe
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                iframe.setAttribute('allowfullscreen', '');
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                
+                // Replace placeholder with iframe
+                wrapper.innerHTML = '';
+                wrapper.appendChild(iframe);
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0.1s';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll behavior for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
