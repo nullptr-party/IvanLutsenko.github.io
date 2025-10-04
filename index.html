@@ -3,7 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name - Portfolio</title>
+    <title>Ivan Lutsenko - Portfolio</title>
+    
+    <!-- SVG Icons Definition -->
+    <svg style="display: none;">
+        <!-- LinkedIn Logo -->
+        <symbol id="linkedin-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </symbol>
+        
+        <!-- Telegram Logo -->
+        <symbol id="telegram-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+        </symbol>
+        
+        <!-- YouTube Logo -->
+        <symbol id="youtube-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </symbol>
+        
+        <!-- TikTok Logo -->
+        <symbol id="tiktok-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+        </symbol>
+    </svg>
     <style>
         * {
             margin: 0;
@@ -37,14 +60,18 @@
             padding: 1rem 2rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            justify-content: center;
             gap: 2rem;
             flex-wrap: wrap;
+            flex: 1;
+            justify-content: center;
         }
 
         nav a {
@@ -57,6 +84,37 @@
 
         nav a:hover {
             color: var(--bg-cream);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            background-color: rgba(253, 246, 227, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .lang-btn {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid transparent;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .lang-btn:hover {
+            background-color: rgba(253, 246, 227, 0.2);
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent-green);
+            border-color: var(--bg-cream);
         }
 
         /* Sections */
@@ -209,8 +267,15 @@
         }
 
         .social-icon {
-            font-size: 3rem;
+            width: 3rem;
+            height: 3rem;
             margin-bottom: 0.5rem;
+            color: var(--dark-green);
+            transition: color 0.3s ease;
+        }
+        
+        .social-link:hover .social-icon {
+            color: var(--text-light);
         }
 
         .social-name {
@@ -220,7 +285,7 @@
 
         /* Resources Section */
         #resources {
-            background-color: var(--bg-cream);
+            background-color: var(--bg-light);
         }
 
         .resources-grid {
@@ -280,6 +345,19 @@
             margin-top: 3rem;
         }
 
+        /* Language-specific content */
+        [data-lang] {
+            display: none;
+        }
+
+        [data-lang].active {
+            display: block;
+        }
+
+        [data-lang].active.inline {
+            display: inline;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             h1 {
@@ -294,6 +372,11 @@
                 padding: 3rem 1rem;
             }
 
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
             nav ul {
                 gap: 1rem;
             }
@@ -304,6 +387,10 @@
 
             .social-container {
                 gap: 1rem;
+            }
+
+            .language-switcher {
+                order: -1;
             }
         }
 
@@ -317,33 +404,91 @@
     <!-- Navigation -->
     <nav>
         <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#videos">Talks</a></li>
-            <li><a href="#social">Connect</a></li>
-            <li><a href="#resources">Resources</a></li>
+            <li><a href="#about" data-lang="en" class="active">About & Contacts</a><a href="#about" data-lang="ru">О себе и контакты</a></li>
+            <li><a href="#videos" data-lang="en" class="active">Talks</a><a href="#videos" data-lang="ru">Выступления</a></li>
+            <li><a href="#resources" data-lang="en" class="active">Resources</a><a href="#resources" data-lang="ru">Материалы</a></li>
         </ul>
+        
+        <div class="language-switcher">
+            <button class="lang-btn" data-lang-switch="ru">RU</button>
+            <button class="lang-btn active" data-lang-switch="en">EN</button>
+        </div>
     </nav>
 
-    <!-- About Section -->
+    <!-- About & Contacts Section -->
     <section id="about">
         <div class="profile-container">
             <!-- Replace src with your actual image URL -->
-            <!-- <img src="your-photo.jpg" alt="Your Name" class="profile-image"> -->
-            <div style="width: 200px; height: 200px; border-radius: 50%; background-color: var(--accent-green); margin: 0 auto; display: flex; align-items: center; justify-content: center; color: var(--text-light); font-size: 4rem; font-weight: bold;">YN</div>
+            <!-- <img src="your-photo.jpg" alt="Ivan Lutsenko" class="profile-image"> -->
+            <div style="width: 200px; height: 200px; border-radius: 50%; background-color: var(--accent-green); margin: 0 auto; display: flex; align-items: center; justify-content: center; color: var(--text-light); font-size: 4rem; font-weight: bold;">IL</div>
         </div>
-        <h1>Your Name</h1>
-        <p style="font-size: 1.3rem; color: var(--accent-green); margin-bottom: 2rem;">Speaker | Researcher | Thought Leader</p>
+        <h1>Ivan Lutsenko</h1>
         
-        <div class="bio">
-            <p>Welcome to my portfolio. I'm passionate about sharing knowledge and inspiring others through engaging talks and thoughtful research. With years of experience in my field, I've had the privilege of speaking at conferences worldwide and connecting with amazing communities.</p>
+        <!-- English Version -->
+        <div data-lang="en" class="active">
+            <p style="font-size: 1.3rem; color: var(--accent-green); margin-bottom: 2rem;">Speaker | Researcher | Thought Leader</p>
             
-            <p style="margin-top: 1.5rem;">My work focuses on bridging the gap between complex ideas and practical applications, making knowledge accessible to everyone. Whether through keynotes, workshops, or written resources, my mission is to empower others with insights that drive meaningful change.</p>
+            <div class="bio">
+                <p>Welcome to my portfolio. I'm passionate about sharing knowledge and inspiring others through engaging talks and thoughtful research. With years of experience in my field, I've had the privilege of speaking at conferences worldwide and connecting with amazing communities.</p>
+                
+                <p style="margin-top: 1.5rem;">My work focuses on bridging the gap between complex ideas and practical applications, making knowledge accessible to everyone. Whether through keynotes, workshops, or written resources, my mission is to empower others with insights that drive meaningful change.</p>
+            </div>
+        </div>
+        
+        <!-- Russian Version -->
+        <div data-lang="ru">
+            <p style="font-size: 1.3rem; color: var(--accent-green); margin-bottom: 2rem;">Спикер | Исследователь | Лидер мнений</p>
+            
+            <div class="bio">
+                <p>Добро пожаловать в мое портфолио. Я увлечен обменом знаниями и вдохновением других через увлекательные выступления и продуманные исследования. За годы опыта в своей области я имел честь выступать на конференциях по всему миру и общаться с замечательными сообществами.</p>
+                
+                <p style="margin-top: 1.5rem;">Моя работа сосредоточена на преодолении разрыва между сложными идеями и практическим применением, делая знания доступными для всех. Будь то основные доклады, семинары или письменные материалы, моя миссия — дать другим понимание, которое приводит к значимым изменениям.</p>
+            </div>
+        </div>
+
+        <!-- Contacts / Social Links -->
+        <div style="margin-top: 3rem;">
+            <!-- English Title -->
+            <h2 data-lang="en" class="active" style="font-size: 2rem; margin-bottom: 1.5rem;">Connect With Me</h2>
+            <!-- Russian Title -->
+            <h2 data-lang="ru" style="font-size: 2rem; margin-bottom: 1.5rem;">Связаться со мной</h2>
+            
+            <div class="social-container">
+                <a href="https://www.linkedin.com/in/ivan-lutsenko" class="social-link" target="_blank">
+                    <svg class="social-icon"><use href="#linkedin-icon"/></svg>
+                    <span class="social-name">LinkedIn</span>
+                </a>
+
+                <a href="https://t.me/BerZerg" class="social-link" target="_blank">
+                    <svg class="social-icon"><use href="#telegram-icon"/></svg>
+                    <span class="social-name">Telegram</span>
+                </a>
+
+                <a href="https://t.me/maliastra" class="social-link" target="_blank">
+                    <svg class="social-icon"><use href="#telegram-icon"/></svg>
+                    <span class="social-name" data-lang="en" class="active inline">Telegram Channel</span>
+                    <span class="social-name" data-lang="ru">Telegram-канал</span>
+                </a>
+
+                <a href="https://youtube.com/@permaliadastra" class="social-link" target="_blank">
+                    <svg class="social-icon"><use href="#youtube-icon"/></svg>
+                    <span class="social-name">YouTube</span>
+                </a>
+
+                <a href="https://tiktok.com/@permaliadastra" class="social-link" target="_blank">
+                    <svg class="social-icon"><use href="#tiktok-icon"/></svg>
+                    <span class="social-name">TikTok</span>
+                </a>
+            </div>
         </div>
     </section>
 
     <!-- Video Gallery Section -->
     <section id="videos">
-        <h2>Featured Talks</h2>
+        <!-- English Title -->
+        <h2 data-lang="en" class="active">Featured Talks</h2>
+        <!-- Russian Title -->
+        <h2 data-lang="ru">Избранные выступления</h2>
         
         <div class="video-grid">
             <!-- Video Card 1 -->
@@ -353,133 +498,241 @@
                     <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
                 </div>
                 <div class="video-info">
-                    <h3 class="video-title">Keynote: Innovation in Modern Times</h3>
-                    <p class="video-description">A deep dive into how innovation shapes our future, delivered at Tech Summit 2024. Exploring emerging trends and their impact on society.</p>
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">Keynote: Innovation in Modern Times</h3>
+                        <p class="video-description">A deep dive into how innovation shapes our future, delivered at Tech Summit 2024. Exploring emerging trends and their impact on society.</p>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">Основной доклад: Инновации в современном мире</h3>
+                        <p class="video-description">Глубокое погружение в то, как инновации формируют наше будущее, представлено на Tech Summit 2024. Исследование новых тенденций и их влияния на общество.</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Video Card 2 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <!-- Replace with your actual YouTube/Vimeo embed URL -->
                     <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
                 </div>
                 <div class="video-info">
-                    <h3 class="video-title">Workshop: Practical Strategies</h3>
-                    <p class="video-description">An interactive workshop covering actionable strategies for success. Recorded at the Annual Conference 2023.</p>
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">Workshop: Practical Strategies</h3>
+                        <p class="video-description">An interactive workshop covering actionable strategies for success. Recorded at the Annual Conference 2023.</p>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">Мастер-класс: Практические стратегии</h3>
+                        <p class="video-description">Интерактивный семинар, охватывающий практические стратегии успеха. Записано на Ежегодной конференции 2023.</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Video Card 3 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <!-- Replace with your actual YouTube/Vimeo embed URL -->
                     <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
                 </div>
                 <div class="video-info">
-                    <h3 class="video-title">Panel Discussion: The Future</h3>
-                    <p class="video-description">Joined industry leaders to discuss where we're heading and how to prepare for tomorrow's challenges.</p>
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">Panel Discussion: The Future</h3>
+                        <p class="video-description">Joined industry leaders to discuss where we're heading and how to prepare for tomorrow's challenges.</p>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">Панельная дискуссия: Будущее</h3>
+                        <p class="video-description">Присоединился к лидерам отрасли, чтобы обсудить, куда мы движемся и как подготовиться к завтрашним вызовам.</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Video Card 4 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <!-- Replace with your actual YouTube/Vimeo embed URL -->
                     <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
                 </div>
                 <div class="video-info">
-                    <h3 class="video-title">TEDx Talk: Transformative Ideas</h3>
-                    <p class="video-description">Sharing transformative ideas that challenge conventional thinking and inspire new perspectives.</p>
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">TEDx Talk: Transformative Ideas</h3>
+                        <p class="video-description">Sharing transformative ideas that challenge conventional thinking and inspire new perspectives.</p>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">TEDx: Трансформирующие идеи</h3>
+                        <p class="video-description">Делюсь трансформирующими идеями, которые бросают вызов традиционному мышлению и вдохновляют на новые перспективы.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Social Links Section -->
-    <section id="social">
-        <h2>Connect With Me</h2>
-        
-        <div class="social-container">
-            <a href="https://twitter.com/yourusername" class="social-link" target="_blank">
-                <div class="social-icon">🐦</div>
-                <span class="social-name">Twitter</span>
-            </a>
-
-            <a href="https://linkedin.com/in/yourusername" class="social-link" target="_blank">
-                <div class="social-icon">💼</div>
-                <span class="social-name">LinkedIn</span>
-            </a>
-
-            <a href="https://github.com/yourusername" class="social-link" target="_blank">
-                <div class="social-icon">💻</div>
-                <span class="social-name">GitHub</span>
-            </a>
-
-            <a href="https://youtube.com/@yourusername" class="social-link" target="_blank">
-                <div class="social-icon">📺</div>
-                <span class="social-name">YouTube</span>
-            </a>
-
-            <a href="mailto:your.email@example.com" class="social-link">
-                <div class="social-icon">✉️</div>
-                <span class="social-name">Email</span>
-            </a>
-
-            <a href="https://medium.com/@yourusername" class="social-link" target="_blank">
-                <div class="social-icon">📝</div>
-                <span class="social-name">Medium</span>
-            </a>
         </div>
     </section>
 
     <!-- Resources Section -->
     <section id="resources">
-        <h2>Resources & Downloads</h2>
+        <!-- English Title -->
+        <h2 data-lang="en" class="active">Resources & Downloads</h2>
+        <!-- Russian Title -->
+        <h2 data-lang="ru">Материалы и загрузки</h2>
         
         <div class="resources-grid">
             <div class="resource-card">
-                <h3 class="resource-title">📊 Presentation Slides</h3>
-                <p class="resource-description">Download the complete slide deck from my recent keynote on innovation and digital transformation.</p>
-                <a href="#" class="download-btn" download>Download PDF</a>
+                <!-- English -->
+                <div data-lang="en" class="active">
+                    <h3 class="resource-title">📊 Presentation Slides</h3>
+                    <p class="resource-description">Download the complete slide deck from my recent keynote on innovation and digital transformation.</p>
+                    <a href="#" class="download-btn" download>Download PDF</a>
+                </div>
+                <!-- Russian -->
+                <div data-lang="ru">
+                    <h3 class="resource-title">📊 Слайды презентации</h3>
+                    <p class="resource-description">Скачайте полный набор слайдов из моего недавнего основного доклада об инновациях и цифровой трансформации.</p>
+                    <a href="#" class="download-btn" download>Скачать PDF</a>
+                </div>
             </div>
 
             <div class="resource-card">
-                <h3 class="resource-title">📚 White Paper</h3>
-                <p class="resource-description">In-depth research paper exploring emerging trends and their practical implications for businesses.</p>
-                <a href="#" class="download-btn" download>Download PDF</a>
+                <!-- English -->
+                <div data-lang="en" class="active">
+                    <h3 class="resource-title">📚 White Paper</h3>
+                    <p class="resource-description">In-depth research paper exploring emerging trends and their practical implications for businesses.</p>
+                    <a href="#" class="download-btn" download>Download PDF</a>
+                </div>
+                <!-- Russian -->
+                <div data-lang="ru">
+                    <h3 class="resource-title">📚 Белая книга</h3>
+                    <p class="resource-description">Подробный исследовательский документ, изучающий новые тенденции и их практическое применение для бизнеса.</p>
+                    <a href="#" class="download-btn" download>Скачать PDF</a>
+                </div>
             </div>
 
             <div class="resource-card">
-                <h3 class="resource-title">🎯 Quick Reference Guide</h3>
-                <p class="resource-description">A handy one-page reference guide summarizing key concepts and actionable takeaways.</p>
-                <a href="#" class="download-btn" download>Download PDF</a>
+                <!-- English -->
+                <div data-lang="en" class="active">
+                    <h3 class="resource-title">🎯 Quick Reference Guide</h3>
+                    <p class="resource-description">A handy one-page reference guide summarizing key concepts and actionable takeaways.</p>
+                    <a href="#" class="download-btn" download>Download PDF</a>
+                </div>
+                <!-- Russian -->
+                <div data-lang="ru">
+                    <h3 class="resource-title">🎯 Краткое справочное руководство</h3>
+                    <p class="resource-description">Удобное справочное руководство на одной странице, обобщающее ключевые концепции и практические выводы.</p>
+                    <a href="#" class="download-btn" download>Скачать PDF</a>
+                </div>
             </div>
 
             <div class="resource-card">
-                <h3 class="resource-title">📖 eBook</h3>
-                <p class="resource-description">Comprehensive guide featuring insights from years of experience in the field.</p>
-                <a href="#" class="download-btn" download>Download EPUB</a>
+                <!-- English -->
+                <div data-lang="en" class="active">
+                    <h3 class="resource-title">📖 eBook</h3>
+                    <p class="resource-description">Comprehensive guide featuring insights from years of experience in the field.</p>
+                    <a href="#" class="download-btn" download>Download EPUB</a>
+                </div>
+                <!-- Russian -->
+                <div data-lang="ru">
+                    <h3 class="resource-title">📖 Электронная книга</h3>
+                    <p class="resource-description">Всеобъемлющее руководство с идеями, полученными за годы опыта работы в этой области.</p>
+                    <a href="#" class="download-btn" download>Скачать EPUB</a>
+                </div>
             </div>
 
             <div class="resource-card">
-                <h3 class="resource-title">🎤 Speaker Kit</h3>
-                <p class="resource-description">Media kit including bio, high-resolution photos, and speaking topics for event organizers.</p>
-                <a href="#" class="download-btn" download>Download ZIP</a>
+                <!-- English -->
+                <div data-lang="en" class="active">
+                    <h3 class="resource-title">🎤 Speaker Kit</h3>
+                    <p class="resource-description">Media kit including bio, high-resolution photos, and speaking topics for event organizers.</p>
+                    <a href="#" class="download-btn" download>Download ZIP</a>
+                </div>
+                <!-- Russian -->
+                <div data-lang="ru">
+                    <h3 class="resource-title">🎤 Комплект для спикера</h3>
+                    <p class="resource-description">Медиа-кит, включающий биографию, фотографии высокого разрешения и темы выступлений для организаторов мероприятий.</p>
+                    <a href="#" class="download-btn" download>Скачать ZIP</a>
+                </div>
             </div>
 
             <div class="resource-card">
-                <h3 class="resource-title">📋 Workshop Materials</h3>
-                <p class="resource-description">Templates, worksheets, and exercises from my popular workshops that you can use.</p>
-                <a href="#" class="download-btn" download>Download PDF</a>
+                <!-- English -->
+                <div data-lang="en" class="active">
+                    <h3 class="resource-title">📋 Workshop Materials</h3>
+                    <p class="resource-description">Templates, worksheets, and exercises from my popular workshops that you can use.</p>
+                    <a href="#" class="download-btn" download>Download PDF</a>
+                </div>
+                <!-- Russian -->
+                <div data-lang="ru">
+                    <h3 class="resource-title">📋 Материалы семинара</h3>
+                    <p class="resource-description">Шаблоны, рабочие листы и упражнения из моих популярных семинаров, которые вы можете использовать.</p>
+                    <a href="#" class="download-btn" download>Скачать PDF</a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Your Name. All rights reserved.</p>
-        <p style="margin-top: 0.5rem; opacity: 0.8;">Crafted with care and minimalism</p>
+        <!-- English -->
+        <div data-lang="en" class="active">
+            <p>&copy; 2025 Ivan Lutsenko. All rights reserved.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">Crafted with care and minimalism</p>
+        </div>
+        <!-- Russian -->
+        <div data-lang="ru">
+            <p>&copy; 2025 Иван Луценко. Все права защищены.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">Создано с заботой и минимализмом</p>
+        </div>
     </footer>
+
+    <script>
+        // Language Switcher
+        const langButtons = document.querySelectorAll('[data-lang-switch]');
+        const langElements = document.querySelectorAll('[data-lang]');
+        
+        // Get saved language or default to English
+        let currentLang = localStorage.getItem('preferredLanguage') || 'en';
+        
+        // Set initial language
+        setLanguage(currentLang);
+        
+        // Add click listeners to language buttons
+        langButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const lang = button.getAttribute('data-lang-switch');
+                setLanguage(lang);
+                localStorage.setItem('preferredLanguage', lang);
+            });
+        });
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Update all language elements
+            langElements.forEach(element => {
+                if (element.getAttribute('data-lang') === lang) {
+                    element.classList.add('active');
+                    // Check if it should be inline
+                    if (element.classList.contains('social-name')) {
+                        element.classList.add('inline');
+                    }
+                } else {
+                    element.classList.remove('active');
+                    element.classList.remove('inline');
+                }
+            });
+            
+            // Update language buttons
+            langButtons.forEach(button => {
+                if (button.getAttribute('data-lang-switch') === lang) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+        }
+    </script>
 </body>
-  </html>
+</html>
