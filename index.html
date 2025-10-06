@@ -763,10 +763,6 @@
     <!-- Navigation -->
     <nav id="navbar">
         <div class="nav-container">
-            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-                <svg><use href="#menu-icon"></use></svg>
-            </button>
-
             <ul id="navMenu">
                 <button class="close-menu" id="closeMenu" aria-label="Close menu">
                     <svg><use href="#close-icon"></use></svg>
@@ -1050,22 +1046,25 @@
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
         const closeMenu = document.getElementById('closeMenu');
-        const navLinks = navMenu.querySelectorAll('a');
 
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.add('mobile-open');
-            document.body.style.overflow = 'hidden';
-        });
+        if (menuToggle && navMenu && closeMenu) {
+            const navLinks = navMenu.querySelectorAll('a');
 
-        closeMenu.addEventListener('click', closeMobileMenu);
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.add('mobile-open');
+                document.body.style.overflow = 'hidden';
+            });
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', closeMobileMenu);
-        });
+            closeMenu.addEventListener('click', closeMobileMenu);
 
-        function closeMobileMenu() {
-            navMenu.classList.remove('mobile-open');
-            document.body.style.overflow = '';
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+
+            function closeMobileMenu() {
+                navMenu.classList.remove('mobile-open');
+                document.body.style.overflow = '';
+            }
         }
 
         // Navbar scroll effect
