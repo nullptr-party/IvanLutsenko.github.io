@@ -540,6 +540,9 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+        }
+
+        .resource-card > div {
             display: flex;
             flex-direction: column;
             min-height: 100%;
@@ -619,6 +622,12 @@
         }
 
         /* Responsive Design */
+        @media (min-width: 769px) {
+            nav ul {
+                display: flex !important;
+            }
+        }
+
         @media (max-width: 768px) {
             nav {
                 padding: 1rem;
@@ -879,7 +888,7 @@
             <!-- Video Card 1 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="1W-1VoxvZn8" style="background-image: url('https://img.youtube.com/vi/1W-1VoxvZn8/maxresdefault.jpg')">
+                    <div class="video-placeholder" data-video-id="1W-1VoxvZn8" style="background-image: url('https://img.youtube.com/vi/1W-1VoxvZn8/sddefault.jpg')">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
