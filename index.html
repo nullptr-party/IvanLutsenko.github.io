@@ -196,7 +196,30 @@
             color: var(--text-light);
         }
 
-        /* Language Switcher */
+        /* Mobile Controls Container */
+        .mobile-controls {
+            display: none; /* Hidden on desktop */
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        /* Mobile Language Switcher */
+        .mobile-language-switcher {
+            display: flex;
+            gap: 0.15rem;
+            align-items: center;
+            background-color: rgba(253, 246, 227, 0.1);
+            padding: 0.2rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .mobile-language-switcher .lang-btn {
+            padding: 0.35rem 0.6rem;
+            font-size: 0.75rem;
+        }
+
+        /* Desktop Language Switcher */
         .language-switcher {
             display: flex;
             gap: 0.25rem;
@@ -660,6 +683,10 @@
 
         /* Responsive Design */
         @media (min-width: 769px) {
+            .mobile-controls {
+                display: none; /* Hide mobile controls on desktop */
+            }
+
             .menu-toggle {
                 display: none; /* Hide menu toggle on desktop */
             }
@@ -682,6 +709,10 @@
         @media (max-width: 768px) {
             nav {
                 padding: 1rem;
+            }
+
+            .mobile-controls {
+                display: flex; /* Show mobile controls on mobile */
             }
 
             .menu-toggle {
@@ -725,11 +756,9 @@
                 padding: 1rem 2rem;
             }
 
+            /* Hide desktop language switcher in mobile menu */
             .language-switcher {
-                position: absolute;
-                bottom: 2rem;
-                left: 50%;
-                transform: translateX(-50%);
+                display: none !important;
             }
 
             section {
@@ -807,9 +836,20 @@
             <span data-lang="uk">Портфоліо</span>
             <span data-lang="ru">Портфолио</span>
         </a> <!-- Brand on the left -->
-        <button class="menu-toggle" id="menuToggle" aria-label="Open menu"> <!-- Menu toggle for mobile -->
-            <svg><use href="#menu-icon"></use></svg>
-        </button>
+
+        <!-- Mobile controls (language switcher + menu toggle) -->
+        <div class="mobile-controls">
+            <!-- Mobile Language Switcher (always visible on mobile) -->
+            <div class="mobile-language-switcher">
+                <button class="lang-btn active" data-lang-switch="en">EN</button>
+                <button class="lang-btn" data-lang-switch="uk">UK</button>
+                <button class="lang-btn" data-lang-switch="ru">RU</button>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Open menu"> <!-- Menu toggle for mobile -->
+                <svg><use href="#menu-icon"></use></svg>
+            </button>
+        </div>
+
         <ul id="navMenu">
             <button class="close-menu" id="closeMenu" aria-label="Close menu">
                 <svg><use href="#close-icon"></use></svg>
