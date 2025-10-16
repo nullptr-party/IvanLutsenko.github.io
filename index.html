@@ -101,8 +101,8 @@
             padding: 1rem 2rem;
             box-shadow: var(--shadow-md);
             z-index: 1000;
-            display: flex;
-            justify-content: space-between;
+            display: flex; /* Makes items in nav horizontally */
+            justify-content: space-between; /* Pushes items to ends */
             align-items: center;
             backdrop-filter: blur(10px);
             transition: var(--transition);
@@ -111,15 +111,6 @@
         nav.scrolled {
             padding: 0.75rem 2rem;
             background: linear-gradient(135deg, rgba(13, 59, 46, 0.98) 0%, rgba(26, 92, 71, 0.98) 100%);
-        }
-
-        .nav-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
         }
 
         .nav-brand {
@@ -132,7 +123,7 @@
 
         nav ul {
             list-style: none;
-            display: flex;
+            display: flex; /* Default for desktop */
             gap: 1rem;
             align-items: center;
         }
@@ -167,9 +158,9 @@
             background-color: rgba(253, 246, 227, 0.1);
         }
 
-        /* Mobile Menu Button */
+        /* Mobile Menu Button (hidden on desktop) */
         .menu-toggle {
-            display: none;
+            display: none; /* Hidden by default, shown on mobile */
             background: none;
             border: none;
             cursor: pointer;
@@ -179,6 +170,21 @@
         .menu-toggle svg {
             width: 24px;
             height: 24px;
+            color: var(--text-light);
+        }
+
+        /* Close Menu Button (hidden by default) */
+        .close-menu {
+            display: none; /* Hide the close button by default */
+            background: none; /* Ensure no background */
+            border: none; /* Ensure no border */
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .close-menu svg {
+            width: 32px;
+            height: 32px;
             color: var(--text-light);
         }
 
@@ -623,12 +629,22 @@
 
         /* Responsive Design */
         @media (min-width: 769px) {
-            nav ul {
-                display: flex !important;
+            .menu-toggle {
+                display: none; /* Hide menu toggle on desktop */
             }
 
-            .menu-toggle {
-                display: none !important;
+            .close-menu {
+                display: none; /* Hide close button on desktop */
+            }
+
+            nav ul {
+                display: flex !important; /* Show nav links on desktop */
+                position: static; /* Override mobile fixed positioning */
+                height: auto;
+                background: none;
+                flex-direction: row;
+                gap: 1rem;
+                justify-content: flex-start;
             }
         }
 
@@ -637,16 +653,12 @@
                 padding: 1rem;
             }
 
-            .nav-container {
-                flex-wrap: wrap;
-            }
-
             .menu-toggle {
-                display: block;
+                display: block; /* Show menu toggle on mobile */
             }
 
             nav ul {
-                display: none;
+                display: none; /* Hide nav menu by default on mobile */
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -661,17 +673,14 @@
             }
 
             nav ul.mobile-open {
-                display: flex;
+                display: flex; /* Show nav menu when mobile-open class is present */
             }
 
             .close-menu {
+                display: block; /* Show close button when mobile menu is open */
                 position: absolute;
                 top: 1rem;
                 right: 1rem;
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 0.5rem;
             }
 
             .close-menu svg {
@@ -762,44 +771,45 @@
 <body>
     <!-- Navigation -->
     <nav id="navbar">
-        <div class="nav-container">
-            <ul id="navMenu">
-                <button class="close-menu" id="closeMenu" aria-label="Close menu">
-                    <svg><use href="#close-icon"></use></svg>
-                </button>
-
-                <li>
-                    <a href="#about">
-                        <span data-lang="en" class="active">About</span>
-                        <span data-lang="ru">О себе</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#contact">
-                        <span data-lang="en" class="active">Contact</span>
-                        <span data-lang="ru">Контакты</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#videos">
-                        <span data-lang="en" class="active">Videos</span>
-                        <span data-lang="ru">Выступления</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#resources">
-                        <span data-lang="en" class="active">Resources</span>
-                        <span data-lang="ru">Материалы</span>
-                    </a>
-                </li>
-                
-                <!-- Language Switcher -->
-                <li class="language-switcher">
-                    <button class="lang-btn active" data-lang-switch="en">EN</button>
-                    <button class="lang-btn" data-lang-switch="ru">RU</button>
-                </li>
-            </ul>
-        </div>
+        <a href="#about" class="nav-brand">Ivan Lutsenko is a Netlify tester</a> <!-- Brand on the left -->
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu"> <!-- Menu toggle for mobile -->
+            <svg><use href="#menu-icon"></use></svg>
+        </button>
+        <ul id="navMenu">
+            <button class="close-menu" id="closeMenu" aria-label="Close menu">
+                <svg><use href="#close-icon"></use></svg>
+            </button>
+            <li>
+                <a href="#about">
+                    <span data-lang="en" class="active">About</span>
+                    <span data-lang="ru">О себе</span>
+                </a>
+            </li>
+            <li>
+                <a href="#contact">
+                    <span data-lang="en" class="active">Contact</span>
+                    <span data-lang="ru">Контакты</span>
+                </a>
+            </li>
+            <li>
+                <a href="#videos">
+                    <span data-lang="en" class="active">Videos</span>
+                    <span data-lang="ru">Выступления</span>
+                </a>
+            </li>
+            <li>
+                <a href="#resources">
+                    <span data-lang="en" class="active">Resources</span>
+                    <span data-lang="ru">Материалы</span>
+                </a>
+            </li>
+            
+            <!-- Language Switcher -->
+            <li class="language-switcher">
+                <button class="lang-btn active" data-lang-switch="en">EN</button>
+                <button class="lang-btn" data-lang-switch="ru">RU</button>
+            </li>
+        </ul>
     </nav>
 
     <!-- About Section -->
