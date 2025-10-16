@@ -605,7 +605,9 @@
         }
 
         .download-btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             background: linear-gradient(135deg, var(--accent-green), var(--light-green));
             color: white;
             padding: 0.75rem 2rem;
@@ -800,7 +802,11 @@
 <body>
     <!-- Navigation -->
     <nav id="navbar">
-        <a href="#about" class="nav-brand">Ivan Lutsenko</a> <!-- Brand on the left -->
+        <a href="#about" class="nav-brand">
+            <span data-lang="en" class="active">Portfolio</span>
+            <span data-lang="uk">Портфоліо</span>
+            <span data-lang="ru">Портфолио</span>
+        </a> <!-- Brand on the left -->
         <button class="menu-toggle" id="menuToggle" aria-label="Open menu"> <!-- Menu toggle for mobile -->
             <svg><use href="#menu-icon"></use></svg>
         </button>
@@ -811,31 +817,36 @@
             <li>
                 <a href="#about">
                     <span data-lang="en" class="active">About</span>
+                    <span data-lang="uk">Про мене</span>
                     <span data-lang="ru">О себе</span>
                 </a>
             </li>
             <li>
                 <a href="#contact">
                     <span data-lang="en" class="active">Contact</span>
+                    <span data-lang="uk">Контакти</span>
                     <span data-lang="ru">Контакты</span>
                 </a>
             </li>
             <li>
                 <a href="#videos">
                     <span data-lang="en" class="active">Videos</span>
+                    <span data-lang="uk">Виступи</span>
                     <span data-lang="ru">Выступления</span>
                 </a>
             </li>
             <li>
                 <a href="#resources">
                     <span data-lang="en" class="active">Resources</span>
+                    <span data-lang="uk">Матеріали</span>
                     <span data-lang="ru">Материалы</span>
                 </a>
             </li>
-            
+
             <!-- Language Switcher -->
             <li class="language-switcher">
                 <button class="lang-btn active" data-lang-switch="en">EN</button>
+                <button class="lang-btn" data-lang-switch="uk">UK</button>
                 <button class="lang-btn" data-lang-switch="ru">RU</button>
             </li>
         </ul>
@@ -846,8 +857,12 @@
         <div class="profile-container">
             <img src="res/1000094492.jpg" alt="Ivan Lutsenko" class="profile-image">
         </div>
-        
-        <h1>Ivan Lutsenko</h1>
+
+        <h1>
+            <span data-lang="en" class="active">Ivan Lutsenko</span>
+            <span data-lang="uk">Іван Луценко</span>
+            <span data-lang="ru">Иван Луценко</span>
+        </h1>
         
         <!-- English -->
         <div data-lang="en" class="active">
@@ -856,6 +871,16 @@
                 <p>Hi, I'm Ivan Lutsenko — Android Tech Lead at Bereke Bank, where I'm responsible for the business application. My professional interests lie at the intersection of engineering quality and team processes: I monitor codebase health, build horizontal connections within the team, and try to make the project comfortable and attractive for developers.</p>
                 <p>Since 2024, I've been experimenting with AI tools in everyday tech lead work — from auto-generating tests and documentation to offloading administrative and bureaucratic routines. I'm looking for what actually helps, without illusions about deus ex machina.</p>
                 <p>I write about various topics on my Telegram channel, co-organize <a href="https://nullptr.party" target="_blank" rel="noopener" style="color: var(--accent-green);">nullptr.party</a> meetups, and serve as an organizing committee member at <a href="https://gdg.community.dev/gdg-almaty" target="_blank" rel="noopener" style="color: var(--accent-green);">GDG Almaty</a>.</p>
+            </div>
+        </div>
+
+        <!-- Ukrainian -->
+        <div data-lang="uk">
+            <p class="subtitle">Android Tech Lead | Ентузіаст AI-інструментів</p>
+            <div class="bio">
+                <p>Привіт, я Іван Луценко — Android Tech Lead в Bereke Bank, де відповідаю за додаток для бізнесу. Мої професійні інтереси на перетині інженерної якості та командних процесів: стежу за здоров'ям кодової бази, вибудовую горизонтальні зв'язки всередині команди та намагаюся зробити проєкт комфортним та привабливим для розробників.</p>
+                <p>З 2024 року експериментую з AI-інструментами у повсякденній роботі техліда — від автогенерації тестів та документації до розвантаження адміністративно-бюрократичної рутини. Шукаю, що дійсно допомагає, без ілюзій про deus ex machina.</p>
+                <p>Пишу про різне в Telegram-каналі, співорганізую зустрічі <a href="https://nullptr.party" target="_blank" rel="noopener" style="color: var(--accent-green);">nullptr.party</a>, член оргкомітету в <a href="https://gdg.community.dev/gdg-almaty" target="_blank" rel="noopener" style="color: var(--accent-green);">GDG Almaty</a>.</p>
             </div>
         </div>
 
@@ -874,6 +899,8 @@
     <section id="contact">
         <!-- English Title -->
         <h2 data-lang="en" class="active">Connect With Me</h2>
+        <!-- Ukrainian Title -->
+        <h2 data-lang="uk">Зв'язатися зі мною</h2>
         <!-- Russian Title -->
         <h2 data-lang="ru">Связаться со мной</h2>
 
@@ -896,6 +923,7 @@
                 <svg><use href="#telegram-icon"></use></svg>
                 <div class="social-info">
                     <div class="social-name" data-lang="en" style="display: inline;">Telegram Channel</div>
+                    <div class="social-name" data-lang="uk">Telegram-канал</div>
                     <div class="social-name" data-lang="ru">Telegram-канал</div>
                 </div>
             </a>
@@ -920,6 +948,8 @@
     <section id="videos">
         <!-- English Title -->
         <h2 data-lang="en" class="active">Featured Presentations</h2>
+        <!-- Ukrainian Title -->
+        <h2 data-lang="uk">Виступи</h2>
         <!-- Russian Title -->
         <h2 data-lang="ru">Выступления</h2>
         
@@ -938,6 +968,11 @@
                     <div data-lang="en" class="active">
                         <h3 class="video-title">Claude & MCPs in Tech Lead Work v.1</h3>
                         <p class="video-description">Practical experience using Claude AI and MCP servers in daily tech lead activities. Automation of routine tasks, Crashlytics analysis, custom-built task tracker, and real productivity gains. Presented at nullptr.party @ Bereke Bank.</p>
+                    </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">Claude та MCP у роботі техліда v.1</h3>
+                        <p class="video-description">Практичний досвід використання Claude AI та MCP-серверів у повсякденній роботі техліда. Автоматизація рутинних завдань, аналіз Crashlytics, самописний task tracker та реальний приріст продуктивності. Виступ на nullptr.party @ Bereke Bank.</p>
                     </div>
                     <!-- Russian -->
                     <div data-lang="ru">
@@ -962,6 +997,11 @@
                         <h3 class="video-title">Claude & MCPs in Tech Lead Work v.2</h3>
                         <p class="video-description">A condensed version with a larger audience. If you've watched v.1, feel free to skip to the Q&A section. Presented at AI Driven Development @ Most IT Hub.</p>
                     </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">Claude та MCP у роботі техліда v.2</h3>
+                        <p class="video-description">Трохи скорочена версія, зате зі збільшеною аудиторією. Якщо дивилися першу версію, то рекомендував би відразу до Q&A секції переходити. Виступ на AI Driven Development @ Most IT Hub.</p>
+                    </div>
                     <!-- Russian -->
                     <div data-lang="ru">
                         <h3 class="video-title">Claude и MCP в работе техлида v.2</h3>
@@ -976,6 +1016,8 @@
     <section id="resources">
         <!-- English Title -->
         <h2 data-lang="en" class="active">Resources & Downloads</h2>
+        <!-- Ukrainian Title -->
+        <h2 data-lang="uk">Матеріали та завантаження</h2>
         <!-- Russian Title -->
         <h2 data-lang="ru">Материалы и загрузки</h2>
         
@@ -992,6 +1034,19 @@
                     <div class="resource-buttons">
                         <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn" target="_blank" rel="noopener">View</a>
                         <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn secondary" download>Download</a>
+                    </div>
+                </div>
+                <!-- Ukrainian -->
+                <div data-lang="uk">
+                    <h3 class="resource-title">📊 MCP та Claude в роботі техліда v.3</h3>
+                    <p class="resource-description">Презентація про практичне застосування Model Context Protocol та AI-інструментів Claude у повсякденній роботі техліда. Теми:<br>
+                    • Екосистема MCP-серверів та інтеграція<br>
+                    • Автоматизація рутинних завдань та документації<br>
+                    • Аналіз Crashlytics та відлагодження<br>
+                    • Реальні приклади та приріст продуктивності</p>
+                    <div class="resource-buttons">
+                        <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn" target="_blank" rel="noopener">Переглянути</a>
+                        <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn secondary" download>Завантажити</a>
                     </div>
                 </div>
                 <!-- Russian -->
@@ -1020,6 +1075,16 @@
                         <a href="res/statusline.sh" class="download-btn secondary" download>Download</a>
                     </div>
                 </div>
+                <!-- Ukrainian -->
+                <div data-lang="uk">
+                    <h3 class="resource-title">⚙️ Статусний рядок Claude Code</h3>
+                    <p class="resource-description">Кастомний скрипт статусного рядка для Claude Code з покращеним відстеженням контексту та моніторингом сесій.<br>
+                    Формат: <code style="font-size: 0.9em; background: #f0f0f0; padding: 2px 6px; border-radius: 4px;">ctx: 85% 🔴 | s: 3h46m left 🟢 | 💸 anthropic money burnt: $1.31 | IvanLutsenko.github.io</code></p>
+                    <div class="resource-buttons">
+                        <a href="res/statusline.md" class="download-btn" target="_blank" rel="noopener">Переглянути</a>
+                        <a href="res/statusline.sh" class="download-btn secondary" download>Завантажити</a>
+                    </div>
+                </div>
                 <!-- Russian -->
                 <div data-lang="ru">
                     <h3 class="resource-title">⚙️ Статусная строка Claude Code</h3>
@@ -1042,6 +1107,15 @@
                         <a href="res/crashlytics-prompt.md" class="download-btn secondary" download>Download</a>
                     </div>
                 </div>
+                <!-- Ukrainian -->
+                <div data-lang="uk">
+                    <h3 class="resource-title">🐛 Промпт для аналізу Crashlytics</h3>
+                    <p class="resource-description">Професійний системний промпт для аналізу Firebase Crashlytics з використанням Claude AI та MCP-серверів. Структурований підхід до аналізу першопричин, інтеграція з git blame та автоматична генерація JIRA тікетів. Розроблено для Android банківських додатків з метою 99%+ crash-free users.</p>
+                    <div class="resource-buttons">
+                        <a href="res/crashlytics-prompt.md" class="download-btn" target="_blank" rel="noopener">Переглянути</a>
+                        <a href="res/crashlytics-prompt.md" class="download-btn secondary" download>Завантажити</a>
+                    </div>
+                </div>
                 <!-- Russian -->
                 <div data-lang="ru">
                     <h3 class="resource-title">🐛 Промпт для анализа Crashlytics</h3>
@@ -1059,12 +1133,17 @@
     <footer>
         <!-- English -->
         <div data-lang="en" class="active">
-            <p>&copy; 2025 Ivan Lutsenko. All rights reserved.</p>
+            <p>&copy; 2025 Claude Code & Gemini. All rights reserved.</p>
             <p style="margin-top: 0.5rem; opacity: 0.8;">Crafted with elegance and minimalism</p>
+        </div>
+        <!-- Ukrainian -->
+        <div data-lang="uk">
+            <p>&copy; 2025 Claude Code & Gemini. Всі права захищені.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">Створено з елегантністю та мінімалізмом</p>
         </div>
         <!-- Russian -->
         <div data-lang="ru">
-            <p>&copy; 2025 Иван Луценко. Все права защищены.</p>
+            <p>&copy; 2025 Claude Code & Gemini. Все права защищены.</p>
             <p style="margin-top: 0.5rem; opacity: 0.8;">Создано с элегантностью и минимализмом</p>
         </div>
     </footer>
