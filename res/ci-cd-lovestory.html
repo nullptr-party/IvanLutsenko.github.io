@@ -404,6 +404,17 @@
                 0 0 60px rgba(0, 255, 255, 0.8);
         }
 
+        .exit-btn {
+            background: linear-gradient(135deg, #ff0080, #ff0080);
+            border-color: #ff0080;
+        }
+
+        .exit-btn:hover {
+            box-shadow:
+                0 0 30px rgba(255, 0, 128, 1),
+                0 0 60px rgba(255, 0, 128, 0.8);
+        }
+
         .slide-number {
             display: none;
         }
@@ -1339,6 +1350,7 @@
     <div class="nav-buttons">
         <button class="nav-btn" onclick="previousSlide()">‹</button>
         <button class="nav-btn" onclick="nextSlide()">›</button>
+        <button class="nav-btn exit-btn" onclick="window.location.href='https://ivan.nullptr.party'" title="Exit (ESC)">✕</button>
     </div>
 
     <script>
