@@ -1379,7 +1379,8 @@
         function previousSlide() { showSlide(currentSlide - 1); }
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'Escape') window.location.href = 'https://ivan.nullptr.party';
+            else if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
             else if (e.key === 'ArrowLeft') previousSlide();
         });
 
