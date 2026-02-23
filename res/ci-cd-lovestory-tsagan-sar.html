@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD: История любви — Цаһан Сар Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Cormorant+Garamond:wght@400;600;700&display=swap&subset=cyrillic');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #DAA520;
+            --gold-dark: #B8860B;
+            --gold-light: #F0D060;
+            --red: #C41E3A;
+            --red-dark: #8B1A2B;
+            --cream: #FFF8E7;
+            --cream-dark: #F5E6C8;
+            --brown: #2F1810;
+            --brown-light: #5C3A21;
+            --green-steppe: #5A7D3A;
+            --green-dark: #3A5A1A;
+            --sky: #87CEEB;
+            --sky-light: #B0E0F0;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+            background: var(--cream);
+            color: var(--brown);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Steppe background with ornamental pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(180deg, var(--sky-light) 0%, var(--cream) 30%, var(--cream-dark) 100%);
+            z-index: 0;
+        }
+
+        /* Traditional Kalmyk meander pattern overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.04;
+            background-image:
+                repeating-linear-gradient(0deg, var(--gold-dark) 0px, var(--gold-dark) 2px, transparent 2px, transparent 20px),
+                repeating-linear-gradient(90deg, var(--gold-dark) 0px, var(--gold-dark) 2px, transparent 2px, transparent 20px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating elements container */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-item {
+            position: absolute;
+            top: -60px;
+            animation: floatDown linear infinite;
+            opacity: 0.6;
+            font-size: 1.2em;
+        }
+
+        @keyframes floatDown {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(30deg); }
+        }
+
+        /* Gentle warm glow animation */
+        @keyframes warmGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.05); }
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .slide-content {
+            background-color: rgba(255, 248, 231, 0.95);
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 48'%3E%3Crect width='20' height='48' fill='%238B1A2B'/%3E%3Cline x1='1' y1='0' x2='1' y2='48' stroke='%23DAA520' stroke-width='0.6' opacity='0.4'/%3E%3Cline x1='19' y1='0' x2='19' y2='48' stroke='%23DAA520' stroke-width='0.6' opacity='0.4'/%3E%3Cpath d='M10,0 C10,4 3,4 3,12 C3,20 10,20 10,24 C10,28 17,28 17,36 C17,44 10,44 10,48' fill='none' stroke='%23DAA520' stroke-width='2'/%3E%3Cpath d='M10,0 C10,5 5,5 5,12 C5,19 10,19 10,24 C10,29 15,29 15,36 C15,43 10,43 10,48' fill='none' stroke='%23F0D060' stroke-width='0.7' opacity='0.4'/%3E%3Ccircle cx='4' cy='12' r='1.8' fill='%23F0D060'/%3E%3Ccircle cx='16' cy='36' r='1.8' fill='%23F0D060'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 48'%3E%3Crect width='20' height='48' fill='%238B1A2B'/%3E%3Cline x1='1' y1='0' x2='1' y2='48' stroke='%23DAA520' stroke-width='0.6' opacity='0.4'/%3E%3Cline x1='19' y1='0' x2='19' y2='48' stroke='%23DAA520' stroke-width='0.6' opacity='0.4'/%3E%3Cpath d='M10,0 C10,4 17,4 17,12 C17,20 10,20 10,24 C10,28 3,28 3,36 C3,44 10,44 10,48' fill='none' stroke='%23DAA520' stroke-width='2'/%3E%3Cpath d='M10,0 C10,5 15,5 15,12 C15,19 10,19 10,24 C10,29 5,29 5,36 C5,43 10,43 10,48' fill='none' stroke='%23F0D060' stroke-width='0.7' opacity='0.4'/%3E%3Ccircle cx='16' cy='12' r='1.8' fill='%23F0D060'/%3E%3Ccircle cx='4' cy='36' r='1.8' fill='%23F0D060'/%3E%3C/svg%3E");
+            background-position: left top, right top;
+            background-repeat: repeat-y, repeat-y;
+            background-size: 20px auto, 20px auto;
+            border: none;
+            padding: 48px 48px 60px 48px;
+            max-width: 1400px;
+            width: 100%;
+            height: 80vh;
+            box-shadow: 0 4px 30px rgba(218, 165, 32, 0.2);
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Gopher + page number footer */
+        .slide-footer {
+            position: absolute;
+            bottom: 30px;
+            right: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            z-index: 10;
+        }
+
+        .footer-gopher {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .page-num {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--gold);
+            color: var(--gold-dark);
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Ornamental top border — зег with diamond hooves + echo line */
+        .ornament-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 24'%3E%3Crect width='48' height='24' fill='%238B1A2B'/%3E%3Cline x1='0' y1='1' x2='48' y2='1' stroke='%23DAA520' stroke-width='0.6' opacity='0.4'/%3E%3Cline x1='0' y1='23' x2='48' y2='23' stroke='%23DAA520' stroke-width='0.6' opacity='0.4'/%3E%3Cline x1='0' y1='12' x2='48' y2='12' stroke='%23DAA520' stroke-width='1'/%3E%3Cpath d='M4,12 A8,8 0 0,1 20,12' fill='none' stroke='%23DAA520' stroke-width='2'/%3E%3Cpath d='M28,12 A8,8 0 0,0 44,12' fill='none' stroke='%23DAA520' stroke-width='2'/%3E%3Cpath d='M6,12 A6,6 0 0,1 18,12' fill='none' stroke='%23F0D060' stroke-width='0.7' opacity='0.4'/%3E%3Cpath d='M30,12 A6,6 0 0,0 42,12' fill='none' stroke='%23F0D060' stroke-width='0.7' opacity='0.4'/%3E%3Cpath d='M12,3 L14,5.5 L12,8 L10,5.5 Z' fill='%23F0D060'/%3E%3Cpath d='M36,16 L38,18.5 L36,21 L34,18.5 Z' fill='%23F0D060'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-size: auto 24px;
+            z-index: 5;
+        }
+
+        /* Ornamental bottom border — зег mirrored */
+        .ornament-border-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 24'%3E%3Crect width='48' height='24' fill='%238B1A2B'/%3E%3Cline x1='0' y1='1' x2='48' y2='1' stroke='%23DAA520' stroke-width='0.6' opacity='0.4'/%3E%3Cline x1='0' y1='23' x2='48' y2='23' stroke='%23DAA520' stroke-width='0.6' opacity='0.4'/%3E%3Cline x1='0' y1='12' x2='48' y2='12' stroke='%23DAA520' stroke-width='1'/%3E%3Cpath d='M4,12 A8,8 0 0,0 20,12' fill='none' stroke='%23DAA520' stroke-width='2'/%3E%3Cpath d='M28,12 A8,8 0 0,1 44,12' fill='none' stroke='%23DAA520' stroke-width='2'/%3E%3Cpath d='M6,12 A6,6 0 0,0 18,12' fill='none' stroke='%23F0D060' stroke-width='0.7' opacity='0.4'/%3E%3Cpath d='M30,12 A6,6 0 0,1 42,12' fill='none' stroke='%23F0D060' stroke-width='0.7' opacity='0.4'/%3E%3Cpath d='M12,16 L14,18.5 L12,21 L10,18.5 Z' fill='%23F0D060'/%3E%3Cpath d='M36,3 L38,5.5 L36,8 L34,5.5 Z' fill='%23F0D060'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-size: auto 24px;
+            z-index: 5;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 88px;
+            color: var(--red-dark);
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 46px;
+            color: var(--red-dark);
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            padding: 10px 24px;
+            border: 2px solid var(--gold-dark);
+            display: inline-block;
+        }
+
+
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+            color: var(--brown);
+            text-align: center;
+            line-height: 1.8;
+            font-weight: 600;
+        }
+
+        .highlight-cyan {
+            color: var(--gold-dark);
+            font-weight: 800;
+        }
+
+        .highlight-pink {
+            color: var(--red);
+            font-weight: 800;
+        }
+
+        .highlight-yellow {
+            color: var(--green-steppe);
+            font-weight: 800;
+        }
+
+        .highlight-green {
+            color: var(--green-dark);
+            font-weight: 800;
+        }
+
+        ul {
+            list-style: none;
+            font-size: 28px;
+            line-height: 1.8;
+            font-weight: 600;
+            max-width: 65%;
+            margin-right: auto;
+        }
+
+        ul li {
+            margin-bottom: 15px;
+            padding-left: 55px;
+            position: relative;
+            color: var(--brown);
+        }
+
+        ul li::before {
+            content: '🌷';
+            position: absolute;
+            left: 0;
+            font-size: 24px;
+        }
+
+        .strikethrough li {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        ul ul {
+            margin-top: 15px;
+            font-size: 24px;
+        }
+
+        ul ul li {
+            margin-bottom: 10px;
+            padding-left: 40px;
+        }
+
+        ul ul li::before {
+            content: '◆';
+            font-size: 14px;
+            color: var(--gold-dark);
+            top: 6px;
+        }
+
+        .no-wrap {
+            white-space: nowrap;
+        }
+
+        .bereke-text ul {
+            font-size: 26px;
+        }
+
+        .icon {
+            display: inline-block;
+            margin-right: 12px;
+            font-size: 28px;
+        }
+
+        .year-badge {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            color: var(--red-dark);
+            padding: 12px 30px;
+            font-size: 26px;
+            font-weight: 900;
+            font-family: 'Playfair Display', serif;
+            box-shadow: 0 3px 15px rgba(218, 165, 32, 0.4);
+            border: 2px solid var(--gold-dark);
+        }
+
+        .nav-buttons {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            display: flex;
+            gap: 16px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            border: 2px solid var(--gold-dark);
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            font-size: 28px;
+            font-weight: 900;
+            box-shadow: 0 3px 15px rgba(218, 165, 32, 0.4);
+            transition: all 0.3s ease;
+            color: var(--red-dark);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 25px rgba(218, 165, 32, 0.6);
+        }
+
+        .exit-btn {
+            background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+            border-color: var(--red-dark);
+            color: var(--cream);
+        }
+
+        .exit-btn:hover {
+            box-shadow: 0 5px 25px rgba(196, 30, 58, 0.5);
+        }
+
+        .slide-number {
+            display: none;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .timeline-item {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -46px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--red);
+            border: 4px solid var(--cream);
+            box-shadow: 0 0 10px rgba(196, 30, 58, 0.4);
+        }
+
+        .principle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .principle-card {
+            padding: 30px;
+        }
+
+        .principle-card.pain {
+            background: rgba(196, 30, 58, 0.08);
+            border: 2px solid rgba(196, 30, 58, 0.3);
+        }
+
+        .principle-card.quality {
+            background: rgba(218, 165, 32, 0.1);
+            border: 2px solid rgba(218, 165, 32, 0.4);
+        }
+
+        .principle-card.comfort {
+            background: rgba(90, 125, 58, 0.1);
+            border: 2px solid rgba(90, 125, 58, 0.3);
+        }
+
+        .header-magenta {
+            color: var(--red);
+        }
+
+        .principle-card h4 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--brown);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .principle-card ul {
+            font-size: 20px;
+        }
+
+        .final-quote {
+            text-align: center;
+            font-size: 46px;
+            line-height: 1.8;
+            color: var(--brown);
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .final-quote .author {
+            font-size: 34px;
+            color: var(--brown-light);
+            margin-top: 40px;
+            font-style: italic;
+        }
+
+        .final-quote .emphasis {
+            color: var(--red);
+            font-weight: 900;
+            font-size: 60px;
+            animation: warmPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes warmPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.75; transform: scale(1.02); }
+        }
+
+        .qr-section {
+            position: absolute;
+            bottom: 85px;
+            right: 20px;
+            width: 250px;
+            height: 250px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .qr-code {
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--gold);
+            padding: 10px;
+            background: rgba(255, 248, 231, 0.9);
+            box-shadow: 0 4px 20px rgba(218, 165, 32, 0.3);
+        }
+
+
+        /* Steppe grass line at bottom */
+        .steppe-grass {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(0deg, rgba(90, 125, 58, 0.15) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 48px; }
+            h2 { font-size: 34px; }
+            ul { font-size: 22px; }
+            .principle-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements" id="floatingElements"></div>
+    <div class="steppe-grass"></div>
+
+    <div class="presentation">
+        <!-- Slide 1 -->
+        <div class="slide active">
+            <div class="slide-content" data-slide="1">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h1>CI/CD: ИСТОРИЯ ЛЮБВИ</h1>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+            <div class="slide-content" data-slide="2">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h1>CI/CD: ИСТОРИЯ ЛЮБВИ</h1>
+                <p class="subtitle">
+                    Как <span class="highlight-cyan">Иван Луценко</span> познакомился,<br>
+                    полюбил и продолжает любить<br>
+                    CI/CD
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3-6: Speaker Intro -->
+        <div class="slide">
+            <div class="slide-content" data-slide="3">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>КТО ДОКЛАДЧИК?</h2>
+                <ul>
+                    <li><span class="highlight-cyan">Роль:</span> android техлид в Bereke Business</li>
+                </ul>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="qr-tg.png" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="4">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>КТО ДОКЛАДЧИК?</h2>
+                <ul>
+                    <li><span class="highlight-cyan">Роль:</span> android техлид в Bereke Business</li>
+                    <li><span class="highlight-cyan">Специализация:</span> платформенная android разработка</li>
+                </ul>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="qr-tg.png" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="5">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>КТО ДОКЛАДЧИК?</h2>
+                <ul>
+                    <li><span class="highlight-cyan">Роль:</span> android техлид в Bereke Business</li>
+                    <li><span class="highlight-cyan">Специализация:</span> платформенная android разработка</li>
+                    <li><span class="highlight-cyan">Опыт:</span> петы, outsource проекты, банковское приложение</li>
+                </ul>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="qr-tg.png" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="6">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>КТО ДОКЛАДЧИК?</h2>
+                <ul>
+                    <li><span class="highlight-cyan">Роль:</span> android техлид в Bereke Business</li>
+                    <li><span class="highlight-cyan">Специализация:</span> платформенная android разработка</li>
+                    <li><span class="highlight-cyan">Опыт:</span> петы, outsource проекты, банковское приложение</li>
+                    <li><span class="highlight-cyan">CI/CD:</span> любовь с первого взгляда, 3 года совместной жизни</li>
+                </ul>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="qr-tg.png" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slides 7-12: What is CI/CD -->
+        <div class="slide">
+            <div class="slide-content" data-slide="7">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ЧТО ЭТО ТАКОЕ?</h2>
+                <ul>
+                    <li>continuous integration <span class="highlight-cyan">&</span> continuous delivery</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="8">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ЧТО ЭТО ТАКОЕ?</h2>
+                <ul>
+                    <li>continuous integration <span class="highlight-cyan">&</span> continuous delivery</li>
+                    <li><span class="highlight-cyan">автоматизация</span> доставки инкремента</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="9">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ЧТО ЭТО ТАКОЕ?</h2>
+                <ul>
+                    <li>continuous integration <span class="highlight-cyan">&</span> continuous delivery</li>
+                    <li><span class="highlight-cyan">автоматизация</span> доставки инкремента</li>
+                    <li>улучшение <span class="highlight-cyan">качества</span> работы</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="10">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ЧТО ЭТО ТАКОЕ?</h2>
+                <ul>
+                    <li>continuous integration <span class="highlight-cyan">&</span> continuous delivery</li>
+                    <li><span class="highlight-cyan">автоматизация</span> доставки инкремента</li>
+                    <li>улучшение <span class="highlight-cyan">качества</span> работы</li>
+                    <li>ключ к успеху</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="11">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ЧТО ЭТО ТАКОЕ?</h2>
+                <ul>
+                    <li>continuous integration <span class="highlight-cyan">&</span> continuous delivery</li>
+                    <li><span class="highlight-cyan">автоматизация</span> доставки инкремента</li>
+                    <li>улучшение <span class="highlight-cyan">качества</span> работы</li>
+                    <li>ключ к успеху</li>
+                    <li><span class="highlight-cyan">большая</span> куча всякого</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="12">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ЧТО ЭТО ТАКОЕ?</h2>
+                <ul class="strikethrough">
+                    <li>continuous integration <span class="highlight-cyan">&</span> continuous delivery</li>
+                    <li><span class="highlight-cyan">автоматизация</span> доставки инкремента</li>
+                    <li>улучшение <span class="highlight-cyan">качества</span> работы</li>
+                    <li>ключ к успеху</li>
+                    <li><span class="highlight-cyan">большая</span> куча всякого</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="13">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <div style="text-align: center; padding: 80px 0;">
+                    <h2 style="margin-bottom: 60px;">ЧТО ЭТО ТАКОЕ?</h2>
+                    <p style="font-size: 60px; font-weight: 900; font-family: 'Playfair Display', serif;">
+                        <span class="highlight-cyan">ЛЮБОВЬ</span><span class="highlight-cyan">,</span><br>
+                        <span style="color: var(--brown);">ЛЕНЬ И</span><br>
+                        <span class="highlight-cyan">КОНТРОЛЬ</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slides 14-16: Qsoft 2022 -->
+        <div class="slide">
+            <div class="slide-content" data-slide="14">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>Qsoft</h2>
+                <ul>
+                    <li>2022 год, статейки, <span class="highlight-cyan">gitlab</span> и два дня</li>
+                </ul>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="QR 22.png" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="15">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>Qsoft</h2>
+                <ul>
+                    <li>2022 год, статейки, gitlab и два дня</li>
+                    <li>помощь <span class="highlight-cyan">девопса</span> в настройке раннера</li>
+                </ul>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="QR 22.png" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="16">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>Qsoft</h2>
+                <ul>
+                    <li>2022 год, статейки, gitlab и два дня</li>
+                    <li>помощь <span class="highlight-cyan">девопса</span> в настройке раннера</li>
+                    <li>app distribution по <span class="highlight-cyan">триггеру</span></li>
+                </ul>
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <img src="QR 22.png" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slides 17-22: Bereke 2022 -->
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="17">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2022</h2>
+                <ul>
+                    <li>это был <span class="highlight-cyan">тяжелый</span> год</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="18">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2022</h2>
+                <ul>
+                    <li>это был <span class="highlight-cyan">тяжелый</span> год</li>
+                    <li>древний Jenkins живущий на кладбище костылей</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="19">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2022</h2>
+                <ul>
+                    <li>это был <span class="highlight-cyan">тяжелый</span> год</li>
+                    <li>древний Jenkins живущий на кладбище костылей</li>
+                    <li><span class="highlight-cyan">сломанные</span> тесты и app distribution</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="20">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2022</h2>
+                <ul>
+                    <li>это был <span class="highlight-cyan">тяжелый</span> год</li>
+                    <li>древний Jenkins живущий на кладбище костылей</li>
+                    <li><span class="highlight-cyan">сломанные</span> тесты и app distribution</li>
+                    <li>11 тестовых сред и <span class="highlight-cyan">раздельные сборки</span> на каждый из них</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="21">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2022</h2>
+                <ul>
+                    <li>это был <span class="highlight-cyan">тяжелый</span> год</li>
+                    <li>древний Jenkins живущий на кладбище костылей</li>
+                    <li><span class="highlight-cyan">сломанные</span> тесты и app distribution</li>
+                    <li>11 тестовых сред и <span class="highlight-cyan">раздельные сборки</span> на каждый из них</li>
+                    <li><span class="highlight-cyan">huawei</span> c проблемными релизами</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="22">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2022</h2>
+                <ul>
+                    <li>это был <span class="highlight-cyan">тяжелый</span> год</li>
+                    <li>древний Jenkins живущий на кладбище костылей</li>
+                    <li><span class="highlight-cyan">сломанные</span> тесты и app distribution</li>
+                    <li>11 тестовых сред и <span class="highlight-cyan">раздельные сборки</span> на каждый из них</li>
+                    <li><span class="highlight-cyan">huawei</span> c проблемными релизами</li>
+                    <li>ноль политик <span class="highlight-cyan">мёрджа</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slides 23-28: Bereke 2023 -->
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="23">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2023</h2>
+                <ul>
+                    <li><span class="highlight-cyan">динамичный</span> год</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="24">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2023</h2>
+                <ul>
+                    <li><span class="highlight-cyan">динамичный</span> год</li>
+                    <li>удалённые тесты и app distribution <span class="highlight-cyan">полуавтомат</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="25">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2023</h2>
+                <ul>
+                    <li><span class="highlight-cyan">динамичный</span> год</li>
+                    <li>удалённые тесты и app distribution <span class="highlight-cyan">полуавтомат</span></li>
+                    <li>11 контуров и <span class="highlight-cyan">единая</span> сборка благодаря debug menu</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="26">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2023</h2>
+                <ul>
+                    <li><span class="highlight-cyan">динамичный</span> год</li>
+                    <li>удалённые тесты и app distribution <span class="highlight-cyan">полуавтомат</span></li>
+                    <li>11 контуров и <span class="highlight-cyan">единая</span> сборка благодаря debug menu</li>
+                    <li>huawei<span class="highlight-cyan">&</span>android cо сборками на коммит</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="27">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2023</h2>
+                <ul>
+                    <li><span class="highlight-cyan">динамичный</span> год</li>
+                    <li>удалённые тесты и app distribution <span class="highlight-cyan">полуавтомат</span></li>
+                    <li>11 контуров и <span class="highlight-cyan">единая</span> сборка благодаря debug menu</li>
+                    <li>huawei<span class="highlight-cyan">&</span>android cо сборками на коммит</li>
+                    <li><span class="highlight-cyan">воскрешение</span> Sonarqube</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content bereke-text" data-slide="28">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2023</h2>
+                <ul>
+                    <li><span class="highlight-cyan">динамичный</span> год</li>
+                    <li>удалённые тесты и app distribution <span class="highlight-cyan">полуавтомат</span></li>
+                    <li>11 контуров и <span class="highlight-cyan">единая</span> сборка благодаря<br>debug menu</li>
+                    <li class="no-wrap">huawei<span class="highlight-cyan">&</span>android cо сборками на коммит</li>
+                    <li><span class="highlight-cyan">воскрешение</span> Sonarqube</li>
+                    <li class="no-wrap"><span class="highlight-cyan">политики</span> мёрджа: роли, аппрувы, три билда</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slides 29-33: Bereke 2024 -->
+        <div class="slide">
+            <div class="slide-content" data-slide="29">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2024</h2>
+                <ul>
+                    <li>начало мук <span class="highlight-cyan">разрабов</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="30">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2024</h2>
+                <ul>
+                    <li>начало мук <span class="highlight-cyan">разрабов</span></li>
+                    <li>app distribution полуавтомат с <span class="highlight-cyan">определением</span> команды</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="31">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2024</h2>
+                <ul>
+                    <li>начало мук <span class="highlight-cyan">разрабов</span></li>
+                    <li>app distribution полуавтомат с <span class="highlight-cyan">определением</span> команды</li>
+                    <li><span class="highlight-cyan">смерть</span> Sonarqube</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="32">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2024</h2>
+                <ul>
+                    <li>начало мук <span class="highlight-cyan">разрабов</span></li>
+                    <li>app distribution полуавтомат с <span class="highlight-cyan">определением</span> команды</li>
+                    <li><span class="highlight-cyan">смерть</span> Sonarqube</li>
+                    <li>pre-<span class="highlight-cyan">commit</span> Detekt</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="33">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2024</h2>
+                <ul>
+                    <li>начало мук <span class="highlight-cyan">разрабов</span></li>
+                    <li>app distribution полуавтомат с <span class="highlight-cyan">определением</span> команды</li>
+                    <li><span class="highlight-cyan">смерть</span> Sonarqube</li>
+                    <li>pre-<span class="highlight-cyan">commit</span> Detekt</li>
+                    <li>древний Jenkins живущий на кладбище костылей</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slides 34-40: Bereke 2025 -->
+        <div class="slide">
+            <div class="slide-content" data-slide="34">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2025</h2>
+                <ul>
+                    <li>муки разрабов на <span class="highlight-cyan">максимум</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="35">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2025</h2>
+                <ul>
+                    <li>муки разрабов на <span class="highlight-cyan">максимум</span></li>
+                    <li>pre-<span class="highlight-cyan">push</span> хук разрастается</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="36">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2025</h2>
+                <ul>
+                    <li>муки разрабов на <span class="highlight-cyan">максимум</span></li>
+                    <li>pre-<span class="highlight-cyan">push</span> хук разрастается
+                        <ul>
+                            <li><span class="highlight-cyan">Detekt</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="37">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2025</h2>
+                <ul>
+                    <li>муки разрабов на <span class="highlight-cyan">максимум</span></li>
+                    <li>pre-<span class="highlight-cyan">push</span> хук разрастается
+                        <ul>
+                            <li><span class="highlight-cyan">Detekt</span></li>
+                            <li class="no-wrap">Compose preview tests</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="38">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2025</h2>
+                <ul>
+                    <li>муки разрабов на <span class="highlight-cyan">максимум</span></li>
+                    <li>pre-<span class="highlight-cyan">push</span> хук разрастается
+                        <ul>
+                            <li><span class="highlight-cyan">Detekt</span></li>
+                            <li class="no-wrap">Compose preview tests</li>
+                            <li><span class="highlight-cyan">Unit tests</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="39">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2025</h2>
+                <ul>
+                    <li>муки разрабов на <span class="highlight-cyan">максимум</span></li>
+                    <li>pre-<span class="highlight-cyan">push</span> хук разрастается
+                        <ul>
+                            <li><span class="highlight-cyan">Detekt</span></li>
+                            <li class="no-wrap">Compose preview tests</li>
+                            <li><span class="highlight-cyan">Unit tests</span></li>
+                            <li><span class="header-magenta">Kover</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="40">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2025</h2>
+                <ul>
+                    <li>муки разрабов на <span class="highlight-cyan">максимум</span></li>
+                    <li>pre-<span class="highlight-cyan">push</span> хук разрастается
+                        <ul>
+                            <li><span class="highlight-cyan">Detekt</span></li>
+                            <li class="no-wrap">Compose preview tests</li>
+                            <li><span class="highlight-cyan">Unit tests</span></li>
+                            <li><span class="header-magenta">Kover</span></li>
+                        </ul>
+                    </li>
+                    <li>древний Jenkins живущий на кладбище костылей</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slides 41-44: Bereke 2026 -->
+        <div class="slide">
+            <div class="slide-content" data-slide="41">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2026</h2>
+                <ul>
+                    <li>трёхлетнее ожидание <span class="highlight-cyan">gitlab</span> окончено</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="42">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2026</h2>
+                <ul>
+                    <li>трёхлетнее ожидание <span class="highlight-cyan">gitlab</span> окончено</li>
+                    <li>pre-push локальные хуки стали <span class="highlight-cyan">удалёнными</span> пайплайнами</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="43">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2026</h2>
+                <ul>
+                    <li>трёхлетнее ожидание <span class="highlight-cyan">gitlab</span> окончено</li>
+                    <li>pre-push локальные хуки стали <span class="highlight-cyan">удалёнными</span> пайплайнами</li>
+                    <li><span class="highlight-cyan">remote</span> cache?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="44">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>БЕРЕКЕ 2026</h2>
+                <ul>
+                    <li>трёхлетнее ожидание <span class="highlight-cyan">gitlab</span> окончено</li>
+                    <li>pre-push локальные хуки стали <span class="highlight-cyan">удалёнными</span> пайплайнами</li>
+                    <li><span class="highlight-cyan">remote</span> cache?</li>
+                    <li>konsist?</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slides 45-47: 3 Principles -->
+        <div class="slide">
+            <div class="slide-content" data-slide="45">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ПОДХОД В ТРЁХ ПРИНЦИПАХ</h2>
+                <div class="principle-grid">
+                    <div class="principle-card pain">
+                        <h4>решаем <span class="highlight-cyan">боли</span> команды</h4>
+                        <ul>
+                            <li><span class="highlight-cyan">debug</span> menu</li>
+                            <li>app distribution для тестирующих</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="46">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ПОДХОД В ТРЁХ ПРИНЦИПАХ</h2>
+                <div class="principle-grid">
+                    <div class="principle-card pain">
+                        <h4>решаем <span class="highlight-cyan">боли</span> команды</h4>
+                        <ul>
+                            <li><span class="highlight-cyan">debug</span> menu</li>
+                            <li>app distribution для тестирующих</li>
+                        </ul>
+                    </div>
+                    <div class="principle-card quality">
+                        <h4>поднимаем <span class="highlight-cyan">качество</span></h4>
+                        <ul>
+                            <li>detekt <span class="highlight-cyan">&</span> sonarqube</li>
+                            <li>unit & preview <span class="highlight-cyan">тесты</span></li>
+                            <li><span class="highlight-cyan">политики</span> мёрджа</li>
+                        </ul>
+                    </div>
+                    <div class="principle-card comfort" style="visibility: hidden;">
+                        <h4>повышаем <span class="highlight-cyan">комфорт</span> команды</h4>
+                        <ul>
+                            <li><span class="no-wrap">app distribution</span></li>
+                            <li class="no-wrap">под ключ для <span class="highlight-cyan">разрабов</span></li>
+                            <li><span class="header-magenta">хуки</span></li>
+                            <li>remote cache</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="47">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <h2>ПОДХОД В ТРЁХ ПРИНЦИПАХ</h2>
+                <div class="principle-grid">
+                    <div class="principle-card pain">
+                        <h4>решаем <span class="highlight-cyan">боли</span> команды</h4>
+                        <ul>
+                            <li><span class="highlight-cyan">debug</span> menu</li>
+                            <li>app distribution для тестирующих</li>
+                        </ul>
+                    </div>
+                    <div class="principle-card quality">
+                        <h4>поднимаем <span class="highlight-cyan">качество</span></h4>
+                        <ul>
+                            <li>detekt <span class="highlight-cyan">&</span> sonarqube</li>
+                            <li>unit & preview <span class="highlight-cyan">тесты</span></li>
+                            <li><span class="highlight-cyan">политики</span> мёрджа</li>
+                        </ul>
+                    </div>
+                    <div class="principle-card comfort">
+                        <h4>повышаем <span class="highlight-cyan">комфорт</span> команды</h4>
+                        <ul>
+                            <li><span class="no-wrap">app distribution</span></li>
+                            <li class="no-wrap">под ключ для <span class="highlight-cyan">разрабов</span></li>
+                            <li><span class="header-magenta">хуки</span></li>
+                            <li>remote cache</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slides 48-49: Final Quote -->
+        <div class="slide">
+            <div class="slide-content" data-slide="48">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <div class="final-quote">
+                    <span>Любовь живёт три года?..</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content" data-slide="49">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <div class="final-quote">
+                    <span>Любовь живёт три года?..</span>
+                    <div class="author">Извини, Бегбедер.</div>
+                    <div style="margin-top: 50px;">
+                        Настоящие чувства <span class="emphasis">ВЕЧНЫ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 50: Contact -->
+        <div class="slide">
+            <div class="slide-content" data-slide="50">
+                <div class="ornament-border"></div>
+                <div class="ornament-border-bottom"></div>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 80px; height: 100%; padding: 0;">
+                    <div style="flex: 1; text-align: center; display: flex; align-items: center; justify-content: center;">
+                        <div style="width: 500px; height: 500px; border: 3px solid var(--gold); box-shadow: 0 4px 20px rgba(218,165,32,0.3); background: var(--cream); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                            <img src="meme-tsagan.png" alt="Meme" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                    </div>
+                    <div style="flex: 1; text-align: center; display: flex; align-items: center; justify-content: center;">
+                        <div class="qr-code" style="width: 500px; height: 500px;">
+                            <img src="qr-tg.png" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-number">
+        <span id="currentSlide">1</span> / <span id="totalSlides">50</span>
+    </div>
+
+    <div class="nav-buttons">
+        <button class="nav-btn exit-btn" onclick="window.location.href='https://ivan.nullptr.party'" title="Exit (ESC)">&#10005;</button>
+        <button class="nav-btn" onclick="previousSlide()">&#8249;</button>
+        <button class="nav-btn" onclick="nextSlide()">&#8250;</button>
+    </div>
+
+    <script>
+        // Floating steppe elements: tulips, bortsoki shapes, ground squirrels
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            const items = ['🌷', '🌷', '🌷', '🥟', '🌾', '☀️', '🌸'];
+
+            for (let i = 0; i < 30; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating-item';
+                el.textContent = items[Math.floor(Math.random() * items.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.animationDuration = (Math.random() * 8 + 10) + 's';
+                el.style.animationDelay = Math.random() * 15 + 's';
+                el.style.fontSize = (Math.random() * 12 + 14) + 'px';
+                el.style.opacity = Math.random() * 0.3 + 0.15;
+                container.appendChild(el);
+            }
+        }
+
+        createFloatingElements();
+
+        // Inject gopher + page number into each slide
+        document.querySelectorAll('.slide-content').forEach(el => {
+            const num = el.getAttribute('data-slide');
+            if (!num) return;
+            const footer = document.createElement('div');
+            footer.className = 'slide-footer';
+            footer.innerHTML = '<img src="gopher-small.png" alt="" class="footer-gopher"><span class="page-num">' + num + '</span>';
+            el.appendChild(footer);
+        });
+
+        // Presentation Navigation
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') window.location.href = 'https://ivan.nullptr.party';
+            else if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Touch Support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        });
+    </script>
+</body>
+</html>
