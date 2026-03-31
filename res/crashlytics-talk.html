@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crashlytics. От ручного анализа до команды субагентов</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap&subset=cyrillic');
+
+        :root {
+            --bg: #0b0d1a;
+            --bg-card: rgba(8, 15, 40, 0.95);
+            --text: #c8d6e5;
+            --text-muted: #5a6a7a;
+            --accent-1: #4fa4d4;
+            --accent-2: #c0392b;
+            --accent-3: #f39c12;
+            --accent-4: #e8d5a3;
+            --font-heading: 'IBM Plex Sans', sans-serif;
+            --font-body: 'IBM Plex Mono', monospace;
+            --slide-border-radius: 4px;
+            --slide-border: 1px solid rgba(79, 164, 212, 0.3);
+            --slide-shadow: 0 0 40px rgba(4, 20, 60, 0.8), 0 0 80px rgba(79, 164, 212, 0.08);
+            --btn-bg: rgba(79, 164, 212, 0.15);
+            --btn-text: var(--accent-1);
+            --transition-slide: opacity 1s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* === Stars field (enhanced) === */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(3px 3px at 10% 15%, rgba(200,220,255,1), transparent),
+                radial-gradient(2.5px 2.5px at 85% 8%, rgba(255,240,200,0.95), transparent),
+                radial-gradient(3px 3px at 50% 88%, rgba(200,230,255,1), transparent),
+                radial-gradient(2.5px 2.5px at 92% 45%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(3px 3px at 7% 72%, rgba(220,240,255,0.95), transparent),
+                radial-gradient(2.5px 2.5px at 68% 5%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(2px 2px at 22% 32%, rgba(255,255,255,0.85), transparent),
+                radial-gradient(2px 2px at 75% 22%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 38% 65%, rgba(200,220,255,0.85), transparent),
+                radial-gradient(2px 2px at 58% 42%, rgba(255,255,255,0.75), transparent),
+                radial-gradient(2px 2px at 15% 55%, rgba(255,240,220,0.8), transparent),
+                radial-gradient(2px 2px at 82% 78%, rgba(255,255,255,0.85), transparent),
+                radial-gradient(2px 2px at 45% 12%, rgba(200,230,255,0.8), transparent),
+                radial-gradient(2px 2px at 95% 62%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(2px 2px at 32% 92%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 62% 75%, rgba(220,230,255,0.75), transparent),
+                radial-gradient(1.5px 1.5px at 5% 25%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 18% 82%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1.5px 1.5px at 28% 48%, rgba(255,255,255,0.65), transparent),
+                radial-gradient(1.5px 1.5px at 42% 28%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1.5px 1.5px at 55% 58%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1.5px 1.5px at 65% 38%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1.5px 1.5px at 72% 85%, rgba(255,255,255,0.55), transparent),
+                radial-gradient(1.5px 1.5px at 88% 32%, rgba(255,255,255,0.65), transparent),
+                radial-gradient(1.5px 1.5px at 35% 78%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1.5px 1.5px at 48% 95%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1.5px 1.5px at 78% 52%, rgba(255,255,255,0.55), transparent),
+                radial-gradient(1.5px 1.5px at 3% 42%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 97% 18%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1.5px 1.5px at 52% 22%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 12% 62%, rgba(255,255,255,0.45), transparent),
+                radial-gradient(1px 1px at 25% 15%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 40% 45%, rgba(255,255,255,0.35), transparent),
+                radial-gradient(1px 1px at 60% 68%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 70% 12%, rgba(255,255,255,0.45), transparent),
+                radial-gradient(1px 1px at 83% 55%, rgba(255,255,255,0.35), transparent),
+                radial-gradient(1px 1px at 90% 90%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 20% 95%, rgba(255,255,255,0.35), transparent),
+                radial-gradient(ellipse at 20% 80%, rgba(79, 164, 212, 0.07), transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(192, 57, 43, 0.05), transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(79, 100, 180, 0.03), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(3px 3px at 12% 35%, rgba(200,220,255,1), transparent),
+                radial-gradient(2.5px 2.5px at 37% 82%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(3.5px 3.5px at 62% 18%, rgba(200,230,255,1), transparent),
+                radial-gradient(2px 2px at 78% 58%, rgba(255,240,200,0.85), transparent),
+                radial-gradient(3px 3px at 92% 72%, rgba(255,240,200,0.9), transparent),
+                radial-gradient(2.5px 2.5px at 8% 68%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(3px 3px at 48% 42%, rgba(200,230,255,1), transparent),
+                radial-gradient(2px 2px at 25% 18%, rgba(255,255,255,0.85), transparent),
+                radial-gradient(2.5px 2.5px at 55% 72%, rgba(220,240,255,0.9), transparent),
+                radial-gradient(2px 2px at 82% 38%, rgba(255,240,220,0.8), transparent),
+                radial-gradient(3px 3px at 42% 55%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(2px 2px at 70% 92%, rgba(200,220,255,0.85), transparent);
+            pointer-events: none;
+            z-index: 1;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        /* Extra star layers */
+        .stars-extra {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+        .stars-extra-1 {
+            background:
+                radial-gradient(2px 2px at 2% 5%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1.5px 1.5px at 8% 18%, rgba(200,220,255,0.7), transparent),
+                radial-gradient(2.5px 2.5px at 14% 3%, rgba(255,240,200,0.85), transparent),
+                radial-gradient(1px 1px at 16% 38%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(2px 2px at 23% 58%, rgba(220,240,255,0.75), transparent),
+                radial-gradient(1.5px 1.5px at 27% 8%, rgba(255,255,255,0.65), transparent),
+                radial-gradient(3px 3px at 33% 72%, rgba(200,230,255,0.9), transparent),
+                radial-gradient(1px 1px at 37% 22%, rgba(255,255,255,0.45), transparent),
+                radial-gradient(2px 2px at 43% 85%, rgba(255,240,220,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 47% 35%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2.5px 2.5px at 53% 5%, rgba(200,220,255,0.85), transparent),
+                radial-gradient(1px 1px at 57% 48%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(2px 2px at 63% 92%, rgba(255,255,255,0.75), transparent),
+                radial-gradient(1.5px 1.5px at 67% 15%, rgba(220,240,255,0.65), transparent),
+                radial-gradient(3px 3px at 73% 68%, rgba(255,240,200,0.9), transparent),
+                radial-gradient(1px 1px at 77% 28%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(2px 2px at 83% 82%, rgba(200,230,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 87% 42%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2.5px 2.5px at 93% 55%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 97% 75%, rgba(200,220,255,0.45), transparent),
+                radial-gradient(2px 2px at 4% 88%, rgba(255,240,200,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 11% 45%, rgba(255,255,255,0.55), transparent),
+                radial-gradient(1px 1px at 19% 72%, rgba(220,240,255,0.4), transparent),
+                radial-gradient(2px 2px at 29% 95%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 41% 2%, rgba(255,255,255,0.65), transparent),
+                radial-gradient(1px 1px at 51% 52%, rgba(200,220,255,0.4), transparent),
+                radial-gradient(2px 2px at 59% 18%, rgba(255,255,255,0.75), transparent),
+                radial-gradient(1.5px 1.5px at 71% 38%, rgba(255,240,220,0.55), transparent),
+                radial-gradient(1px 1px at 81% 8%, rgba(255,255,255,0.45), transparent),
+                radial-gradient(2px 2px at 91% 65%, rgba(200,230,255,0.7), transparent);
+            animation: twinkle 6s ease-in-out infinite;
+            animation-delay: -1s;
+        }
+        .stars-extra-2 {
+            background:
+                radial-gradient(2.5px 2.5px at 6% 52%, rgba(255,255,255,0.85), transparent),
+                radial-gradient(1.5px 1.5px at 13% 88%, rgba(200,220,255,0.6), transparent),
+                radial-gradient(2px 2px at 21% 12%, rgba(255,240,200,0.75), transparent),
+                radial-gradient(1px 1px at 26% 68%, rgba(255,255,255,0.45), transparent),
+                radial-gradient(3px 3px at 31% 28%, rgba(220,240,255,0.9), transparent),
+                radial-gradient(1.5px 1.5px at 36% 82%, rgba(255,255,255,0.55), transparent),
+                radial-gradient(2px 2px at 44% 42%, rgba(200,230,255,0.7), transparent),
+                radial-gradient(1px 1px at 49% 75%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(2.5px 2.5px at 56% 18%, rgba(255,240,220,0.8), transparent),
+                radial-gradient(1.5px 1.5px at 61% 58%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 66% 95%, rgba(200,220,255,0.7), transparent),
+                radial-gradient(1px 1px at 74% 8%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(3px 3px at 79% 48%, rgba(255,240,200,0.85), transparent),
+                radial-gradient(1.5px 1.5px at 84% 72%, rgba(220,240,255,0.55), transparent),
+                radial-gradient(2px 2px at 89% 22%, rgba(255,255,255,0.75), transparent),
+                radial-gradient(1px 1px at 96% 38%, rgba(200,230,255,0.45), transparent),
+                radial-gradient(2px 2px at 9% 32%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 17% 62%, rgba(255,240,220,0.6), transparent),
+                radial-gradient(1px 1px at 24% 2%, rgba(255,255,255,0.45), transparent),
+                radial-gradient(2.5px 2.5px at 39% 52%, rgba(200,220,255,0.8), transparent),
+                radial-gradient(1.5px 1.5px at 46% 15%, rgba(255,255,255,0.55), transparent),
+                radial-gradient(1px 1px at 54% 78%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(2px 2px at 64% 32%, rgba(220,240,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 76% 92%, rgba(255,240,200,0.6), transparent),
+                radial-gradient(1px 1px at 86% 12%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(2px 2px at 94% 85%, rgba(200,230,255,0.7), transparent);
+            animation: twinkle 5s ease-in-out infinite;
+            animation-delay: -2s;
+        }
+
+        .stars-extra-3 {
+            background:
+                radial-gradient(2px 2px at 1% 10%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(3px 3px at 5% 40%, rgba(200,220,255,0.95), transparent),
+                radial-gradient(1.5px 1.5px at 9% 70%, rgba(255,240,200,0.65), transparent),
+                radial-gradient(2.5px 2.5px at 13% 95%, rgba(255,255,255,0.85), transparent),
+                radial-gradient(1px 1px at 17% 20%, rgba(220,240,255,0.5), transparent),
+                radial-gradient(2px 2px at 22% 55%, rgba(255,255,255,0.75), transparent),
+                radial-gradient(3px 3px at 26% 85%, rgba(200,230,255,0.9), transparent),
+                radial-gradient(1.5px 1.5px at 30% 15%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 34% 50%, rgba(255,240,220,0.7), transparent),
+                radial-gradient(2.5px 2.5px at 38% 80%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 42% 10%, rgba(200,220,255,0.45), transparent),
+                radial-gradient(3px 3px at 46% 38%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1.5px 1.5px at 50% 65%, rgba(220,240,255,0.6), transparent),
+                radial-gradient(2px 2px at 54% 90%, rgba(255,240,200,0.75), transparent),
+                radial-gradient(2.5px 2.5px at 58% 25%, rgba(255,255,255,0.85), transparent),
+                radial-gradient(1px 1px at 62% 52%, rgba(200,230,255,0.5), transparent),
+                radial-gradient(2px 2px at 66% 78%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(3px 3px at 70% 5%, rgba(220,240,255,0.95), transparent),
+                radial-gradient(1.5px 1.5px at 74% 42%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 78% 68%, rgba(255,240,200,0.75), transparent),
+                radial-gradient(2.5px 2.5px at 82% 92%, rgba(200,220,255,0.85), transparent),
+                radial-gradient(1px 1px at 86% 18%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(3px 3px at 90% 48%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1.5px 1.5px at 94% 72%, rgba(220,240,255,0.65), transparent),
+                radial-gradient(2px 2px at 98% 30%, rgba(255,240,220,0.7), transparent);
+            animation: twinkle 3.5s ease-in-out infinite;
+            animation-delay: -0.5s;
+        }
+        .stars-extra-4 {
+            background:
+                radial-gradient(2.5px 2.5px at 3% 28%, rgba(255,255,255,0.85), transparent),
+                radial-gradient(1.5px 1.5px at 7% 58%, rgba(200,220,255,0.65), transparent),
+                radial-gradient(3px 3px at 11% 85%, rgba(255,240,200,0.9), transparent),
+                radial-gradient(1px 1px at 15% 12%, rgba(255,255,255,0.45), transparent),
+                radial-gradient(2px 2px at 20% 42%, rgba(220,240,255,0.75), transparent),
+                radial-gradient(2.5px 2.5px at 24% 72%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1.5px 1.5px at 28% 98%, rgba(200,230,255,0.6), transparent),
+                radial-gradient(3px 3px at 32% 8%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(2px 2px at 36% 35%, rgba(255,240,220,0.7), transparent),
+                radial-gradient(1px 1px at 40% 62%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(2.5px 2.5px at 45% 88%, rgba(200,220,255,0.85), transparent),
+                radial-gradient(1.5px 1.5px at 48% 22%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(3px 3px at 52% 48%, rgba(220,240,255,0.95), transparent),
+                radial-gradient(2px 2px at 56% 75%, rgba(255,240,200,0.7), transparent),
+                radial-gradient(1px 1px at 60% 5%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(2.5px 2.5px at 65% 32%, rgba(200,230,255,0.8), transparent),
+                radial-gradient(1.5px 1.5px at 68% 58%, rgba(255,255,255,0.65), transparent),
+                radial-gradient(3px 3px at 72% 82%, rgba(255,240,220,0.9), transparent),
+                radial-gradient(2px 2px at 76% 15%, rgba(255,255,255,0.75), transparent),
+                radial-gradient(1px 1px at 80% 45%, rgba(220,240,255,0.5), transparent),
+                radial-gradient(2.5px 2.5px at 85% 68%, rgba(200,220,255,0.85), transparent),
+                radial-gradient(1.5px 1.5px at 88% 95%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 92% 25%, rgba(255,240,200,0.75), transparent),
+                radial-gradient(3px 3px at 96% 55%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 99% 82%, rgba(200,230,255,0.5), transparent);
+            animation: twinkle 4.5s ease-in-out infinite;
+            animation-delay: -3s;
+        }
+
+        /* Orbit */
+        .orbit {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 140vmax; height: 140vmax;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            border: 1px solid rgba(79, 164, 212, 0.06);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .orbit::after {
+            content: '';
+            position: absolute;
+            top: -3px; left: 50%;
+            width: 6px; height: 6px;
+            background: var(--accent-3);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-3), 0 0 20px rgba(243,156,18,0.4);
+            animation: orbit-move 30s linear infinite;
+        }
+
+        @keyframes orbit-move {
+            0% { transform: rotate(0deg) translateX(70vmax) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(70vmax) rotate(-360deg); }
+        }
+
+        /* === Flying space objects === */
+        .space-objects {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+            overflow: hidden;
+        }
+        .flying-object {
+            position: absolute;
+            opacity: 1;
+        }
+        .flying-object.brighter { opacity: 1; }
+
+        @keyframes fly-right {
+            0% { transform: translateX(-120px); }
+            100% { transform: translateX(calc(100vw + 120px)); }
+        }
+        @keyframes fly-left {
+            0% { transform: translateX(calc(100vw + 120px)); }
+            100% { transform: translateX(-120px); }
+        }
+        @keyframes fly-diag-up {
+            0% { transform: translate(-120px, 80px); }
+            100% { transform: translate(calc(100vw + 120px), -80px); }
+        }
+        @keyframes fly-diag-down {
+            0% { transform: translate(calc(100vw + 120px), -60px); }
+            100% { transform: translate(-120px, 60px); }
+        }
+
+        /* Comet tail */
+        .comet::after {
+            content: '';
+            position: absolute;
+            right: 100%; top: 50%;
+            width: 40px; height: 2px;
+            background: linear-gradient(to left, rgba(243,156,18,0.4), transparent);
+            transform: translateY(-50%);
+        }
+
+        /* Asteroid */
+        .asteroid {
+            border-radius: 40% 60% 50% 50%;
+            background: rgba(180,160,140,0.5);
+        }
+
+        .presentation { width: 100vw; height: 100vh; position: relative; z-index: 2; }
+
+        .slide {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            padding: 60px;
+            position: absolute; top: 0; left: 0;
+            opacity: 0; pointer-events: none;
+            transition: var(--transition-slide);
+        }
+        .slide.active { opacity: 1; pointer-events: auto; }
+
+        .slide-content {
+            background: var(--bg-card);
+            border: var(--slide-border);
+            border-radius: var(--slide-border-radius);
+            padding: 40px 40px 60px 40px;
+            max-width: 1400px; width: 100%; height: 80vh;
+            box-shadow: var(--slide-shadow);
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { border-color: rgba(79, 164, 212, 0.2); }
+            50% { border-color: rgba(79, 164, 212, 0.45); }
+        }
+
+        .slide.active .slide-content {
+            animation: borderGlow 6s ease-in-out infinite;
+        }
+
+        /* Auto slide numbering */
+        .presentation { counter-reset: slide-counter; }
+        .slide { counter-increment: slide-counter; }
+        .slide .slide-content::after {
+            content: counter(slide-counter);
+            position: absolute; bottom: 15px; right: 15px;
+            width: 45px; height: 45px;
+            border: 1px solid rgba(79, 164, 212, 0.3);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent-1); font-size: 16px; font-weight: 700;
+            font-family: var(--font-heading); opacity: 0.5;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 64px; color: var(--accent-4);
+            margin-bottom: 30px; font-weight: 700;
+            text-align: center; line-height: 1.2;
+            text-transform: uppercase; letter-spacing: 3px;
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 42px; color: var(--accent-1);
+            margin-bottom: 25px; font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h3 {
+            font-family: var(--font-heading);
+            font-size: 28px; margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-family: var(--font-body);
+            font-size: 26px; color: var(--text-muted);
+            text-align: center; line-height: 1.8;
+            font-style: italic;
+        }
+
+        ul {
+            list-style: none; font-size: 28px;
+            line-height: 1.8; font-weight: 500;
+            max-width: 70%; margin-right: auto;
+        }
+
+        ul li {
+            margin-bottom: 12px; padding-left: 45px; position: relative;
+        }
+
+        ul li::before {
+            content: '\2737';
+            position: absolute; left: 0;
+            color: var(--accent-3); font-size: 22px;
+        }
+
+        ul ul { margin-top: 10px; font-size: 24px; }
+        ul ul li { margin-bottom: 8px; padding-left: 35px; }
+        ul ul li::before { content: '\2022'; font-size: 20px; color: var(--accent-1); }
+
+        /* #9: All text accents → orange only */
+        .highlight-cyan   { color: var(--accent-3); font-weight: 700; }
+        .highlight-red     { color: var(--accent-3); font-weight: 700; }
+        .highlight-gold    { color: var(--accent-3); font-weight: 700; }
+        .highlight-warm    { color: var(--accent-3); font-weight: 700; }
+
+        /* Navigation */
+        .nav-buttons {
+            position: fixed; bottom: 40px; left: 40px;
+            display: flex; gap: 12px; z-index: 1000;
+        }
+
+        .nav-btn {
+            background: var(--btn-bg);
+            border: 1px solid rgba(79, 164, 212, 0.4);
+            border-radius: 50%; width: 55px; height: 55px;
+            cursor: pointer; font-size: 24px; font-weight: 700;
+            color: var(--btn-text); font-family: var(--font-heading);
+            transition: all 0.3s; backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(79, 164, 212, 0.25);
+            box-shadow: 0 0 20px rgba(79, 164, 212, 0.3);
+            transform: scale(1.1);
+        }
+
+        .exit-btn {
+            background: rgba(192, 57, 43, 0.15);
+            border-color: rgba(192, 57, 43, 0.4);
+            color: var(--accent-2);
+        }
+
+        .slide-number { display: none; }
+
+        .section-divider {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; height: 100%;
+        }
+
+        .section-number {
+            font-size: 100px; color: var(--accent-2);
+            opacity: 0.15; font-family: var(--font-heading);
+            line-height: 1; margin-bottom: 20px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(79, 164, 212, 0.2);
+            border-left: 3px solid var(--accent-3);
+            border-radius: 4px; padding: 20px;
+            font-family: var(--font-body); font-size: 16px;
+            color: var(--text); overflow-x: auto;
+            white-space: pre; line-height: 1.6;
+            margin: 15px 0; max-height: 55vh;
+        }
+
+        .code-block .keyword { color: var(--accent-2); }
+        .code-block .string  { color: var(--accent-1); }
+        .code-block .comment { color: var(--text-muted); font-style: italic; }
+
+        .two-col {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .col-problem { border-left: 3px solid var(--accent-2); padding-left: 20px; }
+        .col-problem h3 { color: var(--accent-2); }
+        .col-solution { border-left: 3px solid var(--accent-1); padding-left: 20px; }
+        .col-solution h3 { color: var(--accent-1); }
+
+        .pipeline {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 15px; margin: auto; padding: 20px 30px;
+        }
+
+        .pipeline-row {
+            display: flex; align-items: center;
+            justify-content: center; width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .pipeline-step {
+            background: rgba(79, 164, 212, 0.08);
+            border: 1px solid rgba(79, 164, 212, 0.4);
+            border-radius: 4px; padding: 8px 14px; margin: 4px 0;
+            font-size: 16px; font-weight: 600;
+            color: var(--accent-1); text-align: center;
+        }
+
+        .pipeline-step small { font-size: 12px; font-weight: 400; opacity: 0.7; }
+
+        .pipeline-step.accent {
+            border-color: var(--accent-2); color: var(--accent-2);
+            background: rgba(192, 57, 43, 0.08);
+        }
+
+        .pipeline-step.new {
+            border-color: var(--accent-3); color: var(--accent-3);
+            background: rgba(243, 156, 18, 0.08);
+        }
+
+        .pipeline-step.special {
+            border-color: var(--accent-4); color: var(--accent-4);
+            background: rgba(232, 213, 163, 0.08);
+            border-style: dashed;
+        }
+
+        .pipeline-arrow {
+            color: var(--accent-3); font-size: 20px;
+            padding: 0 6px; flex-shrink: 0;
+        }
+
+        .pipeline-branch {
+            display: flex; flex-direction: column; gap: 4px;
+        }
+
+        .screenshot-placeholder {
+            border: 1px dashed rgba(79, 164, 212, 0.3);
+            border-radius: 4px; padding: 40px;
+            text-align: center; color: var(--text-muted);
+            opacity: 0.5; min-height: 200px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; margin: 15px 0;
+        }
+
+        /* #3: Bigger QR for slides */
+        .qr-section {
+            position: absolute; bottom: 60px; right: 20px;
+            width: 350px; height: 350px;
+            pointer-events: none; z-index: 10;
+        }
+
+        .qr-code {
+            width: 100%; height: 100%;
+            border: none;
+            border-radius: 4px; padding: 8px;
+            background: transparent;
+        }
+
+        .final-quote {
+            text-align: center; font-size: 40px;
+            line-height: 1.6; color: var(--accent-4); font-weight: 600;
+        }
+        .final-quote .author {
+            font-size: 28px; color: var(--accent-1);
+            margin-top: 30px; font-style: italic; font-weight: 400;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 36px; }
+            h2 { font-size: 30px; }
+            ul { font-size: 22px; }
+            .two-col { grid-template-columns: 1fr; }
+        }
+
+        @media (min-width: 1920px) {
+            .slide-content { max-width: 90vw; padding: 50px 60px 70px 60px; }
+            h1 { font-size: clamp(64px, 4vw, 120px); }
+            h2 { font-size: clamp(42px, 2.5vw, 72px); }
+            ul { font-size: clamp(28px, 1.6vw, 42px); }
+            ul ul { font-size: clamp(24px, 1.3vw, 36px); }
+            .pipeline-step { font-size: clamp(16px, 1vw, 24px); padding: 12px 20px; }
+            .nav-btn { width: 70px; height: 70px; font-size: 32px; }
+            .code-block { font-size: clamp(16px, 0.9vw, 24px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="orbit"></div>
+
+    <!-- Star layers x4 -->
+    <div class="stars-extra stars-extra-1"></div>
+    <div class="stars-extra stars-extra-2"></div>
+    <div class="stars-extra stars-extra-3"></div>
+    <div class="stars-extra stars-extra-4"></div>
+
+    <!-- Flying space objects x2 -->
+    <div class="space-objects">
+        <div class="flying-object" style="font-size:20px;top:12%;animation:fly-right 35s linear infinite;">&#128640;</div>
+        <div class="flying-object" style="font-size:14px;top:75%;animation:fly-right 48s linear infinite;animation-delay:-22s;">&#128640;</div>
+        <div class="flying-object" style="font-size:12px;top:92%;animation:fly-right 42s linear infinite;animation-delay:-30s;">&#128640;</div>
+        <div class="flying-object" style="font-size:18px;top:28%;animation:fly-left 40s linear infinite;animation-delay:-10s;">&#128760;</div>
+        <div class="flying-object" style="font-size:14px;top:55%;animation:fly-left 38s linear infinite;animation-delay:-18s;">&#128752;</div>
+        <div class="flying-object" style="font-size:26px;top:82%;animation:fly-right 60s linear infinite;animation-delay:-35s;">&#129680;</div>
+        <div class="flying-object" style="font-size:22px;top:45%;animation:fly-left 55s linear infinite;animation-delay:-25s;">&#127757;</div>
+        <div class="flying-object" style="font-size:16px;top:8%;animation:fly-right 45s linear infinite;animation-delay:-15s;">&#127761;</div>
+        <div class="flying-object comet" style="font-size:16px;top:35%;animation:fly-diag-up 28s linear infinite;animation-delay:-8s;">&#9732;</div>
+        <div class="flying-object comet" style="font-size:20px;top:65%;animation:fly-diag-down 32s linear infinite;animation-delay:-12s;">&#9732;</div>
+        <div class="flying-object asteroid" style="width:7px;height:5px;top:20%;animation:fly-right 50s linear infinite;animation-delay:-5s;"></div>
+        <div class="flying-object asteroid" style="width:4px;height:4px;top:60%;animation:fly-left 44s linear infinite;animation-delay:-20s;"></div>
+        <div class="flying-object asteroid" style="width:5px;height:4px;top:40%;animation:fly-diag-up 55s linear infinite;animation-delay:-33s;"></div>
+        <!-- second wave -->
+        <div class="flying-object" style="font-size:16px;top:5%;animation:fly-left 37s linear infinite;animation-delay:-3s;">&#128640;</div>
+        <div class="flying-object" style="font-size:22px;top:50%;animation:fly-right 52s linear infinite;animation-delay:-40s;">&#128640;</div>
+        <div class="flying-object" style="font-size:10px;top:88%;animation:fly-left 44s linear infinite;animation-delay:-16s;">&#128640;</div>
+        <div class="flying-object" style="font-size:15px;top:18%;animation:fly-right 43s linear infinite;animation-delay:-7s;">&#128760;</div>
+        <div class="flying-object" style="font-size:12px;top:68%;animation:fly-right 36s linear infinite;animation-delay:-28s;">&#128752;</div>
+        <div class="flying-object" style="font-size:20px;top:38%;animation:fly-left 58s linear infinite;animation-delay:-45s;">&#129680;</div>
+        <div class="flying-object" style="font-size:18px;top:72%;animation:fly-right 50s linear infinite;animation-delay:-14s;">&#127757;</div>
+        <div class="flying-object" style="font-size:14px;top:95%;animation:fly-left 47s linear infinite;animation-delay:-32s;">&#127761;</div>
+        <div class="flying-object comet" style="font-size:14px;top:15%;animation:fly-diag-down 26s linear infinite;animation-delay:-4s;">&#9732;</div>
+        <div class="flying-object comet" style="font-size:18px;top:80%;animation:fly-diag-up 30s linear infinite;animation-delay:-19s;">&#9732;</div>
+        <div class="flying-object asteroid" style="width:6px;height:4px;top:48%;animation:fly-right 46s linear infinite;animation-delay:-11s;"></div>
+        <div class="flying-object asteroid" style="width:5px;height:5px;top:30%;animation:fly-left 52s linear infinite;animation-delay:-37s;"></div>
+        <div class="flying-object asteroid" style="width:4px;height:3px;top:85%;animation:fly-diag-down 48s linear infinite;animation-delay:-24s;"></div>
+    </div>
+
+    <div class="presentation">
+
+<!-- === #1: TITLE (progressive: 2 slides) === -->
+<div class="slide active"><div class="slide-content" style="padding-top: 20vh; align-items: center;">
+    <h1>CRASHLYTICS</h1>
+    <h2 style="text-align: center; color: var(--accent-4); font-size: 36px; letter-spacing: 2px;">От ручного анализа до команды субагентов</h2>
+</div></div>
+<div class="slide"><div class="slide-content" style="padding-top: 20vh; align-items: center;">
+    <h1>CRASHLYTICS</h1>
+    <h2 style="text-align: center; color: var(--accent-4); font-size: 36px; letter-spacing: 2px;">От ручного анализа до команды субагентов</h2>
+    <p class="subtitle" style="margin-top: 30px;">Как <span class="highlight-gold">Иван Луценко</span> ленился всё больше,<br>но при этом повышал эффективность работы с крашами</p>
+</div></div>
+
+<!-- === #3: ОБО МНЕ (4 slides, bigger QR) === -->
+<div class="slide"><div class="slide-content"><h2>Обо мне</h2>
+    <ul><li><span class="highlight-gold">Роль:</span> Android Tech Lead, Bereke Business</li></ul>
+    <div class="qr-section"><div class="qr-code"><img src="img/slide-000.png" alt="QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Обо мне</h2>
+    <ul><li><span class="highlight-gold">Роль:</span> Android Tech Lead, Bereke Business</li>
+        <li><span class="highlight-gold">Специализация:</span> платформенная android-разработка</li></ul>
+    <div class="qr-section"><div class="qr-code"><img src="img/slide-000.png" alt="QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Обо мне</h2>
+    <ul><li><span class="highlight-gold">Роль:</span> Android Tech Lead, Bereke Business</li>
+        <li><span class="highlight-gold">Специализация:</span> платформенная android-разработка</li>
+        <li><span class="highlight-gold">Опыт:</span> петы, outsource проекты, банковское приложение</li></ul>
+    <div class="qr-section"><div class="qr-code"><img src="img/slide-000.png" alt="QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Обо мне</h2>
+    <ul><li><span class="highlight-gold">Роль:</span> Android Tech Lead, Bereke Business</li>
+        <li><span class="highlight-gold">Специализация:</span> платформенная android-разработка</li>
+        <li><span class="highlight-gold">Опыт:</span> петы, outsource проекты, банковское приложение</li>
+        <li><span class="highlight-gold">Текущий фокус:</span> AI-ассистированная разработка и управление проектами</li></ul>
+    <div class="qr-section"><div class="qr-code"><img src="img/slide-000.png" alt="QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+</div></div>
+
+<!-- === НАВАЛИВАЕМ БАЗЫ, CRASHLYTICS (image absolute, text independent) === -->
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Crashlytics</h2>
+    <ul style="max-width:35%;font-size:24px;"><li><span class="highlight-gold">Мониторинг</span> &mdash; crash-free users, trends</li></ul>
+    <div style="position:absolute;top:80px;right:40px;bottom:70px;width:55%;display:flex;align-items:flex-start;justify-content:center;">
+        <img src="img/slide-002.png" alt="Firebase dashboard" style="max-width:100%;max-height:100%;border-radius:4px;border:1px solid rgba(79,164,212,0.2);object-fit:contain;"></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Crashlytics</h2>
+    <ul style="max-width:35%;font-size:24px;"><li><span class="highlight-gold">Мониторинг</span> &mdash; crash-free users, trends</li>
+        <li><span class="highlight-gold">Фильтры</span> &mdash; по версиям, типам событий</li></ul>
+    <div style="position:absolute;top:80px;right:40px;bottom:70px;width:55%;display:flex;align-items:flex-start;justify-content:center;">
+        <img src="img/slide-002.png" alt="Firebase dashboard" style="max-width:100%;max-height:100%;border-radius:4px;border:1px solid rgba(79,164,212,0.2);object-fit:contain;"></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Crashlytics</h2>
+    <ul style="max-width:35%;font-size:24px;"><li><span class="highlight-gold">Мониторинг</span> &mdash; crash-free users, trends</li>
+        <li><span class="highlight-gold">Фильтры</span> &mdash; по версиям, типам событий</li>
+        <li>Поддержка <span class="highlight-gold">Android</span> и <span class="highlight-gold">iOS</span></li></ul>
+    <div style="position:absolute;top:80px;right:40px;bottom:70px;width:55%;display:flex;align-items:flex-start;justify-content:center;">
+        <img src="img/slide-002.png" alt="Firebase dashboard" style="max-width:100%;max-height:100%;border-radius:4px;border:1px solid rgba(79,164,212,0.2);object-fit:contain;"></div>
+</div></div>
+
+<!-- === НАВАЛИВАЕМ БАЗЫ, ТОЧЕЧНО (image absolute, text independent) === -->
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, точечно</h2>
+    <ul style="max-width:35%;font-size:24px;"><li><span class="highlight-gold">Устройства</span> в деталях</li></ul>
+    <div style="position:absolute;top:80px;right:40px;bottom:70px;width:55%;display:flex;align-items:flex-start;justify-content:center;">
+        <img src="img/slide-004.png" alt="Детали краша" style="max-width:100%;max-height:100%;border-radius:4px;border:1px solid rgba(79,164,212,0.2);object-fit:contain;"></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, точечно</h2>
+    <ul style="max-width:35%;font-size:24px;"><li><span class="highlight-gold">Устройства</span> в деталях</li>
+        <li><span class="highlight-gold">Даты</span> &mdash; когда появился, тренд</li></ul>
+    <div style="position:absolute;top:80px;right:40px;bottom:70px;width:55%;display:flex;align-items:flex-start;justify-content:center;">
+        <img src="img/slide-004.png" alt="Детали краша" style="max-width:100%;max-height:100%;border-radius:4px;border:1px solid rgba(79,164,212,0.2);object-fit:contain;"></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, точечно</h2>
+    <ul style="max-width:35%;font-size:24px;"><li><span class="highlight-gold">Устройства</span> в деталях</li>
+        <li><span class="highlight-gold">Даты</span> &mdash; когда появился, тренд</li>
+        <li><span class="highlight-gold">Стектрейс</span> &mdash; полная цепочка вызовов</li></ul>
+    <div style="position:absolute;top:80px;right:40px;bottom:70px;width:55%;display:flex;align-items:flex-start;justify-content:center;">
+        <img src="img/slide-004.png" alt="Детали краша" style="max-width:100%;max-height:100%;border-radius:4px;border:1px solid rgba(79,164,212,0.2);object-fit:contain;"></div>
+</div></div>
+
+<!-- === 1) АНАЛИЗ РУКАМИ (5 progressive slides) === -->
+<div class="slide"><div class="slide-content"><h2>1) Анализ руками</h2>
+    <ul><li><span class="highlight-gold">Долго</span></li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>1) Анализ руками</h2>
+    <ul><li><span class="highlight-gold">Долго</span></li>
+        <li>Не всегда <span class="highlight-gold">правильно</span></li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>1) Анализ руками</h2>
+    <ul><li><span class="highlight-gold">Долго</span></li>
+        <li>Не всегда <span class="highlight-gold">правильно</span></li>
+        <li>False positive в назначении <span class="highlight-gold">автора</span></li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>1) Анализ руками</h2>
+    <ul><li><span class="highlight-gold">Долго</span></li>
+        <li>Не всегда <span class="highlight-gold">правильно</span></li>
+        <li>False positive в назначении <span class="highlight-gold">автора</span></li>
+        <li>Не все логи <span class="highlight-gold">прозрачны</span></li></ul>
+</div></div>
+<!-- #7: closing quotes ensured -->
+<div class="slide"><div class="slide-content"><h2>1) Анализ руками</h2>
+    <ul><li><span class="highlight-gold">Долго</span></li>
+        <li>Не всегда <span class="highlight-gold">правильно</span></li>
+        <li>False positive в назначении <span class="highlight-gold">автора</span></li>
+        <li>Не все логи <span class="highlight-gold">прозрачны</span></li>
+        <li>Не все разработчики <span class="highlight-gold">довольны</span></li></ul>
+    <p style="margin-top:auto;font-size:18px;color:var(--accent-4);font-style:italic;">&laquo;Ракету, которая не может взлететь, нет смысла совершенствовать&raquo; &mdash; нужен другой подход</p>
+</div></div>
+
+<!-- === #8: 2) LLM, НАЧАЛО (progressive, merged items 1+3) === -->
+<div class="slide"><div class="slide-content"><h2>2) LLM, начало</h2>
+    <ul><li><span class="highlight-gold">Май 2024</span>, gemini в Crashlytics</li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>2) LLM, начало</h2>
+    <ul><li><span class="highlight-gold">Май 2024</span>, gemini в Crashlytics</li>
+        <li>Разрыв мозга &mdash; <span class="highlight-gold">&laquo;что могло произойти&raquo;</span></li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>2) LLM, начало</h2>
+    <ul><li><span class="highlight-gold">Май 2024</span>, gemini в Crashlytics</li>
+        <li>Разрыв мозга &mdash; <span class="highlight-gold">&laquo;что могло произойти&raquo;</span></li>
+        <li>Анализ неплохой, но <span class="highlight-gold">поверхностный</span></li></ul>
+</div></div>
+<!-- LLM image (maximized, flush top) -->
+<div class="slide"><div class="slide-content" style="padding-top:15px;">
+    <h2 style="margin-bottom:10px;">2) LLM, начало</h2>
+    <div style="flex:1;display:flex;align-items:flex-start;justify-content:center;">
+        <img src="img/slide-005.png" alt="Gemini analysis" style="max-width:100%;max-height:calc(80vh - 80px);border-radius:4px;border:1px solid rgba(79,164,212,0.2);object-fit:contain;"></div>
+</div></div>
+
+<!-- === #12: НАВАЛИВАЕМ БАЗЫ, CLAUDE DESKTOP (progressive 5 items) === -->
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Claude Desktop</h2>
+    <ul><li><span class="highlight-gold">Claude</span></li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Claude Desktop</h2>
+    <ul><li><span class="highlight-gold">Claude</span></li>
+        <li><span class="highlight-gold">Desktop</span></li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Claude Desktop</h2>
+    <ul><li><span class="highlight-gold">Claude</span></li>
+        <li><span class="highlight-gold">Desktop</span></li>
+        <li><span class="highlight-gold">Промпт</span> &mdash; роль, контекст, правила</li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Claude Desktop</h2>
+    <ul><li><span class="highlight-gold">Claude</span></li>
+        <li><span class="highlight-gold">Desktop</span></li>
+        <li><span class="highlight-gold">Промпт</span> &mdash; роль, контекст, правила</li>
+        <li><span class="highlight-gold">Проекты</span> &mdash; project instructions</li></ul>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Claude Desktop</h2>
+    <ul><li><span class="highlight-gold">Claude</span></li>
+        <li><span class="highlight-gold">Desktop</span></li>
+        <li><span class="highlight-gold">Промпт</span> &mdash; роль, контекст, правила</li>
+        <li><span class="highlight-gold">Проекты</span> &mdash; project instructions</li>
+        <li><span class="highlight-gold">Ручная</span> загрузка стектрейса</li></ul>
+</div></div>
+<!-- #13: Claude Desktop images (maximized) -->
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, Claude Desktop</h2>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:20px;">
+        <img src="img/slide-006.png" alt="Claude Desktop instructions" style="max-width:49%;max-height:75vh;border-radius:4px;border:1px solid rgba(79,164,212,0.2);">
+        <img src="img/slide-007.png" alt="Claude Desktop анализ" style="max-width:49%;max-height:75vh;border-radius:4px;border:1px solid rgba(79,164,212,0.2);"></div>
+</div></div>
+
+<!-- === #14,15: 3) CLAUDE DESKTOP — СТРУКТУРА (progressive: 4, then 7, then 7+stats) === -->
+<div class="slide"><div class="slide-content"><h2>3) Claude Desktop</h2>
+    <div class="two-col" style="margin-top:10px;">
+        <div><ul style="max-width:100%;font-size:24px;">
+            <li>1. Роль и контекст</li>
+            <li>2. Входные данные</li>
+            <li>3. Процесс анализа</li>
+            <li>4. MCP-стратегия + Fallback</li></ul></div>
+        <div></div>
+    </div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>3) Claude Desktop</h2>
+    <div class="two-col" style="margin-top:10px;">
+        <div><ul style="max-width:100%;font-size:24px;">
+            <li>1. Роль и контекст</li>
+            <li>2. Входные данные</li>
+            <li>3. Процесс анализа</li>
+            <li>4. MCP-стратегия + Fallback</li></ul></div>
+        <div><ul style="max-width:100%;font-size:24px;">
+            <li>5. Определение assignee</li>
+            <li>6. Два отчёта на выходе</li>
+            <li>7. Чеклист и ограничения</li></ul></div>
+    </div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>3) Claude Desktop</h2>
+    <div class="two-col" style="margin-top:10px;">
+        <div><ul style="max-width:100%;font-size:24px;">
+            <li>1. Роль и контекст</li>
+            <li>2. Входные данные</li>
+            <li>3. Процесс анализа</li>
+            <li>4. MCP-стратегия + Fallback</li></ul></div>
+        <div><ul style="max-width:100%;font-size:24px;">
+            <li>5. Определение assignee</li>
+            <li>6. Два отчёта на выходе</li>
+            <li>7. Чеклист и ограничения</li></ul></div>
+    </div>
+    <p style="margin-top:auto;text-align:center;font-size:42px;color:var(--accent-3);font-weight:700;letter-spacing:2px;">~249 строк &middot; ~11 500 символов &middot; ~19 800 байт<span style="visibility:hidden;"> и один форк?</span></p>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>3) Claude Desktop</h2>
+    <div class="two-col" style="margin-top:10px;">
+        <div><ul style="max-width:100%;font-size:24px;">
+            <li>1. Роль и контекст</li>
+            <li>2. Входные данные</li>
+            <li>3. Процесс анализа</li>
+            <li>4. MCP-стратегия + Fallback</li></ul></div>
+        <div><ul style="max-width:100%;font-size:24px;">
+            <li>5. Определение assignee</li>
+            <li>6. Два отчёта на выходе</li>
+            <li>7. Чеклист и ограничения</li></ul></div>
+    </div>
+    <p style="margin-top:auto;text-align:center;font-size:42px;color:var(--accent-3);font-weight:700;letter-spacing:2px;">~249 строк &middot; ~11 500 символов &middot; ~19 800 байт и один форк?</p>
+</div></div>
+
+<!-- === CC & ПЛАГИНЫ (progressive, consistent two-col layout) === -->
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, CC & плагины</h2>
+    <div class="two-col" style="flex:1;"><div><ul style="max-width:100%;font-size:24px;">
+        <li><span class="highlight-gold">Claude</span></li></ul></div>
+    <div></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, CC & плагины</h2>
+    <div class="two-col" style="flex:1;"><div><ul style="max-width:100%;font-size:24px;">
+        <li><span class="highlight-gold">Claude</span></li>
+        <li><span class="highlight-gold">CLI</span></li></ul></div>
+    <div></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, CC & плагины</h2>
+    <div class="two-col" style="flex:1;"><div><ul style="max-width:100%;font-size:24px;">
+        <li><span class="highlight-gold">Claude</span></li>
+        <li><span class="highlight-gold">CLI</span></li>
+        <li>Расширяемая через <span class="highlight-gold">плагины</span></li></ul></div>
+    <div></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, CC & плагины</h2>
+    <div class="two-col" style="flex:1;"><div><ul style="max-width:100%;font-size:24px;">
+        <li><span class="highlight-gold">Claude</span></li>
+        <li><span class="highlight-gold">CLI</span></li>
+        <li>Расширяемая через <span class="highlight-gold">плагины</span></li></ul></div>
+    <div><h3 style="color:var(--accent-3);">Плагины</h3><ul style="max-width:100%;font-size:24px;">
+        <li>Commands</li>
+        <li>Agents</li>
+        <li>Hooks</li>
+        <li>MCP</li>
+        <li>Skills</li></ul></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, CC & плагины</h2>
+    <div class="two-col" style="flex:1;"><div><ul style="max-width:100%;font-size:24px;">
+        <li><span class="highlight-gold">Claude</span></li>
+        <li><span class="highlight-gold">CLI</span></li>
+        <li>Расширяемая через <span class="highlight-gold">плагины</span></li></ul></div>
+    <div><h3 style="color:var(--accent-3);">Плагины</h3><ul style="max-width:100%;font-size:24px;">
+        <li>Commands</li>
+        <li>Agents</li>
+        <li>Hooks</li>
+        <li>MCP</li>
+        <li>Skills</li>
+        <li>Шарится через <span class="highlight-gold">git</span></li>
+        <li>Подключается <span class="highlight-gold">одной строкой</span></li></ul></div></div>
+</div></div>
+<!-- CC & plugins images (maximized) -->
+<div class="slide"><div class="slide-content"><h2>Наваливаем базы, CC & плагины</h2>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:20px;">
+        <img src="img/slide-009.png" alt="Plugin marketplaces" style="max-width:49%;max-height:70vh;border-radius:4px;border:1px solid rgba(79,164,212,0.2);">
+        <img src="img/slide-010.png" alt="Plugin installed" style="max-width:49%;max-height:70vh;border-radius:4px;border:1px solid rgba(79,164,212,0.2);"></div>
+</div></div>
+
+<!-- === 4) CLAUDE CODE — PIPELINE === -->
+<div class="slide"><div class="slide-content" style="align-items:center;justify-content:center;">
+    <h2 style="text-align:center;">4) Claude Code &mdash; архитектура</h2>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+        <img src="img/slide-011.png" alt="Pipeline" style="max-width:95%;max-height:60vh;border-radius:4px;"></div>
+</div></div>
+
+<!-- === DESKTOP VS CC PLUGIN (5 progressive slides) === -->
+<div class="slide"><div class="slide-content"><h2>Desktop проект vs CC plugin</h2>
+    <div class="two-col" style="margin-top:10px;"><div class="col-problem"><h3>Desktop</h3></div><div class="col-solution"><h3>CC Plugin</h3></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">Ручная</span> загрузка логов</li></ul></div>
+    <div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Да вообще как хочешь</li></ul></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Desktop проект vs CC plugin</h2>
+    <div class="two-col" style="margin-top:10px;"><div class="col-problem"><h3>Desktop</h3></div><div class="col-solution"><h3>CC Plugin</h3></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">Ручная</span> загрузка логов</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Да вообще как хочешь</li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">1 модель</span> делает всё</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">4 агента</span>, разные модели</li></ul></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Desktop проект vs CC plugin</h2>
+    <div class="two-col" style="margin-top:10px;"><div class="col-problem"><h3>Desktop</h3></div><div class="col-solution"><h3>CC Plugin</h3></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">Ручная</span> загрузка логов</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Да вообще как хочешь</li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">1 модель</span> делает всё</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">4 агента</span>, разные модели</li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Сама себя проверяет</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Отдельный <span class="highlight-gold">reviewer</span></li></ul></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Desktop проект vs CC plugin</h2>
+    <div class="two-col" style="margin-top:10px;"><div class="col-problem"><h3>Desktop</h3></div><div class="col-solution"><h3>CC Plugin</h3></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">Ручная</span> загрузка логов</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Да вообще как хочешь</li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">1 модель</span> делает всё</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">4 агента</span>, разные модели</li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Сама себя проверяет</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Отдельный <span class="highlight-gold">reviewer</span></li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">Только</span> Android</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Android + <span class="highlight-gold">iOS</span></li></ul></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>Desktop проект vs CC plugin</h2>
+    <div class="two-col" style="margin-top:10px;"><div class="col-problem"><h3>Desktop</h3></div><div class="col-solution"><h3>CC Plugin</h3></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">Ручная</span> загрузка логов</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Да вообще как хочешь</li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">1 модель</span> делает всё</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">4 агента</span>, разные модели</li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Сама себя проверяет</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Отдельный <span class="highlight-gold">reviewer</span></li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li><span class="highlight-gold">Только</span> Android</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Android + <span class="highlight-gold">iOS</span></li></ul></div></div>
+    <div class="two-col" style="margin-top:0;gap:40px;"><div style="border-left:3px solid var(--accent-2);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>Хардкод</li></ul></div><div style="border-left:3px solid var(--accent-1);padding-left:20px;"><ul style="max-width:100%;font-size:22px;"><li>/crash-config + per-project</li></ul></div></div>
+</div></div>
+
+<!-- === ДВА ОТЧЁТА (one slide, both reports, no scroll) === -->
+<div class="slide"><div class="slide-content"><h2>Два отчёта. Какой сам прочитаешь, какой QA отправишь?</h2>
+    <div class="two-col" style="margin-top:10px;flex:1;align-items:stretch;">
+        <div style="border-left:3px solid var(--accent-4);padding-left:15px;overflow:hidden;display:flex;flex-direction:column;">
+            <h3 style="color:var(--accent-4);font-size:18px;">Detailed Analysis</h3>
+            <div class="code-block" style="font-size:8px;line-height:1.3;max-height:none;border-left-color:var(--accent-4);padding:10px;white-space:pre-wrap;word-break:break-word;overflow:hidden;flex:1;"><span class="keyword">Crash:</span> IllegalStateException — translucent activity + fixed orientation on Android 8.0
+<span class="keyword">Exception:</span> java.lang.IllegalStateException: Only fullscreen opaque activities can request orientation
+<span class="keyword">App version:</span> 1.57.0 — 1.58.0
+<span class="keyword">Component:</span> 117 (Activity lifecycle /core/activities/host-activity)
+<span class="keyword">Stack trace analysis:</span>
+1. android.app.Activity.onCreate(Activity.java:1038) — platform orientation check
+2. android.core.app.ComponentActivity.onCreate(ComponentActivity.kt:68)
+3. androidx.activity.ComponentActivity.onCreate(ComponentActivity.kt:329)
+4. androidx.fragment.app.FragmentActivity.onCreate(FragmentActivity.java:216)
+5. HostActivity.kt:145 — super.onCreate() call
+<span class="keyword">Checked files:</span>
+- app/src/main/AndroidManifest.xml:137 — android:screenOrientation="portrait", author: o.krasnozhenko, commit: za123d6c3de (2023-09-20)
+- app/src/main/AndroidManifest.xml:136 — android:theme="@style/AppTheme", author: default, commit: 3fe6d0f2 (2022-01-01)
+- core/ui/main/values/styles.xml:18-19 — windowTranslucentStatus=true, windowTranslucentNavigation=true, author: i.vasilenk0, commit: a51dc1a0e1
+- core/activities/host-activity/.../HostActivity.kt:145 — super.onCreate(savedInstanceState), author: ivan.lutsenko, commit: d669f51c8e77 (2023-01-17)
+<span class="keyword">Executed commands:</span>
+- git blame -L 136,140 master — app/src/main/AndroidManifest.xml
+- git blame -L 137,138 master — .../HostActivity.kt
+<span class="keyword">Root cause:</span> Known Android 8.0 (API 26) platform bug (Google Issue #68454482, fixed in 8.1). HostActivity has screenOrientation="portrait" in the manifest, but its theme (AppTheme) sets windowTranslucentStatus=true and windowTranslucentNavigation=true, making the window non-opaque. Android 8.0 throws IllegalStateException for this combination at super.onCreate().
+<span class="keyword">Fix before</span> (HostActivity.kt):
+  override fun onCreate(savedInstanceState: Bundle?) {
+    if (screenAccessManager.areScreensDisabled()) { screenAccessManager.disableScreenshot(window) }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { setRecentsScreenHost(isMain) }
+  }
+<span class="keyword">Fix after:</span>
+  override fun onCreate(savedInstanceState: Bundle?) {
+    // Workaround: Android 8.0 bug — translucent + fixed orientation = crash
+    // https://issuetracker.google.com/issues/68454482
+    if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+      requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    }
+    if (screenAccessManager.areScreensDisabled()) { screenAccessManager.disableScreenshot(window) }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { setRecentsScreenHost(isMain) }
+  }
+<span class="keyword">Assignee:</span> o.krasnozhenko (git blame: AndroidManifest.xml:137)
+<span class="keyword">Trigger:</span> Launching the app on an Android 8.0 (API 26) device.
+<span class="keyword">Verdict:</span> Narrow user slice. Add lint check or CI rule.</div></div>
+        <div style="border-left:3px solid var(--accent-3);padding-left:15px;overflow:hidden;display:flex;flex-direction:column;">
+            <h3 style="color:var(--accent-3);font-size:18px;">JIRA Brief</h3>
+            <div class="code-block" style="font-size:11px;line-height:1.4;max-height:none;border-left-color:var(--accent-3);padding:10px;white-space:pre-wrap;word-break:break-word;overflow:hidden;flex:1;"><span class="keyword">Crash:</span> IllegalStateException — translucent activity + fixed orientation on Android 8.0
+
+<span class="keyword">Component:</span> core/activities/host-activity
+
+<span class="keyword">Assignee:</span> o.krasnozhenko (git blame: AndroidManifest.xml:137)
+
+<span class="keyword">Problem:</span> App crashes on launch for Android 8.0 users (9 users, 19 events). Completely blocks app usage.
+
+<span class="keyword">Stack trace:</span>
+java.lang.IllegalStateException: Only fullscreen opaque activities can request orientation
+  at android.app.Activity.onCreate(Activity.java:1038)
+  at kz.berekebank.business.onCreate(<span class="string">HostActivity.kt:145</span>)
+
+<span class="keyword">Cause:</span> HostActivity has screenOrientation="portrait" + translucent theme. Android 8.0 platform bug throws for this combination.
+
+<span class="keyword">Fix:</span>
+// Add before super.onCreate() in HostActivity.kt:
+if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+  requestedOrientation = SCREEN_ORIENTATION_UNSPECIFIED
+}
+
+<span class="keyword">Reproduction:</span>
+1. Run on device/emulator with Android 8.0 (API 26)
+2. App crashes on launch with IllegalStateException
+
+<span class="keyword">Firebase:</span>
+console.firebase.google.com/.../0b257dc8171bb7ada514</div></div></div>
+</div></div>
+
+<!-- === #19,22: 5) ЧТО ЕЩЁ МОЖНО СДЕЛАТЬ [но я не буду] (progressive + QR) === -->
+<div class="slide"><div class="slide-content"><h2>5) Что ещё можно сделать? [но я не буду]</h2>
+    <ul><li><span class="highlight-gold">Запуск по расписанию</span></li></ul>
+    <div class="qr-section" style="width:280px;height:280px;"><div class="qr-code"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&amp;data=https://github.com/IvanLutsenko/awac-claude-code-plugins" alt="GitHub QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>5) Что ещё можно сделать? [но я не буду]</h2>
+    <ul><li><span class="highlight-gold">Запуск по расписанию</span></li>
+        <li>Интеграция с <span class="highlight-gold">Jira</span></li></ul>
+    <div class="qr-section" style="width:280px;height:280px;"><div class="qr-code"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&amp;data=https://github.com/IvanLutsenko/awac-claude-code-plugins" alt="GitHub QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>5) Что ещё можно сделать? [но я не буду]</h2>
+    <ul><li><span class="highlight-gold">Запуск по расписанию</span></li>
+        <li>Интеграция с <span class="highlight-gold">Jira</span></li>
+        <li>Авто-<span class="highlight-gold">PR</span></li></ul>
+    <div class="qr-section" style="width:280px;height:280px;"><div class="qr-code"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&amp;data=https://github.com/IvanLutsenko/awac-claude-code-plugins" alt="GitHub QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+</div></div>
+<div class="slide"><div class="slide-content"><h2>5) Что ещё можно сделать? [но я не буду]</h2>
+    <ul><li><span class="highlight-gold">Запуск по расписанию</span></li>
+        <li>Интеграция с <span class="highlight-gold">Jira</span></li>
+        <li>Авто-<span class="highlight-gold">PR</span></li>
+        <li>Алёрты и отчёты в <span class="highlight-gold">мессенджеры</span></li></ul>
+    <p style="margin-top:auto;font-size:18px;color:var(--accent-4);font-style:italic;padding-right:300px;">&laquo;То, что казалось несбыточным на протяжении веков, что вчера было лишь дерзновенной мечтой, сегодня становится реальной задачей, а завтра &mdash; свершением&raquo; &mdash; С.П. Королёв</p>
+    <div class="qr-section" style="width:280px;height:280px;"><div class="qr-code"><img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&amp;data=https://github.com/IvanLutsenko/awac-claude-code-plugins" alt="GitHub QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+</div></div>
+
+<!-- === LIVE DEMO === -->
+<div class="slide"><div class="slide-content" style="justify-content:center;align-items:center;">
+    <h1 style="font-size:56px;color:var(--accent-3);">LIVE DEMO</h1>
+    <h2 style="text-align:center;color:var(--accent-4);font-size:32px;">от бага до фикса за 5 минут</h2>
+</div></div>
+
+<!-- === #21: Q&A (QR without border) === -->
+<div class="slide"><div class="slide-content" style="justify-content:center;align-items:center;">
+    <h2 style="text-align:center;font-size:48px;color:var(--accent-4);">Q&A</h2>
+    <div style="display:flex;align-items:center;justify-content:center;gap:80px;flex:1;padding:0;">
+        <div style="flex:1;text-align:center;display:flex;align-items:center;justify-content:center;">
+            <div style="max-width:400px;max-height:500px;border:1px solid rgba(79,164,212,0.3);border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+                <img src="img/korolev.jpg" alt="С.П. Королёв" style="max-width:100%;max-height:500px;object-fit:contain;"></div></div>
+        <div style="flex:1;text-align:center;display:flex;align-items:center;justify-content:center;">
+            <div style="width:450px;height:450px;padding:12px;">
+                <img src="img/slide-000.png" alt="QR" style="width:100%;height:100%;object-fit:contain;"></div></div>
+    </div>
+</div></div>
+
+    </div>
+
+    <div class="nav-buttons">
+        <button class="nav-btn exit-btn" onclick="history.back()">&#10005;</button>
+        <button class="nav-btn" onclick="previousSlide()" style="transform:scaleX(-1);">&#9658;</button>
+        <button class="nav-btn" onclick="nextSlide()">&#9658;</button>
+    </div>
+    <div class="slide-number"><span id="currentSlide">1</span> / <span id="totalSlides">0</span></div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); previousSlide(); }
+            else if (e.key === 'Escape') { history.back(); }
+        });
+        document.addEventListener('click', (e) => { if (!e.target.closest('a, button')) nextSlide(); });
+        document.addEventListener('contextmenu', (e) => { e.preventDefault(); previousSlide(); });
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+        document.addEventListener('touchend', (e) => {
+            const dx = e.changedTouches[0].screenX - touchStartX;
+            if (dx < -50) nextSlide(); if (dx > 50) previousSlide();
+        });
+    </script>
+</body>
+</html>
