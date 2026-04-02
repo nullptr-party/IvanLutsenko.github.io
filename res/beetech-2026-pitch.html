@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevEx в банке как стокгольмский синдром</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --bg-slide: #12121a;
+    --surface: #1a1a2e;
+    --border: #2a2a3e;
+    --text: #e8e6e3;
+    --text-dim: #8b8a88;
+    --accent: #ff6b6b;
+    --accent2: #4ecdc4;
+    --accent3: #ffe66d;
+    --accent4: #a78bfa;
+    --code-bg: #1e1e2e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6vh 8vw;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: var(--bg-slide);
+  }
+
+  .slide.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.5em;
+    letter-spacing: -0.03em;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.6em;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    font-size: clamp(1.1rem, 2vw, 1.6rem);
+    font-weight: 600;
+    margin-bottom: 0.5em;
+    color: var(--accent2);
+  }
+
+  p, li {
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-bottom: 1em;
+  }
+
+  .author {
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    color: var(--text-dim);
+    margin-top: 2em;
+    font-weight: 300;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul li {
+    padding: 0.35em 0;
+    padding-left: 1.5em;
+    position: relative;
+  }
+
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  ol {
+    padding-left: 1.5em;
+  }
+
+  ol li {
+    padding: 0.3em 0;
+  }
+
+  .highlight {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .highlight-green {
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  .highlight-yellow {
+    color: var(--accent3);
+    font-weight: 700;
+  }
+
+  .highlight-purple {
+    color: var(--accent4);
+    font-weight: 700;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--code-bg);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--accent3);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.2em 0.7em;
+    border-radius: 100px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin: 0.2em;
+  }
+
+  .tag-red { background: rgba(255,107,107,0.15); color: var(--accent); border: 1px solid rgba(255,107,107,0.3); }
+  .tag-green { background: rgba(78,205,196,0.15); color: var(--accent2); border: 1px solid rgba(78,205,196,0.3); }
+  .tag-yellow { background: rgba(255,230,109,0.15); color: var(--accent3); border: 1px solid rgba(255,230,109,0.3); }
+  .tag-purple { background: rgba(167,139,250,0.15); color: var(--accent4); border: 1px solid rgba(167,139,250,0.3); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3em;
+    margin-top: 1em;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5em;
+  }
+
+  .card h3 { margin-bottom: 0.4em; }
+
+  .card li::before { background: var(--accent2); }
+
+  .timeline-item {
+    padding: 0.8em 0;
+    padding-left: 2em;
+    position: relative;
+    border-left: 2px solid var(--border);
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 1.2em;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .timeline-item.green::before { background: var(--accent2); }
+  .timeline-item.yellow::before { background: var(--accent3); }
+  .timeline-item.purple::before { background: var(--accent4); }
+
+  .big-number {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .stages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    margin-top: 0.5em;
+  }
+
+  .stage {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 0.6em 1em;
+    border-radius: 8px;
+    background: var(--surface);
+    border-left: 4px solid;
+  }
+
+  .stage-num {
+    font-size: 1.8em;
+    font-weight: 800;
+    width: 1.5em;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .stage-text {
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  }
+
+  .stage-quote {
+    color: var(--text-dim);
+    font-style: italic;
+    margin-left: 0.5em;
+  }
+
+  .progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  .slide-counter {
+    position: fixed;
+    bottom: 1.5em;
+    right: 2em;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    z-index: 100;
+  }
+
+  .notes-toggle {
+    position: fixed;
+    bottom: 1.5em;
+    left: 2em;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    z-index: 100;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .notes-toggle:hover { opacity: 1; }
+
+  .speaker-notes {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10,10,15,0.95);
+    border-top: 1px solid var(--border);
+    padding: 1.5em 3em;
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 99;
+    max-height: 30vh;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+  }
+
+  .speaker-notes.visible {
+    transform: translateY(0);
+  }
+
+  /* Title slide special */
+  .slide-title {
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 30%, rgba(255,107,107,0.08) 0%, transparent 60%),
+                var(--bg-slide);
+  }
+
+  .slide-title h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Final slide */
+  .slide-final {
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 50%, rgba(78,205,196,0.08) 0%, transparent 60%),
+                var(--bg-slide);
+  }
+
+  .slide-final .quote {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    font-weight: 600;
+    line-height: 1.4;
+    max-width: 800px;
+    margin: 0 auto 0.5em;
+  }
+
+  .slide-final .quote-aside {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+
+  .arrow {
+    display: inline-block;
+    color: var(--text-dim);
+    margin: 0 0.3em;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5em;
+    margin-top: 1em;
+  }
+
+  .metric {
+    text-align: center;
+    padding: 1.2em;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .metric-value {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .metric-label {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    margin-top: 0.3em;
+  }
+
+  .takeaway {
+    display: flex;
+    gap: 1em;
+    align-items: flex-start;
+    padding: 0.8em 0;
+  }
+
+  .takeaway-num {
+    font-size: 1.4em;
+    font-weight: 800;
+    color: var(--accent2);
+    flex-shrink: 0;
+    width: 1.5em;
+    text-align: center;
+  }
+
+  .takeaway-content {
+    flex: 1;
+  }
+
+  .takeaway-title {
+    font-weight: 700;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+  }
+
+  .takeaway-desc {
+    color: var(--text-dim);
+    font-size: clamp(0.85rem, 1.3vw, 1rem);
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- Slide 1: Title -->
+  <div class="slide slide-title active" data-notes="Представиться. Коротко: 3,5 года техлидом в банковском Android-приложении. Моя роль — вспомогательная: не хочу принимать бизнес-решения, не пишу длинные юзер флоу, а организую технические процессы и внедряю инструменты, которые делают жизнь команды лучше, легче и автоматизированей. Иногда — против их воли.">
+    <h1>DevEx в банке<br>как стокгольмский синдром</h1>
+    <p class="subtitle">Что напридумывал Иван Луценко, упиваясь слёзками коллег<br>и улучшая им жизнь</p>
+    <p class="author">Иван Луценко &mdash; Android Tech Lead, Bereke Business</p>
+  </div>
+
+  <!-- Slide 2: About -->
+  <div class="slide" data-notes="Это не про конкретный инструмент. Это про процесс: как внедрять изменения в команде, где люди заняты бизнес-задачами и не хотят менять привычки. И про то, что &laquo;стокгольмский синдром&raquo; — это когда ты заставляешь людей делать правильно, они страдают, а потом говорят &laquo;спасибо&raquo;.">
+    <h2>О чём этот доклад</h2>
+    <ul>
+      <li>Как я строил систему DevEx в банке <span class="highlight">3,5 года</span></li>
+      <li>Почему коллеги сначала <span class="highlight">сопротивлялись</span> некоторым улучшениям</li>
+      <li>Как сопротивление превращалось в <span class="highlight-green">принятие</span> (и даже благодарность)</li>
+      <li>Инструменты и подходы, которые можно <span class="highlight-yellow">забрать с собой</span></li>
+    </ul>
+  </div>
+
+  <!-- Slide 3: Task -->
+  <div class="slide" data-notes="Я осознанно выбрал эту роль. Мне не интересно принимать бизнес-решения (хотя за них платят больше). Мне интересно делать так, чтобы команда работала быстрее, а новые люди включались за дни, а не недели.">
+    <h2>Роль техлида &mdash; вспомогательная</h2>
+    <ul>
+      <li>Не пилить фичи, а <span class="highlight-green">убирать препятствия</span></li>
+      <li>Превращать повторяющиеся вопросы в <span class="highlight-green">документацию</span></li>
+      <li>Превращать ручную работу в <span class="highlight-green">автоматизацию</span></li>
+      <li>Поднимать качество кода, <span class="highlight">не убивая продуктивность</span></li>
+    </ul>
+    <div style="margin-top:1.5em; padding:1em 1.5em; background:var(--surface); border-radius:10px; border-left:4px solid var(--accent3);">
+      <p style="font-size:clamp(1.1rem,2vw,1.5rem); font-weight:600;">
+        <span class="highlight-yellow">Принцип:</span> если мне задали вопрос больше одного раза &mdash; пишется документ.
+      </p>
+    </div>
+  </div>
+
+  <!-- Slide 4: Situation -->
+  <div class="slide" data-notes="Представьте: приходит задача на тест, и тестировщик ждёт, пока разработчик оторвётся от текущей задачи, переключит контекст и соберёт нужную сборку. 11 раз для 11 контуров. А новый человек в команде — отдельная история: каждый раз заново объясняешь одно и то же.">
+    <h2>Bereke Business, 2022</h2>
+    <p class="subtitle">Что я застал:</p>
+    <ul>
+      <li><span class="highlight">11</span> тестовых контуров &mdash; <span class="highlight">11</span> отдельных сборок</li>
+      <li>Сломанные тесты, нерабочая app distribution</li>
+      <li>Отсутствие политик мёрджа</li>
+      <li><span class="highlight">1000+</span> ворнингов в проекте</li>
+      <li>Команда: <span class="highlight-green">4</span> Android-разработчика <span class="arrow">&rarr;</span> <span class="highlight-green">14</span> <span class="arrow">&rarr;</span> <span class="highlight-green">10+</span></li>
+      <li>Документация: <span class="highlight">нет</span></li>
+    </ul>
+  </div>
+
+  <!-- Slide 5: Debug menu -->
+  <div class="slide" data-notes="Это первый пример паттерна: конкретная боль → конкретный инструмент → все выигрывают. Никто не сопротивлялся, потому что это чистое удобство. Но дальше будет не так гладко.">
+    <h2>Debug menu &mdash; от 11 сборок к одной</h2>
+    <div class="two-col">
+      <div>
+        <h3 style="color:var(--accent)">Было</h3>
+        <p>11 контуров = 11 сборок<br>Разрабов дёргают из контекста<br>Тестировщики ждут</p>
+      </div>
+      <div>
+        <h3 style="color:var(--accent2)">Стало</h3>
+        <p>1 сборка + переключатель хоста<br>Процесс асинхронный<br>Сборка уже есть когда задача на тесте</p>
+      </div>
+    </div>
+    <div style="margin-top:1.5em;">
+      <p style="color:var(--text-dim); font-size:0.95rem;">
+        <span class="tag tag-green">JWT-сессия</span>
+        <span class="tag tag-green">Биометрия</span>
+        <span class="tag tag-green">Push-токен</span>
+        <span class="tag tag-green">Метрики запуска</span>
+        <span class="tag tag-purple">Noop в release</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Slide 6: Documentation -->
+  <div class="slide" data-notes="DataState — sealed class для UI-состояний — написал Кирилл. Архитектурный гайд по presentation layer написал Алексей, много статей написали Дмитрий и Максим. Участвовали Елнур, Бекжан. Только троих человек не перечислил, и то, может забыл. Это кульминация: люди не просто пользуются системой, а контрибьютят в неё, где-то по моему запросу, где-то сами. Feature Module template — 75 шаблонных файлов, один ввод имени фичи — и всё готово. Убирает целый класс вопросов.">
+    <h2>Документация &mdash; предиктивные ответы</h2>
+    <p class="subtitle"><span class="highlight-yellow">40+</span> статей в Confluence</p>
+    <div class="two-col">
+      <div>
+        <ul>
+          <li><strong>Онбординг</strong> &mdash; VPN, SSH, Bitbucket, группы</li>
+          <li><strong>Запуск проекта</strong> &mdash; сертификаты, hosts, Win/Mac</li>
+          <li><strong>Feature Template</strong> &mdash; 1 команда <span class="arrow">&rarr;</span> 7 модулей, 56 файлов</li>
+        </ul>
+      </div>
+      <div>
+        <ul>
+          <li><strong>Архитектурные гайды</strong> &mdash; presentation layer, DataState</li>
+          <li><strong>Инструкции для RM и QA</strong> &mdash; регресс step-by-step</li>
+          <li><strong>Безопасность, навигация, утилиты</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:1.5em; padding:0.8em 1.2em; background:var(--surface); border-radius:10px; border-left:4px solid var(--accent2);">
+      <p><span class="highlight-green">Часть статей написали коллеги сами</span></p>
+    </div>
+  </div>
+
+  <!-- Slide 7: Pre-push -->
+  <div class="slide" data-notes="Скрипт вырос с 16 до 412 строк за 2 года. В пике — 6 запусков Gradle подряд. Один коммит был в 2 ночи — я добавлял ASCII-котов: грустный кот &laquo;NO PUSH FOR YOU SIR!&raquo; при фейле. Другой коллега закоммитил 69-мегабайтный бинарник в репо, пытаясь оптимизировать — откатили через 3 дня. 43 вынужденных коммита &laquo;detekt fixes&raquo; от 4 разработчиков за 7 недель после включения. Это и есть стокгольмский синдром в чистом виде.">
+    <h2>Pre-push хуки &mdash; хроника синдрома</h2>
+    <div style="display:flex; flex-direction:column; gap:0;">
+      <div class="timeline-item">
+        <strong>Расчистил 1000+ ворнингов</strong> <span class="arrow">&rarr;</span> включил <code>allWarningsAsErrors</code>
+      </div>
+      <div class="timeline-item" style="border-left-color:var(--accent);">
+        <strong style="color:var(--accent)">Коллеги возроптали</strong> <span class="arrow">&rarr;</span> торг: выключаю, но включаю <span class="highlight-yellow">Detekt</span>
+      </div>
+      <div class="timeline-item yellow">
+        Detekt на pre-commit: у меня 5-10 мин, <span class="highlight">у коллег на Windows &mdash; до 30 мин</span>
+      </div>
+      <div class="timeline-item green">
+        Компромисс: перенёс на <span class="highlight-green">pre-push</span>. Прогонов меньше, время то же
+      </div>
+      <div class="timeline-item">
+        +screenshot tests, +unit tests, +<span class="highlight">Kover</span>
+      </div>
+      <div class="timeline-item" style="border-left-color:var(--accent);">
+        Сам поймал pre-push <span class="highlight">длительностью 1 час</span> <span class="arrow">&rarr;</span> облегчил
+      </div>
+      <div class="timeline-item green">
+        <span class="highlight-green">4 человека сами сказали что довольны.</span> Остальные довольно молчат
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8: Built once, used by all -->
+  <div class="slide" data-notes="Философия одна: один человек делает правильно один раз, все остальные просто используют. Feature template убирает целый класс вопросов &laquo;а как правильно создать модуль&raquo;. Витринный модуль — живой пример, по которому можно подглядывать. runSecurely — ноль когнитивной нагрузки: не думаешь о безопасности, но она есть. DataState — Кирилл не просто написал утилиту, а задокументировал и покрыл тестами. Коллега стал контрибьютором DevEx.">
+    <h2>Сделал один раз &mdash; все используют</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.2em; margin-top:0.5em;">
+      <div class="card">
+        <h3>Feature Template</h3>
+        <p style="font-size:0.9rem;">Витринный модуль <span class="highlight-yellow">76 файлов</span> &rarr; шаблон <span class="highlight-yellow">77 .tm файлов</span></p>
+        <p style="font-size:0.9rem; margin-top:0.5em;">Один ввод <code>featureName</code>:</p>
+        <p style="font-size:0.9rem;"><span class="highlight-green">56 файлов</span>, 7 модулей,<br>полная Clean Architecture</p>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:0.5em;">GFT Plugin в Android Studio</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent3);">runSecurely</h3>
+        <p style="font-size:0.9rem;">App Integrity обёртка:</p>
+        <p style="font-size:0.9rem; margin-top:0.5em;"><code>context.runSecurely { ... }</code></p>
+        <p style="font-size:0.9rem; margin-top:0.5em;">debug &mdash; пропускает<br>prod &mdash; прогресс + проверка</p>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:0.5em;">Одна зависимость, один вызов</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent4);">DataState</h3>
+        <p style="font-size:0.9rem;">Sealed class для UI-состояний</p>
+        <p style="font-size:0.9rem; margin-top:0.5em;">Empty / Loading /<br>Success&lt;T&gt; / Error</p>
+        <p style="font-size:0.9rem; margin-top:0.5em;">Flow-расширения, handle/map</p>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:0.5em;">Автор: Кирилл Долгоруков</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9: AI -->
+  <div class="slide" data-notes="Оба плагина — open source, опубликованы в маркетплейсе Claude Code. Crashlytics анализирует краш, находит через git blame автора проблемного кода, предлагает фикс и назначает ответственного. Test gen — 10 агентов проверяют качество, покрытие веток, edge cases, соответствие стандартам. Это следующий виток DevEx: AI как часть инфраструктуры команды. Задокументировано в Confluence, ждёт подписок.">
+    <h2>AI в DevEx &mdash; плагины для Claude Code</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Bereke Business Test Gen</h3>
+        <p style="font-size:0.95rem;">Генерация unit тестов по корпоративным стандартам</p>
+        <ul style="margin-top:0.5em;">
+          <li><span class="highlight-yellow">2-5 мин</span> на класс</li>
+          <li><span class="highlight-yellow">10+</span> специализированных агентов</li>
+          <li>@DisplayName, Given-When-Then, Truth</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Crashlytics Plugin</h3>
+        <p style="font-size:0.95rem;">Анализ крашей с git blame forensics</p>
+        <ul style="margin-top:0.5em;">
+          <li>Android <span class="highlight-green">+</span> iOS</li>
+          <li>Краш <span class="arrow">&rarr;</span> git blame <span class="arrow">&rarr;</span> фикс <span class="arrow">&rarr;</span> ответственный</li>
+          <li>classifier <span class="arrow">&rarr;</span> fetcher <span class="arrow">&rarr;</span> forensics <span class="arrow">&rarr;</span> reviewer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: Results -->
+  <div class="slide" data-notes="Самый важный результат — не цифры, а то что система стала самоподдерживающейся. Коллеги пишут статьи. Коллеги пытаются оптимизировать хуки. Это уже не &laquo;техлид заставляет&raquo;, а &laquo;так принято&raquo;.">
+    <h2>Результаты</h2>
+    <div class="metric-grid">
+      <div class="metric">
+        <div class="metric-value" style="color:var(--accent);">11 <span class="arrow" style="font-size:0.6em">&rarr;</span> 1</div>
+        <div class="metric-label">сборок (debug menu)</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value" style="color:var(--accent2);">0 <span class="arrow" style="font-size:0.6em">&rarr;</span> 40+</div>
+        <div class="metric-label">статей документации</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value" style="color:var(--accent3);">1000+ <span class="arrow" style="font-size:0.6em">&rarr;</span> 0</div>
+        <div class="metric-label">ворнингов (detekt)</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value" style="color:var(--accent4);">1 <span class="arrow" style="font-size:0.6em">&rarr;</span> 56</div>
+        <div class="metric-label">файлов из шаблона фичи</div>
+      </div>
+    </div>
+    <div style="margin-top:1.5em;">
+      <ul>
+        <li>Новый человек запускает проект <span class="highlight-green">по документации</span>, не по вопросам в чате</li>
+        <li>Коллеги <span class="highlight-green">контрибьютят</span> в документацию и инструменты сами</li>
+        <li>Pre-push: с секунд до часа и обратно в минуты, но с <span class="highlight-yellow">quality gate</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Slide 11: Takeaways -->
+  <div class="slide" data-notes="Это практические рекомендации, которые можно применить завтра в любой команде, не только Android. Паттерны универсальны.">
+    <h2>Что забрать с собой</h2>
+    <div style="display:flex; flex-direction:column; gap:0.3em; margin-top:0.5em;">
+      <div class="takeaway">
+        <div class="takeaway-num">1</div>
+        <div class="takeaway-content">
+          <div class="takeaway-title">Принцип &laquo;спросили дважды&raquo;</div>
+          <div class="takeaway-desc">Пишется документ. Дешевле, чем кажется.</div>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-num">2</div>
+        <div class="takeaway-content">
+          <div class="takeaway-title">Торг работает</div>
+          <div class="takeaway-desc">Отключи одно, включи другое. Detekt вместо warningsAsErrors.</div>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-num">3</div>
+        <div class="takeaway-content">
+          <div class="takeaway-title">Начинай с бесспорного</div>
+          <div class="takeaway-desc">Debug menu до detekt. Сначала плюшки, потом дисциплина.</div>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-num">4</div>
+        <div class="takeaway-content">
+          <div class="takeaway-title">Измеряй дискомфорт</div>
+          <div class="takeaway-desc">Если pre-push час &mdash; это проблема. Трейдоф допустим.</div>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="takeaway-num">5</div>
+        <div class="takeaway-content">
+          <div class="takeaway-title">Дай коллегам контрибьютить</div>
+          <div class="takeaway-desc">Система живёт, когда не один человек её поддерживает.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 13: Final -->
+  <div class="slide slide-final" data-notes="">
+    <div class="quote">
+      &laquo;Стокгольмский синдром&raquo; &mdash; это когда ты делаешь людям лучше, а им сначала больно, но потом говорят спасибо.
+    </div>
+    <div class="quote-aside">Ну может не люди, но процессы.</div>
+    <p class="author" style="margin-top:3em;">
+      Иван Луценко<br>
+      <span style="color:var(--text-dim);">Android Tech Lead, Bereke Business</span>
+    </p>
+  </div>
+
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="slide-counter" id="counter"></div>
+<div class="notes-toggle" id="notesToggle">[N] заметки</div>
+<div class="speaker-notes" id="speakerNotes"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  const notesEl = document.getElementById('speakerNotes');
+  const notesToggle = document.getElementById('notesToggle');
+  let current = 0;
+  let notesVisible = false;
+
+  function show(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    slides[current].classList.remove('active');
+    current = idx;
+    slides[current].classList.add('active');
+    progress.style.width = ((current + 1) / slides.length * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    notesEl.textContent = slides[current].dataset.notes || '';
+  }
+
+  function toggleNotes() {
+    notesVisible = !notesVisible;
+    notesEl.classList.toggle('visible', notesVisible);
+    notesToggle.textContent = notesVisible ? '[N] скрыть' : '[N] заметки';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault(); show(current + 1);
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault(); show(current - 1);
+    }
+    if (e.key === 'Home') { e.preventDefault(); show(0); }
+    if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+    if (e.key === 'n' || e.key === 'N' || e.key === 'т' || e.key === 'Т') toggleNotes();
+  });
+
+  notesToggle.addEventListener('click', toggleNotes);
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) dx < 0 ? show(current + 1) : show(current - 1);
+  });
+
+  show(0);
+</script>
+</body>
+</html>
