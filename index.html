@@ -3,22 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Ivan Lutsenko - Speaker, Researcher, Thought Leader. Sharing knowledge through engaging presentations and thoughtful research.">
-    <meta name="keywords" content="Ivan Lutsenko, speaker, researcher, thought leader, presentations">
+    <meta name="description" content="Ivan Lutsenko — Android Tech Lead at Bereke Bank, AI tools enthusiast, speaker and co-organizer of nullptr.party and GDG Almaty meetups.">
+    <meta name="keywords" content="Ivan Lutsenko, Android Tech Lead, speaker, AI tools, Claude, MCP, Crashlytics, CI/CD, nullptr.party, GDG Almaty">
     <meta name="author" content="Ivan Lutsenko">
-    
+    <link rel="canonical" href="https://ivanlutsenko.github.io/">
+
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Ivan Lutsenko - Portfolio">
-    <meta property="og:description" content="Speaker, Researcher, Thought Leader - Sharing knowledge and inspiration">
+    <meta property="og:title" content="Ivan Lutsenko — Android Tech Lead &amp; Speaker">
+    <meta property="og:description" content="Android Tech Lead at Bereke Bank, AI tools enthusiast, speaker and meetup co-organizer.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ivanlutsenko.github.io">
-    
+    <meta property="og:url" content="https://ivanlutsenko.github.io/">
+    <meta property="og:image" content="https://ivanlutsenko.github.io/res/1000094492.jpg">
+    <meta property="og:image:width" content="640">
+    <meta property="og:image:height" content="640">
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Ivan Lutsenko - Portfolio">
-    <meta name="twitter:description" content="Speaker, Researcher, Thought Leader">
-    
-    <title>Ivan Lutsenko - Portfolio</title>
+    <meta name="twitter:title" content="Ivan Lutsenko — Android Tech Lead &amp; Speaker">
+    <meta name="twitter:description" content="Android Tech Lead at Bereke Bank, AI tools enthusiast, speaker and meetup co-organizer.">
+    <meta name="twitter:image" content="https://ivanlutsenko.github.io/res/1000094492.jpg">
+
+    <title>Ivan Lutsenko — Android Tech Lead &amp; Speaker</title>
+
+    <!-- Structured Data: Person -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Ivan Lutsenko",
+      "url": "https://ivanlutsenko.github.io/",
+      "image": "https://ivanlutsenko.github.io/res/1000094492.jpg",
+      "jobTitle": "Android Tech Lead",
+      "worksFor": { "@type": "Organization", "name": "Bereke Bank" },
+      "sameAs": [
+        "https://www.linkedin.com/in/ivan-lutsenko/",
+        "https://t.me/maliastra",
+        "https://www.youtube.com/channel/UClrUQ26FCv3pHVZT6YogOnA",
+        "https://www.tiktok.com/@permaliadastra"
+      ]
+    }
+    </script>
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -88,6 +112,7 @@
 
         html {
             scroll-behavior: smooth;
+            scroll-padding-top: 80px; /* offset for fixed navbar on anchor jumps */
         }
 
         body {
@@ -112,7 +137,6 @@
             display: flex; /* Makes items in nav horizontally */
             justify-content: space-between; /* Pushes items to ends */
             align-items: center;
-            backdrop-filter: blur(10px);
             transition: var(--transition);
         }
 
@@ -341,6 +365,15 @@
             line-height: 1.8;
             color: var(--text-dark);
             opacity: 0.9;
+        }
+
+        .bio a {
+            color: var(--accent-green);
+        }
+
+        .footer-note {
+            margin-top: 0.5rem;
+            opacity: 0.8;
         }
 
         .profile-container {
@@ -895,7 +928,7 @@
     <!-- About Section -->
     <section id="about">
         <div class="profile-container">
-            <img src="res/1000094492.jpg" alt="Ivan Lutsenko" class="profile-image">
+            <img src="res/1000094492.jpg" alt="Ivan Lutsenko" class="profile-image" width="640" height="640" decoding="async">
         </div>
 
         <h1>
@@ -910,7 +943,7 @@
             <div class="bio">
                 <p>Hi, I'm Android Tech Lead at Bereke Bank, where I'm responsible for the business application. My professional interests lie at the intersection of engineering quality and team processes: I monitor codebase health, build horizontal connections within the team, and try to make the project comfortable and attractive for developers.</p>
                 <p>Since 2024, I've been experimenting with AI tools in everyday tech lead work — from auto-generating tests and documentation to offloading administrative and bureaucratic routines. I'm looking for what actually helps, without illusions about deus ex machina.</p>
-                <p>I write about various topics on my Telegram channel, co-organize <a href="https://nullptr.party" target="_blank" rel="noopener" style="color: var(--accent-green);">nullptr.party</a> meetups, and serve as an organizing committee member at <a href="https://gdg.community.dev/gdg-almaty" target="_blank" rel="noopener" style="color: var(--accent-green);">GDG Almaty</a>.</p>
+                <p>I write about various topics on my Telegram channel, co-organize <a href="https://nullptr.party" target="_blank" rel="noopener">nullptr.party</a> meetups, and serve as an organizing committee member at <a href="https://gdg.community.dev/gdg-almaty" target="_blank" rel="noopener">GDG Almaty</a>.</p>
             </div>
         </div>
 
@@ -920,7 +953,7 @@
             <div class="bio">
                 <p>Привіт, я Android Tech Lead в Bereke Bank, де відповідаю за додаток для бізнесу. Мої професійні інтереси на перетині інженерної якості та командних процесів: стежу за здоров'ям кодової бази, вибудовую горизонтальні зв'язки всередині команди та намагаюся зробити проєкт комфортним та привабливим для розробників.</p>
                 <p>З 2024 року експериментую з AI-інструментами у повсякденній роботі техліда — від автогенерації тестів та документації до розвантаження адміністративно-бюрократичної рутини. Шукаю, що дійсно допомагає, без ілюзій про deus ex machina.</p>
-                <p>Пишу про різне в Telegram-каналі, співорганізую зустрічі <a href="https://nullptr.party" target="_blank" rel="noopener" style="color: var(--accent-green);">nullptr.party</a>, член оргкомітету в <a href="https://gdg.community.dev/gdg-almaty" target="_blank" rel="noopener" style="color: var(--accent-green);">GDG Almaty</a>.</p>
+                <p>Пишу про різне в Telegram-каналі, співорганізую зустрічі <a href="https://nullptr.party" target="_blank" rel="noopener">nullptr.party</a>, член оргкомітету в <a href="https://gdg.community.dev/gdg-almaty" target="_blank" rel="noopener">GDG Almaty</a>.</p>
             </div>
         </div>
 
@@ -930,7 +963,7 @@
             <div class="bio">
                 <p>Привет, я Android Tech Lead в Bereke Bank, где отвечаю за приложение для бизнеса. Мои профессиональные интересы на стыке инженерного качества и командных процессов: слежу за здоровьем кодовой базы, выстраиваю горизонтальные связи внутри команды и стараюсь сделать проект комфортным и привлекательным для разработчиков.</p>
                 <p>С 2024 года экспериментирую с AI-инструментами в повседневной работе техлида — от автогенерации тестов и документации до разгрузки административно-бюрократической рутины. Ищу, что действительно помогает, без иллюзий про deus ex machina.</p>
-                <p>Пишу о разном в Telegram-канале, соорганизую встречи <a href="https://nullptr.party" target="_blank" rel="noopener" style="color: var(--accent-green);">nullptr.party</a>, член оргкомитета в <a href="https://gdg.community.dev/gdg-almaty" target="_blank" rel="noopener" style="color: var(--accent-green);">GDG Almaty</a>.</p>
+                <p>Пишу о разном в Telegram-канале, соорганизую встречи <a href="https://nullptr.party" target="_blank" rel="noopener">nullptr.party</a>, член оргкомитета в <a href="https://gdg.community.dev/gdg-almaty" target="_blank" rel="noopener">GDG Almaty</a>.</p>
             </div>
         </div>
     </section>
@@ -962,7 +995,7 @@
             <a href="https://t.me/maliastra" target="_blank" rel="noopener" class="social-card">
                 <svg><use href="#telegram-icon"></use></svg>
                 <div class="social-info">
-                    <div class="social-name" data-lang="en" style="display: inline;">Telegram Channel</div>
+                    <div class="social-name" data-lang="en">Telegram Channel</div>
                     <div class="social-name" data-lang="uk">Telegram-канал</div>
                     <div class="social-name" data-lang="ru">Telegram-канал</div>
                 </div>
@@ -997,7 +1030,7 @@
             <!-- Video Card 1 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="1W-1VoxvZn8" style="background-image: url('https://img.youtube.com/vi/1W-1VoxvZn8/sddefault.jpg')">
+                    <div class="video-placeholder" data-video-id="1W-1VoxvZn8" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.1" style="background-image: url('https://img.youtube.com/vi/1W-1VoxvZn8/sddefault.jpg')">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1025,7 +1058,7 @@
             <!-- Video Card 2 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="NClJR-HOp30" style="background-image: url('https://img.youtube.com/vi/NClJR-HOp30/maxresdefault.jpg')">
+                    <div class="video-placeholder" data-video-id="NClJR-HOp30" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.2" style="background-image: url('https://img.youtube.com/vi/NClJR-HOp30/maxresdefault.jpg')">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1053,7 +1086,7 @@
             <!-- Video Card 3 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="2FXjctVWAQk" style="background-image: url('https://img.youtube.com/vi/2FXjctVWAQk/2.jpg')">
+                    <div class="video-placeholder" data-video-id="2FXjctVWAQk" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.3" style="background-image: url('https://img.youtube.com/vi/2FXjctVWAQk/2.jpg')">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1081,7 +1114,7 @@
             <!-- Video Card 4 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="vv8IUVtMHrs" style="background-image: url('https://img.youtube.com/vi/vv8IUVtMHrs/maxresdefault.jpg')">
+                    <div class="video-placeholder" data-video-id="vv8IUVtMHrs" role="button" tabindex="0" aria-label="Play video: CI/CD: A Love Story" style="background-image: url('https://img.youtube.com/vi/vv8IUVtMHrs/maxresdefault.jpg')">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1109,7 +1142,7 @@
             <!-- Video Card 5 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="vQ5SkC84eYM" style="background-image: url('https://img.youtube.com/vi/vQ5SkC84eYM/maxresdefault.jpg')">
+                    <div class="video-placeholder" data-video-id="vQ5SkC84eYM" role="button" tabindex="0" aria-label="Play video: Crash Analysis Evolution" style="background-image: url('https://img.youtube.com/vi/vQ5SkC84eYM/maxresdefault.jpg')">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1344,18 +1377,18 @@
     <footer>
         <!-- English -->
         <div data-lang="en" class="active">
-            <p>&copy; 2025 Claude Code & Gemini. All rights reserved.</p>
-            <p style="margin-top: 0.5rem; opacity: 0.8;">Crafted with elegance and minimalism</p>
+            <p>&copy; 2026 Ivan Lutsenko</p>
+            <p class="footer-note">Crafted with elegance and minimalism — built with Claude Code &amp; Gemini</p>
         </div>
         <!-- Ukrainian -->
         <div data-lang="uk">
-            <p>&copy; 2025 Claude Code & Gemini. Всі права захищені.</p>
-            <p style="margin-top: 0.5rem; opacity: 0.8;">Створено з елегантністю та мінімалізмом</p>
+            <p>&copy; 2026 Іван Луценко</p>
+            <p class="footer-note">Створено з елегантністю та мінімалізмом — за допомогою Claude Code та Gemini</p>
         </div>
         <!-- Russian -->
         <div data-lang="ru">
-            <p>&copy; 2025 Claude Code & Gemini. Все права защищены.</p>
-            <p style="margin-top: 0.5rem; opacity: 0.8;">Создано с элегантностью и минимализмом</p>
+            <p>&copy; 2026 Иван Луценко</p>
+            <p class="footer-note">Создано с элегантностью и минимализмом — с помощью Claude Code и Gemini</p>
         </div>
     </footer>
 
@@ -1431,37 +1464,41 @@
 
         // Navbar scroll effect
         const navbar = document.getElementById('navbar');
-        let lastScrollY = 0;
 
         window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-            
-            if (currentScrollY > 50) {
+            if (window.scrollY > 50) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
-
-            lastScrollY = currentScrollY;
         });
 
         // Lazy loading for videos
         const videoPlaceholders = document.querySelectorAll('.video-placeholder');
         
         videoPlaceholders.forEach(placeholder => {
-            placeholder.addEventListener('click', function() {
-                const videoId = this.getAttribute('data-video-id');
-                const wrapper = this.parentElement;
-                
+            const playVideo = () => {
+                const videoId = placeholder.getAttribute('data-video-id');
+                const wrapper = placeholder.parentElement;
+
                 // Create iframe
                 const iframe = document.createElement('iframe');
                 iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                iframe.setAttribute('title', 'YouTube video player');
                 iframe.setAttribute('allowfullscreen', '');
                 iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-                
+
                 // Replace placeholder with iframe
                 wrapper.innerHTML = '';
                 wrapper.appendChild(iframe);
+            };
+
+            placeholder.addEventListener('click', playVideo);
+            placeholder.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    playVideo();
+                }
             });
         });
 
@@ -1483,23 +1520,6 @@
         // Observe all sections
         document.querySelectorAll('section').forEach(section => {
             observer.observe(section);
-        });
-
-        // Smooth scroll behavior for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                
-                if (targetElement) {
-                    const offsetTop = targetElement.offsetTop - 80;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
         });
     </script>
 </body>
