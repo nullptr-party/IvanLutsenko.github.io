@@ -52,9 +52,6 @@
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#0d3b2e">
 
-    <!-- Preload critical fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <!-- SVG Icons Definition -->
     <svg style="display: none;">
@@ -108,6 +105,10 @@
             --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
             --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* design-v2 skin surfaces */
+            --bg-band: #f1ead6;
+            --card-surface: #fbfdfb;
+            --card-border: rgba(13, 59, 46, 0.08);
         }
 
         html {
@@ -531,6 +532,15 @@
             transition: var(--transition);
         }
 
+        .video-thumb {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
         .video-placeholder::before {
             content: '';
             position: absolute;
@@ -540,6 +550,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.3);
             transition: var(--transition);
+            z-index: 1;
         }
 
         .video-placeholder:hover::before {
@@ -557,7 +568,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             transition: var(--transition);
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .play-button:hover {
@@ -868,7 +879,7 @@
         }
         body.design-v2 #contact,
         body.design-v2 #resources {
-            background: #f1ead6;
+            background: var(--bg-band);
         }
         body.design-v2 #videos {
             background: var(--bg-light);
@@ -878,8 +889,8 @@
         body.design-v2 .social-card,
         body.design-v2 .video-card,
         body.design-v2 .resource-card {
-            background: #fbfdfb;
-            border: 1px solid rgba(13, 59, 46, 0.08);
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
         }
 
         /* Center incomplete grid rows instead of left-orphaning them */
@@ -902,11 +913,11 @@
             justify-content: center;
         }
 
-        /* Visible, on-brand focus ring */
-        body.design-v2 a:focus-visible,
-        body.design-v2 button:focus-visible,
-        body.design-v2 .video-placeholder:focus-visible,
-        body.design-v2 .design-toggle:focus-visible {
+        /* Visible, on-brand focus ring (both designs) */
+        a:focus-visible,
+        button:focus-visible,
+        .video-placeholder:focus-visible,
+        .design-toggle:focus-visible {
             outline: 3px solid var(--accent-green);
             outline-offset: 3px;
             border-radius: 6px;
@@ -940,6 +951,16 @@
             body.design-v2 .social-card { flex: 1 1 100%; }
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+            section { opacity: 1 !important; }
+        }
+
         @media print {
             nav, footer {
                 display: none;
@@ -964,9 +985,9 @@
         <div class="mobile-controls">
             <!-- Mobile Language Switcher (always visible on mobile) -->
             <div class="mobile-language-switcher">
-                <button class="lang-btn active" data-lang-switch="en">EN</button>
-                <button class="lang-btn" data-lang-switch="uk">UK</button>
-                <button class="lang-btn" data-lang-switch="ru">RU</button>
+                <button class="lang-btn active" data-lang-switch="en" aria-pressed="true" aria-label="Switch language to English">EN</button>
+                <button class="lang-btn" data-lang-switch="uk" aria-pressed="false" aria-label="Switch language to Ukrainian">UK</button>
+                <button class="lang-btn" data-lang-switch="ru" aria-pressed="false" aria-label="Switch language to Russian">RU</button>
             </div>
             <button class="menu-toggle" id="menuToggle" aria-label="Open menu"> <!-- Menu toggle for mobile -->
                 <svg><use href="#menu-icon"></use></svg>
@@ -1008,9 +1029,9 @@
 
             <!-- Language Switcher -->
             <li class="language-switcher">
-                <button class="lang-btn active" data-lang-switch="en">EN</button>
-                <button class="lang-btn" data-lang-switch="uk">UK</button>
-                <button class="lang-btn" data-lang-switch="ru">RU</button>
+                <button class="lang-btn active" data-lang-switch="en" aria-pressed="true" aria-label="Switch language to English">EN</button>
+                <button class="lang-btn" data-lang-switch="uk" aria-pressed="false" aria-label="Switch language to Ukrainian">UK</button>
+                <button class="lang-btn" data-lang-switch="ru" aria-pressed="false" aria-label="Switch language to Russian">RU</button>
             </li>
         </ul>
     </nav>
@@ -1120,7 +1141,8 @@
             <!-- Video Card 1 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="1W-1VoxvZn8" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.1" style="background-image: url('https://img.youtube.com/vi/1W-1VoxvZn8/sddefault.jpg')">
+                    <div class="video-placeholder" data-video-id="1W-1VoxvZn8" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.1">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/1W-1VoxvZn8/sddefault.jpg" alt="" loading="lazy">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1148,7 +1170,8 @@
             <!-- Video Card 2 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="NClJR-HOp30" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.2" style="background-image: url('https://img.youtube.com/vi/NClJR-HOp30/maxresdefault.jpg')">
+                    <div class="video-placeholder" data-video-id="NClJR-HOp30" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.2">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/NClJR-HOp30/maxresdefault.jpg" alt="" loading="lazy">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1176,7 +1199,8 @@
             <!-- Video Card 3 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="2FXjctVWAQk" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.3" style="background-image: url('https://img.youtube.com/vi/2FXjctVWAQk/2.jpg')">
+                    <div class="video-placeholder" data-video-id="2FXjctVWAQk" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.3">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/2FXjctVWAQk/2.jpg" alt="" loading="lazy">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1204,7 +1228,8 @@
             <!-- Video Card 4 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="vv8IUVtMHrs" role="button" tabindex="0" aria-label="Play video: CI/CD: A Love Story" style="background-image: url('https://img.youtube.com/vi/vv8IUVtMHrs/maxresdefault.jpg')">
+                    <div class="video-placeholder" data-video-id="vv8IUVtMHrs" role="button" tabindex="0" aria-label="Play video: CI/CD: A Love Story">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/vv8IUVtMHrs/maxresdefault.jpg" alt="" loading="lazy">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1232,7 +1257,8 @@
             <!-- Video Card 5 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="vQ5SkC84eYM" role="button" tabindex="0" aria-label="Play video: Crash Analysis Evolution" style="background-image: url('https://img.youtube.com/vi/vQ5SkC84eYM/maxresdefault.jpg')">
+                    <div class="video-placeholder" data-video-id="vQ5SkC84eYM" role="button" tabindex="0" aria-label="Play video: Crash Analysis Evolution">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/vQ5SkC84eYM/maxresdefault.jpg" alt="" loading="lazy">
                         <div class="play-button">
                             <div class="play-icon"></div>
                         </div>
@@ -1510,11 +1536,9 @@
             
             // Update language buttons
             langButtons.forEach(button => {
-                if (button.getAttribute('data-lang-switch') === lang) {
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('active');
-                }
+                const isActive = button.getAttribute('data-lang-switch') === lang;
+                button.classList.toggle('active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
             });
             
             // Update HTML lang attribute
