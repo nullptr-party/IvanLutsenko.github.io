@@ -905,6 +905,76 @@
         body.design-v2 .resource-card { flex: 0 1 340px; }
         body.design-v2 .social-card { flex-grow: 0; } /* stop a lone card stretching full width */
 
+        /* ===== Audit fixes — scoped to design-v2 only ===== */
+
+        /* Shadows tinted toward the brand hue instead of pure-black neutrals */
+        body.design-v2 {
+            --shadow-sm: 0 2px 10px rgba(13, 59, 46, 0.10);
+            --shadow-md: 0 4px 20px rgba(13, 59, 46, 0.14);
+            --shadow-lg: 0 10px 40px rgba(13, 59, 46, 0.16);
+        }
+
+        /* In-text bio links distinguished by underline, not colour alone (WCAG 1.4.1) */
+        body.design-v2 .bio a {
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+        }
+
+        /* Cap the bio measure to ~68ch */
+        body.design-v2 .bio {
+            max-width: 38rem;
+        }
+
+        /* Drop the side-stripe accent on resource cards (cards already have a full border) */
+        body.design-v2 .resource-card::before {
+            content: none;
+        }
+
+        /* Asymmetric About: photo beside left-aligned name + bio, instead of a centered stack */
+        body.design-v2 #about {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            grid-template-rows: auto auto;
+            align-content: center;
+            column-gap: clamp(2rem, 5vw, 4rem);
+            text-align: left;
+        }
+        body.design-v2 #about .profile-container {
+            grid-column: 1;
+            grid-row: 1 / 3;
+            align-self: center;
+            margin: 0;
+        }
+        body.design-v2 #about h1 {
+            grid-column: 2;
+            grid-row: 1;
+            align-self: end;
+            margin-bottom: 0.75rem;
+        }
+        body.design-v2 #about > div[data-lang] {
+            grid-column: 2;
+            grid-row: 2;
+            align-self: start;
+        }
+        body.design-v2 #about .bio {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        /* Functional scroll-reveal (the base IntersectionObserver was inert) */
+        body.design-v2 section {
+            animation: none;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        body.design-v2 section.in-view {
+            opacity: 1;
+            transform: none;
+        }
+
         /* Larger touch targets for language buttons */
         body.design-v2 .lang-btn {
             min-height: 44px;
@@ -949,6 +1019,14 @@
             body.design-v2 .video-card,
             body.design-v2 .resource-card,
             body.design-v2 .social-card { flex: 1 1 100%; }
+
+            /* About reverts to a centered stack on narrow screens */
+            body.design-v2 #about {
+                display: block;
+                text-align: center;
+            }
+            body.design-v2 #about .profile-container { margin-bottom: 2rem; }
+            body.design-v2 #about .bio { margin-left: auto; margin-right: auto; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -958,7 +1036,7 @@
                 transition-duration: 0.001ms !important;
                 scroll-behavior: auto !important;
             }
-            section { opacity: 1 !important; }
+            section { opacity: 1 !important; transform: none !important; }
         }
 
         @media print {
@@ -1036,10 +1114,11 @@
         </ul>
     </nav>
 
+    <main>
     <!-- About Section -->
     <section id="about">
         <div class="profile-container">
-            <img src="res/1000094492.jpg" alt="Ivan Lutsenko" class="profile-image" width="640" height="640" decoding="async">
+            <img src="res/1000094492.jpg" alt="Ivan Lutsenko" class="profile-image" width="640" height="640" decoding="async" fetchpriority="high">
         </div>
 
         <h1>
@@ -1482,6 +1561,7 @@
             </div>
         </div>
     </section>
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -1619,7 +1699,7 @@
         const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.animationDelay = '0.1s';
+                    entry.target.classList.add('in-view');
                     observer.unobserve(entry.target);
                 }
             });
