@@ -850,6 +850,96 @@
         }
 
         /* Print styles */
+        /* ===== Hidden design toggle: click "Enthusiast" in the subtitle ===== */
+        .design-toggle {
+            cursor: pointer;
+        }
+        .design-toggle:hover {
+            text-decoration: underline dotted;
+            text-underline-offset: 3px;
+        }
+
+        /* ===== Design v2 — Impeccable-polished skin (toggled via .design-v2 on body) ===== */
+        /* Full-bleed alternating section bands for vertical rhythm */
+        body.design-v2 section {
+            max-width: none;
+            padding-left: max(2rem, calc((100% - 1160px) / 2));
+            padding-right: max(2rem, calc((100% - 1160px) / 2));
+        }
+        body.design-v2 #contact,
+        body.design-v2 #resources {
+            background: #f1ead6;
+        }
+        body.design-v2 #videos {
+            background: var(--bg-light);
+        }
+
+        /* Tinted off-white cards (no pure #fff) with quiet definition on cream bands */
+        body.design-v2 .social-card,
+        body.design-v2 .video-card,
+        body.design-v2 .resource-card {
+            background: #fbfdfb;
+            border: 1px solid rgba(13, 59, 46, 0.08);
+        }
+
+        /* Center incomplete grid rows instead of left-orphaning them */
+        body.design-v2 .video-grid,
+        body.design-v2 .resources-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+        body.design-v2 .video-card { flex: 0 1 340px; }
+        body.design-v2 .resource-card { flex: 0 1 340px; }
+        body.design-v2 .social-card { flex-grow: 0; } /* stop a lone card stretching full width */
+
+        /* Larger touch targets for language buttons */
+        body.design-v2 .lang-btn {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Visible, on-brand focus ring */
+        body.design-v2 a:focus-visible,
+        body.design-v2 button:focus-visible,
+        body.design-v2 .video-placeholder:focus-visible,
+        body.design-v2 .design-toggle:focus-visible {
+            outline: 3px solid var(--accent-green);
+            outline-offset: 3px;
+            border-radius: 6px;
+        }
+
+        /* Current-variant indicator */
+        body.design-v2::after {
+            content: "Design v2 · Impeccable";
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background: var(--dark-green);
+            color: var(--text-light);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            box-shadow: var(--shadow-md);
+            z-index: 1001;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            body.design-v2 section {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            body.design-v2 .video-card,
+            body.design-v2 .resource-card,
+            body.design-v2 .social-card { flex: 1 1 100%; }
+        }
+
         @media print {
             nav, footer {
                 display: none;
@@ -939,7 +1029,7 @@
         
         <!-- English -->
         <div data-lang="en" class="active">
-            <p class="subtitle">Android Tech Lead | AI Tools Enthusiast</p>
+            <p class="subtitle">Android Tech Lead | AI Tools <span class="design-toggle" role="button" tabindex="0" aria-pressed="false" title="Toggle alternate design">Enthusiast</span></p>
             <div class="bio">
                 <p>Hi, I'm Android Tech Lead at Bereke Bank, where I'm responsible for the business application. My professional interests lie at the intersection of engineering quality and team processes: I monitor codebase health, build horizontal connections within the team, and try to make the project comfortable and attractive for developers.</p>
                 <p>Since 2024, I've been experimenting with AI tools in everyday tech lead work — from auto-generating tests and documentation to offloading administrative and bureaucratic routines. I'm looking for what actually helps, without illusions about deus ex machina.</p>
@@ -949,7 +1039,7 @@
 
         <!-- Ukrainian -->
         <div data-lang="uk">
-            <p class="subtitle">Android Tech Lead | Ентузіаст AI-інструментів</p>
+            <p class="subtitle">Android Tech Lead | <span class="design-toggle" role="button" tabindex="0" aria-pressed="false" title="Перемкнути альтернативний дизайн">Ентузіаст</span> AI-інструментів</p>
             <div class="bio">
                 <p>Привіт, я Android Tech Lead в Bereke Bank, де відповідаю за додаток для бізнесу. Мої професійні інтереси на перетині інженерної якості та командних процесів: стежу за здоров'ям кодової бази, вибудовую горизонтальні зв'язки всередині команди та намагаюся зробити проєкт комфортним та привабливим для розробників.</p>
                 <p>З 2024 року експериментую з AI-інструментами у повсякденній роботі техліда — від автогенерації тестів та документації до розвантаження адміністративно-бюрократичної рутини. Шукаю, що дійсно допомагає, без ілюзій про deus ex machina.</p>
@@ -959,7 +1049,7 @@
 
         <!-- Russian -->
         <div data-lang="ru">
-            <p class="subtitle">Android Tech Lead | Энтузиаст AI-инструментов</p>
+            <p class="subtitle">Android Tech Lead | <span class="design-toggle" role="button" tabindex="0" aria-pressed="false" title="Переключить альтернативный дизайн">Энтузиаст</span> AI-инструментов</p>
             <div class="bio">
                 <p>Привет, я Android Tech Lead в Bereke Bank, где отвечаю за приложение для бизнеса. Мои профессиональные интересы на стыке инженерного качества и командных процессов: слежу за здоровьем кодовой базы, выстраиваю горизонтальные связи внутри команды и стараюсь сделать проект комфортным и привлекательным для разработчиков.</p>
                 <p>С 2024 года экспериментирую с AI-инструментами в повседневной работе техлида — от автогенерации тестов и документации до разгрузки административно-бюрократической рутины. Ищу, что действительно помогает, без иллюзий про deus ex machina.</p>
@@ -1514,6 +1604,28 @@
         // Observe all sections
         document.querySelectorAll('section').forEach(section => {
             observer.observe(section);
+        });
+
+        // Hidden design toggle: clicking "Enthusiast" switches to the alternate (v2) design
+        const designToggles = document.querySelectorAll('.design-toggle');
+
+        function applyDesign(isV2) {
+            document.body.classList.toggle('design-v2', isV2);
+            designToggles.forEach(el => el.setAttribute('aria-pressed', String(isV2)));
+            localStorage.setItem('designVariant', isV2 ? 'v2' : 'v1');
+        }
+
+        // Restore saved choice
+        applyDesign(localStorage.getItem('designVariant') === 'v2');
+
+        designToggles.forEach(el => {
+            el.addEventListener('click', () => applyDesign(!document.body.classList.contains('design-v2')));
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    applyDesign(!document.body.classList.contains('design-v2'));
+                }
+            });
         });
     </script>
 </body>
