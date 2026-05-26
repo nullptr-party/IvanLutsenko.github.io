@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');</script>
     <meta name="description" content="Ivan Lutsenko — Android Tech Lead at Bereke Bank, AI tools enthusiast, speaker and co-organizer of nullptr.party and GDG Almaty meetups.">
     <meta name="keywords" content="Ivan Lutsenko, Android Tech Lead, speaker, AI tools, Claude, MCP, Crashlytics, CI/CD, nullptr.party, GDG Almaty">
     <meta name="author" content="Ivan Lutsenko">
@@ -101,11 +102,11 @@
             --bg-cream: #f7f1e3;
             --text-dark: #2c3e50;
             --text-light: #fdf6e3;
-            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+            --shadow-sm: 0 2px 10px rgba(13, 59, 46, 0.10);
+            --shadow-md: 0 4px 20px rgba(13, 59, 46, 0.14);
+            --shadow-lg: 0 10px 40px rgba(13, 59, 46, 0.16);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            /* design-v2 skin surfaces */
+            /* band & card surfaces */
             --bg-band: #f1ead6;
             --card-surface: #fbfdfb;
             --card-border: rgba(13, 59, 46, 0.08);
@@ -266,6 +267,10 @@
             transition: var(--transition);
             font-size: 0.9rem;
             letter-spacing: 0.5px;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .lang-btn:hover {
@@ -278,24 +283,24 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Sections */
+        /* Sections — full-bleed bands; content clamped via padding */
         section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+            padding-left: max(2rem, calc((100% - 1160px) / 2));
+            padding-right: max(2rem, calc((100% - 1160px) / 2));
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Scroll-reveal — gated on .js so no-JS keeps all content visible */
+        html.js section {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        html.js section.in-view {
+            opacity: 1;
+            transform: none;
         }
 
         section:first-of-type {
@@ -342,14 +347,37 @@
             letter-spacing: -0.25px;
         }
 
-        /* About Section */
+        /* About Section — photo beside left-aligned name + bio */
         #about {
             background-color: var(--bg-light);
-            text-align: center;
             min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            grid-template-rows: auto auto;
+            align-content: center;
+            column-gap: clamp(2rem, 5vw, 4rem);
+            text-align: left;
+        }
+        #about .profile-container {
+            grid-column: 1;
+            grid-row: 1 / 3;
+            align-self: center;
+            margin: 0;
+        }
+        #about h1 {
+            grid-column: 2;
+            grid-row: 1;
+            align-self: end;
+            margin-bottom: 0.75rem;
+        }
+        #about > div[data-lang] {
+            grid-column: 2;
+            grid-row: 2;
+            align-self: start;
+        }
+        #about .bio {
+            margin-left: 0;
+            margin-right: 0;
         }
 
         .subtitle {
@@ -360,7 +388,7 @@
         }
 
         .bio {
-            max-width: 800px;
+            max-width: 38rem;
             margin: 2rem auto;
             font-size: 1.1rem;
             line-height: 1.8;
@@ -370,6 +398,9 @@
 
         .bio a {
             color: var(--accent-green);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
         }
 
         .footer-note {
@@ -401,7 +432,7 @@
 
         /* Contact Section */
         #contact {
-            background-color: var(--bg-light);
+            background-color: var(--bg-band);
             padding-bottom: 4rem;
         }
 
@@ -415,7 +446,8 @@
         }
 
         .social-card {
-            background: white;
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 1.5rem 2rem;
             text-decoration: none;
@@ -425,7 +457,7 @@
             gap: 1rem;
             box-shadow: var(--shadow-sm);
             transition: var(--transition);
-            flex: 1 1 250px;
+            flex: 0 1 250px;
             min-width: 200px;
             position: relative;
             overflow: hidden;
@@ -475,24 +507,27 @@
 
         /* Video Gallery */
         #videos {
-            background: linear-gradient(135deg, var(--bg-cream) 0%, var(--bg-light) 100%);
+            background: var(--bg-light);
             position: relative;
         }
 
         .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 2rem;
             margin-top: 3rem;
         }
 
         .video-card {
-            background: white;
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             transition: var(--transition);
             position: relative;
+            flex: 0 1 340px;
         }
 
         .video-card:hover {
@@ -603,46 +638,33 @@
 
         /* Resources Section */
         #resources {
-            background-color: var(--bg-light);
+            background-color: var(--bg-band);
         }
 
         .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 2rem;
             margin-top: 3rem;
         }
 
         .resource-card {
-            background: white;
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 2rem;
             box-shadow: var(--shadow-sm);
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            flex: 0 1 340px;
         }
 
         .resource-card > div {
             display: flex;
             flex-direction: column;
             min-height: 100%;
-        }
-
-        .resource-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--accent-green), var(--light-green));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .resource-card:hover::before {
-            opacity: 1;
         }
 
         .resource-card:hover {
@@ -817,12 +839,9 @@
                 font-size: 1.75rem;
             }
 
-            .video-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .resources-grid {
-                grid-template-columns: 1fr;
+            .video-card,
+            .resource-card {
+                flex: 1 1 100%;
             }
 
             .social-links {
@@ -833,6 +852,14 @@
             .social-card {
                 flex: 1 1 100%;
             }
+
+            /* About reverts to a centered stack on narrow screens */
+            #about {
+                display: block;
+                text-align: center;
+            }
+            #about .profile-container { margin-bottom: 2rem; }
+            #about .bio { margin-left: auto; margin-right: auto; }
         }
 
         /* Loading animation */
@@ -860,173 +887,13 @@
             border: 0;
         }
 
-        /* Print styles */
-        /* ===== Hidden design toggle: click "Enthusiast" in the subtitle ===== */
-        .design-toggle {
-            cursor: pointer;
-        }
-        .design-toggle:hover {
-            text-decoration: underline dotted;
-            text-underline-offset: 3px;
-        }
-
-        /* ===== Design v2 — Impeccable-polished skin (toggled via .design-v2 on body) ===== */
-        /* Full-bleed alternating section bands for vertical rhythm */
-        body.design-v2 section {
-            max-width: none;
-            padding-left: max(2rem, calc((100% - 1160px) / 2));
-            padding-right: max(2rem, calc((100% - 1160px) / 2));
-        }
-        body.design-v2 #contact,
-        body.design-v2 #resources {
-            background: var(--bg-band);
-        }
-        body.design-v2 #videos {
-            background: var(--bg-light);
-        }
-
-        /* Tinted off-white cards (no pure #fff) with quiet definition on cream bands */
-        body.design-v2 .social-card,
-        body.design-v2 .video-card,
-        body.design-v2 .resource-card {
-            background: var(--card-surface);
-            border: 1px solid var(--card-border);
-        }
-
-        /* Center incomplete grid rows instead of left-orphaning them */
-        body.design-v2 .video-grid,
-        body.design-v2 .resources-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-        }
-        body.design-v2 .video-card { flex: 0 1 340px; }
-        body.design-v2 .resource-card { flex: 0 1 340px; }
-        body.design-v2 .social-card { flex-grow: 0; } /* stop a lone card stretching full width */
-
-        /* ===== Audit fixes — scoped to design-v2 only ===== */
-
-        /* Shadows tinted toward the brand hue instead of pure-black neutrals */
-        body.design-v2 {
-            --shadow-sm: 0 2px 10px rgba(13, 59, 46, 0.10);
-            --shadow-md: 0 4px 20px rgba(13, 59, 46, 0.14);
-            --shadow-lg: 0 10px 40px rgba(13, 59, 46, 0.16);
-        }
-
-        /* In-text bio links distinguished by underline, not colour alone (WCAG 1.4.1) */
-        body.design-v2 .bio a {
-            text-decoration: underline;
-            text-decoration-thickness: 1px;
-            text-underline-offset: 2px;
-        }
-
-        /* Cap the bio measure to ~68ch */
-        body.design-v2 .bio {
-            max-width: 38rem;
-        }
-
-        /* Drop the side-stripe accent on resource cards (cards already have a full border) */
-        body.design-v2 .resource-card::before {
-            content: none;
-        }
-
-        /* Asymmetric About: photo beside left-aligned name + bio, instead of a centered stack */
-        body.design-v2 #about {
-            display: grid;
-            grid-template-columns: auto minmax(0, 1fr);
-            grid-template-rows: auto auto;
-            align-content: center;
-            column-gap: clamp(2rem, 5vw, 4rem);
-            text-align: left;
-        }
-        body.design-v2 #about .profile-container {
-            grid-column: 1;
-            grid-row: 1 / 3;
-            align-self: center;
-            margin: 0;
-        }
-        body.design-v2 #about h1 {
-            grid-column: 2;
-            grid-row: 1;
-            align-self: end;
-            margin-bottom: 0.75rem;
-        }
-        body.design-v2 #about > div[data-lang] {
-            grid-column: 2;
-            grid-row: 2;
-            align-self: start;
-        }
-        body.design-v2 #about .bio {
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-        /* Functional scroll-reveal (the base IntersectionObserver was inert) */
-        body.design-v2 section {
-            animation: none;
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        body.design-v2 section.in-view {
-            opacity: 1;
-            transform: none;
-        }
-
-        /* Larger touch targets for language buttons */
-        body.design-v2 .lang-btn {
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Visible, on-brand focus ring (both designs) */
+        /* Visible, on-brand focus ring */
         a:focus-visible,
         button:focus-visible,
-        .video-placeholder:focus-visible,
-        .design-toggle:focus-visible {
+        .video-placeholder:focus-visible {
             outline: 3px solid var(--accent-green);
             outline-offset: 3px;
             border-radius: 6px;
-        }
-
-        /* Current-variant indicator */
-        body.design-v2::after {
-            content: "Design v2 · Impeccable";
-            position: fixed;
-            bottom: 16px;
-            right: 16px;
-            background: var(--dark-green);
-            color: var(--text-light);
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            box-shadow: var(--shadow-md);
-            z-index: 1001;
-            pointer-events: none;
-        }
-
-        @media (max-width: 768px) {
-            body.design-v2 section {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-            body.design-v2 .video-card,
-            body.design-v2 .resource-card,
-            body.design-v2 .social-card { flex: 1 1 100%; }
-
-            /* About reverts to a centered stack on narrow screens */
-            body.design-v2 #about {
-                display: block;
-                text-align: center;
-            }
-            body.design-v2 #about .profile-container { margin-bottom: 2rem; }
-            body.design-v2 #about .bio { margin-left: auto; margin-right: auto; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1129,7 +996,7 @@
         
         <!-- English -->
         <div data-lang="en" class="active">
-            <p class="subtitle">Android Tech Lead | AI Tools <span class="design-toggle" role="button" tabindex="0" aria-pressed="false" title="Toggle alternate design">Enthusiast</span></p>
+            <p class="subtitle">Android Tech Lead | AI Tools Enthusiast</p>
             <div class="bio">
                 <p>Hi, I'm Android Tech Lead at Bereke Bank, where I'm responsible for the business application. My professional interests lie at the intersection of engineering quality and team processes: I monitor codebase health, build horizontal connections within the team, and try to make the project comfortable and attractive for developers.</p>
                 <p>Since 2024, I've been experimenting with AI tools in everyday tech lead work — from auto-generating tests and documentation to offloading administrative and bureaucratic routines. I'm looking for what actually helps, without illusions about deus ex machina.</p>
@@ -1139,7 +1006,7 @@
 
         <!-- Ukrainian -->
         <div data-lang="uk">
-            <p class="subtitle">Android Tech Lead | <span class="design-toggle" role="button" tabindex="0" aria-pressed="false" title="Перемкнути альтернативний дизайн">Ентузіаст</span> AI-інструментів</p>
+            <p class="subtitle">Android Tech Lead | Ентузіаст AI-інструментів</p>
             <div class="bio">
                 <p>Привіт, я Android Tech Lead в Bereke Bank, де відповідаю за додаток для бізнесу. Мої професійні інтереси на перетині інженерної якості та командних процесів: стежу за здоров'ям кодової бази, вибудовую горизонтальні зв'язки всередині команди та намагаюся зробити проєкт комфортним та привабливим для розробників.</p>
                 <p>З 2024 року експериментую з AI-інструментами у повсякденній роботі техліда — від автогенерації тестів та документації до розвантаження адміністративно-бюрократичної рутини. Шукаю, що дійсно допомагає, без ілюзій про deus ex machina.</p>
@@ -1149,7 +1016,7 @@
 
         <!-- Russian -->
         <div data-lang="ru">
-            <p class="subtitle">Android Tech Lead | <span class="design-toggle" role="button" tabindex="0" aria-pressed="false" title="Переключить альтернативный дизайн">Энтузиаст</span> AI-инструментов</p>
+            <p class="subtitle">Android Tech Lead | Энтузиаст AI-инструментов</p>
             <div class="bio">
                 <p>Привет, я Android Tech Lead в Bereke Bank, где отвечаю за приложение для бизнеса. Мои профессиональные интересы на стыке инженерного качества и командных процессов: слежу за здоровьем кодовой базы, выстраиваю горизонтальные связи внутри команды и стараюсь сделать проект комфортным и привлекательным для разработчиков.</p>
                 <p>С 2024 года экспериментирую с AI-инструментами в повседневной работе техлида — от автогенерации тестов и документации до разгрузки административно-бюрократической рутины. Ищу, что действительно помогает, без иллюзий про deus ex machina.</p>
@@ -1708,28 +1575,6 @@
         // Observe all sections
         document.querySelectorAll('section').forEach(section => {
             observer.observe(section);
-        });
-
-        // Hidden design toggle: clicking "Enthusiast" switches to the alternate (v2) design
-        const designToggles = document.querySelectorAll('.design-toggle');
-
-        function applyDesign(isV2) {
-            document.body.classList.toggle('design-v2', isV2);
-            designToggles.forEach(el => el.setAttribute('aria-pressed', String(isV2)));
-            localStorage.setItem('designVariant', isV2 ? 'v2' : 'v1');
-        }
-
-        // Restore saved choice
-        applyDesign(localStorage.getItem('designVariant') === 'v2');
-
-        designToggles.forEach(el => {
-            el.addEventListener('click', () => applyDesign(!document.body.classList.contains('design-v2')));
-            el.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    applyDesign(!document.body.classList.contains('design-v2'));
-                }
-            });
         });
     </script>
 </body>
