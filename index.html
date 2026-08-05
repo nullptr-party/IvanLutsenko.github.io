@@ -122,7 +122,7 @@
 
         html {
             scroll-behavior: smooth;
-            scroll-padding-top: 80px; /* offset for fixed navbar on anchor jumps */
+            scroll-padding-top: 96px; /* fixed navbar is 86px on desktop */
         }
 
         body {
@@ -784,6 +784,12 @@
         }
 
         @media (max-width: 768px) {
+            /* The mobile navbar is two rows (~102px), so the desktop 80px offset
+               dropped anchor targets underneath it */
+            html {
+                scroll-padding-top: 110px;
+            }
+
             nav {
                 padding: 1rem;
             }
