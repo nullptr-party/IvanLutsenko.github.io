@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AWAC AI Agent Plugins — eight plugins for Claude Code and Codex CLI: Crashlytics crash forensics, multi-agent code review, Obsidian project tracking, vertical clip maker and more.">
+    <meta name="keywords" content="Claude Code plugins, Codex CLI plugins, Crashlytics, code review agents, Obsidian tracker, MCP, Ivan Lutsenko">
+    <meta name="author" content="Ivan Lutsenko">
+    <link rel="canonical" href="https://ivan.nullptr.party/plugins.html">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="AWAC AI Agent Plugins — Claude Code &amp; Codex CLI">
+    <meta property="og:description" content="Eight plugins for Claude Code and Codex CLI: crash forensics, multi-agent code review, project tracking, clip making.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ivan.nullptr.party/plugins.html">
+    <meta property="og:image" content="https://ivan.nullptr.party/res/1000094492.jpg">
+    <meta property="og:image:width" content="640">
+    <meta property="og:image:height" content="640">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AWAC AI Agent Plugins — Claude Code &amp; Codex CLI">
+    <meta name="twitter:description" content="Eight plugins for Claude Code and Codex CLI: crash forensics, multi-agent code review, project tracking, clip making.">
+    <meta name="twitter:image" content="https://ivan.nullptr.party/res/1000094492.jpg">
+
+    <title>AWAC AI Agent Plugins — Ivan Lutsenko</title>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#0d3b2e">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --dark-green: #0d3b2e;
+            --accent-green: #1a5c47;
+            --light-green: #2d7a5f;
+            --bg-light: #fdf6e3;
+            --bg-band: #f1ead6;
+            --text-dark: #2c3e50;
+            --text-light: #fdf6e3;
+            --card-surface: #fbfdfb;
+            --card-border: rgba(13, 59, 46, 0.08);
+            --shadow-sm: 0 2px 10px rgba(13, 59, 46, 0.10);
+            --shadow-md: 0 4px 20px rgba(13, 59, 46, 0.14);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+        }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--accent-green) 100%);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        nav a:hover { color: #a8d5c2; }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        /* Hero */
+        header.hero {
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--accent-green) 100%);
+            color: var(--text-light);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.9rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .hero-badges span {
+            background: rgba(253, 246, 227, 0.12);
+            border: 1px solid rgba(253, 246, 227, 0.25);
+            border-radius: 999px;
+            padding: 0.3rem 0.9rem;
+            font-size: 0.85rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--bg-light);
+            color: var(--dark-green);
+            padding: 0.7rem 1.6rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid rgba(253, 246, 227, 0.4);
+            box-shadow: none;
+        }
+
+        .btn-ghost:hover { background: rgba(253, 246, 227, 0.12); }
+
+        /* Layout */
+        section { padding: 3.5rem 2rem; max-width: 1000px; margin: 0 auto; }
+
+        section.band {
+            background: var(--bg-band);
+            max-width: none;
+        }
+
+        .band-inner { max-width: 1000px; margin: 0 auto; }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-lead {
+            color: #52616b;
+            margin-bottom: 2rem;
+            max-width: 720px;
+        }
+
+        /* Code blocks */
+        pre {
+            background: #0d1f19;
+            color: #d7e8de;
+            border-radius: 12px;
+            padding: 1.1rem 1.3rem;
+            overflow-x: auto;
+            font-family: var(--mono);
+            font-size: 0.86rem;
+            line-height: 1.65;
+            box-shadow: var(--shadow-sm);
+        }
+
+        pre .c { color: #7fa695; }          /* comment */
+        pre .p { color: #7fd1a8; }          /* prompt sign */
+        pre .k { color: #f0c674; }          /* command / key */
+        pre .o { color: #9ec9ff; }          /* agent / step */
+        pre .g { color: #a5d6a7; }          /* good */
+        pre .r { color: #ef9a9a; }          /* bad */
+
+        code.inline {
+            font-family: var(--mono);
+            font-size: 0.88em;
+            background: rgba(13, 59, 46, 0.07);
+            border-radius: 5px;
+            padding: 0.12em 0.4em;
+        }
+
+        /* Plugin cards */
+        .plugin {
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            padding: 1.8rem;
+            margin-bottom: 1.8rem;
+            scroll-margin-top: 90px;
+        }
+
+        .plugin-head {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.6rem 0.8rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .plugin-head h3 {
+            font-size: 1.35rem;
+            color: var(--dark-green);
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 0.15rem 0.7rem;
+            white-space: nowrap;
+        }
+
+        .tag-stable { background: #d9efe3; color: #1a5c47; }
+        .tag-beta { background: #fdecc8; color: #8a6100; }
+        .tag-ver { background: rgba(13, 59, 46, 0.07); color: #52616b; font-family: var(--mono); }
+        .tag-target { background: #e2ecf7; color: #2c5378; }
+
+        .plugin > p { margin-bottom: 1rem; }
+
+        .plugin h4 {
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #7a8a94;
+            margin: 1.4rem 0 0.6rem;
+        }
+
+        .plugin ul { margin: 0 0 0 1.1rem; }
+        .plugin li { margin-bottom: 0.35rem; }
+
+        .shot {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-sm);
+            margin-top: 1rem;
+        }
+
+        /* Index grid */
+        .toc {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .toc a {
+            display: block;
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            text-decoration: none;
+            color: var(--dark-green);
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .toc a:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .toc a span { display: block; font-weight: 400; font-size: 0.85rem; color: #52616b; margin-top: 0.2rem; }
+
+        footer {
+            background: var(--dark-green);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2.5rem 2rem;
+        }
+
+        footer p { opacity: 0.85; font-size: 0.9rem; }
+        footer a { color: #a8d5c2; }
+
+        @media (max-width: 768px) {
+            nav { padding: 0.9rem 1.1rem; }
+            .nav-links { gap: 1rem; font-size: 0.85rem; }
+            header.hero { padding: 7rem 1.2rem 3rem; }
+            section { padding: 2.5rem 1.2rem; }
+            .plugin { padding: 1.3rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            * { transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">← Portfolio</a>
+        <div class="nav-links">
+            <a href="#install">Install</a>
+            <a href="#plugins">Plugins</a>
+            <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>🧩 AWAC AI Agent Plugins</h1>
+        <p>Eight plugins I use daily as an Android Tech Lead — crash forensics, multi-agent code review, project tracking, plugin porting, clip making. Most of them are dual-target: the same plugin runs in Claude Code and in Codex CLI.</p>
+        <div class="hero-badges">
+            <span>8 plugins</span>
+            <span>Claude Code + Codex CLI</span>
+            <span>Sub-agents · Hooks · MCP servers</span>
+            <span>MIT</span>
+        </div>
+        <p>
+            <a class="btn" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">View on GitHub</a>
+            <a class="btn btn-ghost" href="#install">Install</a>
+        </p>
+    </header>
+
+    <main>
+    <section id="what">
+        <h2>What this is</h2>
+        <p class="section-lead">A marketplace repository. You add it once to your agent CLI, then install plugins by name. Each plugin is a self-contained bundle of slash commands, sub-agents, hooks, skills and — where it needs persistent state — its own MCP server.</p>
+        <div class="toc">
+            <a href="#crashlytics">Crashlytics<span>Android &amp; iOS crash analysis with git blame forensics</span></a>
+            <a href="#obsidian-tracker">Obsidian Tracker<span>Projects, kanban tasks, bugs, ADRs, session logs</span></a>
+            <a href="#combined-review">Combined Review<span>4 review agents + CodeRabbit in one pass</span></a>
+            <a href="#auto-theme">Auto Theme<span>Terminal theme follows macOS light/dark</span></a>
+            <a href="#locale-notifications">Locale Notifications<span>macOS notifications in your system language</span></a>
+            <a href="#drawbridge">Drawbridge<span>Brief → tuned prompt → image-gen web UI</span></a>
+            <a href="#plugin-cross-port">Plugin Cross Port<span>Claude Code ⇄ Codex plugin conversion</span></a>
+            <a href="#clip-maker">Clip Maker<span>Talks → vertical clips with subtitles</span></a>
+        </div>
+    </section>
+
+    <section class="band" id="install">
+        <div class="band-inner">
+            <h2>Install</h2>
+            <p class="section-lead">Add the marketplace once, then install whatever you need. Nothing is installed globally — every plugin is opt-in.</p>
+
+            <h4 style="font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;color:#7a8a94;margin:1.4rem 0 0.6rem;">Claude Code</h4>
+<pre><span class="p">&gt;</span> <span class="k">/plugin marketplace add</span> https://github.com/IvanLutsenko/awac-ai-agent-plugins
+<span class="p">&gt;</span> <span class="k">/plugin install</span> crashlytics        <span class="c"># then any plugin by name</span></pre>
+
+            <h4 style="font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;color:#7a8a94;margin:1.4rem 0 0.6rem;">Codex CLI</h4>
+<pre><span class="c"># add this repo as a Codex marketplace (Git source, or a local clone path)</span>
+$ <span class="k">codex plugin marketplace add</span> IvanLutsenko/awac-ai-agent-plugins
+
+<span class="c"># install a plugin: PLUGIN@MARKETPLACE</span>
+$ <span class="k">codex plugin add</span> combined-review@awac-ai-agent-plugins
+
+<span class="c"># verify</span>
+$ <span class="k">codex plugin marketplace list</span>   <span class="c"># marketplaces and their roots</span>
+$ <span class="k">codex plugin list</span>                <span class="c"># plugins and install status</span></pre>
+            <p style="margin-top:1rem;color:#52616b;font-size:0.92rem;">Claude Code commands are converted into Codex skills under <code class="inline">skills/generated-from-commands/</code>, agents into <code class="inline">skills/generated-from-agents/</code>. The one exception is <em>Locale Notifications</em> — Claude Code only. The old repository slug <code class="inline">awac-claude-code-plugins</code> still works for existing installations.</p>
+        </div>
+    </section>
+
+    <section id="plugins">
+        <h2>The plugins</h2>
+        <p class="section-lead">Versions below reflect the current release in the repository; the README in the repo is the authoritative changelog.</p>
+
+        <!-- Crashlytics -->
+        <article class="plugin" id="crashlytics">
+            <div class="plugin-head">
+                <h3>Crashlytics</h3>
+                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-ver">v4.4.4</span>
+                <span class="tag tag-target">Claude Code + Codex</span>
+            </div>
+            <p>Turns a Crashlytics issue id into a report you can act on: what broke, which commit introduced it, who should fix it, and a before/after patch. Android and iOS, platform auto-detected from project config.</p>
+
+            <h4>Pipeline</h4>
+            <p>Four steps, each its own sub-agent, ending in a deterministic quality gate — the report is rejected if the forensics section is missing or the fix is not code-level.</p>
+<pre><span class="p">&gt;</span> <span class="k">/crash-report</span> ca8f7f21e3b4...
+
+<span class="o">▸ crash-classifier-android</span>   type, component, trigger
+<span class="o">▸ firebase-fetcher</span>           MCP: crashlytics_get_issue + batch_get_events
+<span class="o">▸ crash-forensics-android</span>    git blame on origin/&lt;default-branch&gt;
+<span class="o">▸ validate-report.py</span>         <span class="g">quality gate passed</span>
+
+Root cause  : view binding accessed after onDestroyView
+Introduced  : 4f1a2b9 — "Move loader into fragment"
+Assignee    : &lt;blame author&gt;
+Fix         : cancel the collection job in onDestroyView (patch below)</pre>
+            <!-- screenshot slot: drop res/plugins/crashlytics.png in place, then uncomment
+            <img class="shot" src="res/plugins/crashlytics.png" alt="Crashlytics report in the terminal" loading="lazy">
+            -->
+
+            <h4>Commands</h4>
+            <ul>
+                <li><code class="inline">/crash-report &lt;id|console-url&gt;</code> — unified entry point, auto-detects platform</li>
+                <li><code class="inline">/crash-report-android</code>, <code class="inline">/crash-report-ios</code> — explicit platform</li>
+                <li><code class="inline">/crash-config</code> — language, branch, platform, model, Firebase ids</li>
+                <li><code class="inline">/crashlytics:install-permissions</code> — one-time read-only allowlist, no more prompts mid-report</li>
+            </ul>
+
+            <h4>Notable</h4>
+            <ul>
+                <li>MCP-primary fetch with REST <code class="inline">v1alpha</code> fallback and a manual offline mode</li>
+                <li>Assignee identification is mandatory, not best-effort</li>
+                <li>Reports render with English headers and a body in any language</li>
+                <li>Firebase MCP launcher pinned to <code class="inline">firebase-tools@15</code> so startup does not drift on silent major updates</li>
+            </ul>
+        </article>
+
+        <!-- Obsidian Tracker -->
+        <article class="plugin" id="obsidian-tracker">
+            <div class="plugin-head">
+                <h3>Obsidian Tracker</h3>
+                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-ver">v4.5.2</span>
+                <span class="tag tag-target">Claude Code + Codex</span>
+            </div>
+            <p>Makes an Obsidian vault the single source of truth for what you are working on: projects, a kanban board, bugs, architecture decision records and session logs. Hooks record sessions, actions and commits on their own — the tracking survives <code class="inline">/compact</code>.</p>
+
+            <h4>A session</h4>
+<pre><span class="p">&gt;</span> <span class="k">/track-start</span> kidkiosk
+<span class="g">tracking on</span> — session note created, PostToolUse hook recording
+
+<span class="p">&gt;</span> <span class="k">/task</span> kidkiosk "OTA update for the kiosk app"
+<span class="o">TASK-007</span> created → Backlog
+
+<span class="p">&gt;</span> <span class="k">/done</span> kidkiosk 7
+<span class="o">TASK-007</span> → Done
+
+<span class="p">&gt;</span> <span class="k">/track-stop</span>
+session saved: 41 min, 12 actions, 2 commits, 1 decision</pre>
+            <!-- screenshot slot: drop res/plugins/obsidian-tracker.png in place, then uncomment
+            <img class="shot" src="res/plugins/obsidian-tracker.png" alt="Obsidian kanban board written by the plugin" loading="lazy">
+            -->
+
+            <h4>Commands</h4>
+            <ul>
+                <li>Projects — <code class="inline">/projects</code>, <code class="inline">/project-new</code>, <code class="inline">/project-archive</code></li>
+                <li>Tasks — <code class="inline">/task</code>, <code class="inline">/done</code>, <code class="inline">/today</code>, <code class="inline">/import</code></li>
+                <li>Bugs — <code class="inline">/project-bug</code>, <code class="inline">/bug-close</code></li>
+                <li>Decisions — <code class="inline">/decision-new</code>, <code class="inline">/decision-close</code>, <code class="inline">/decision-supersede</code>, <code class="inline">/decision-link</code></li>
+                <li>Context — <code class="inline">/where-was-i</code>, <code class="inline">/pulse</code>, <code class="inline">/session-log</code></li>
+            </ul>
+
+            <h4>Notable</h4>
+            <ul>
+                <li>Own MCP server, builds itself on first run — no manual <code class="inline">npm install</code></li>
+                <li>Board writes preserve <code class="inline">%% kanban:settings %%</code>, frontmatter and custom sections</li>
+                <li>Obsidian-safe filenames — mobile Obsidian and Sync stop complaining; a normalizer fixes existing vaults</li>
+                <li>Zero-padded, race-safe task ids (<code class="inline">TASK-007</code>)</li>
+                <li>83 vitest + 86 bats tests behind it</li>
+            </ul>
+        </article>
+
+        <!-- Combined Review -->
+        <article class="plugin" id="combined-review">
+            <div class="plugin-head">
+                <h3>Combined Review</h3>
+                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-ver">v1.4.0</span>
+                <span class="tag tag-target">Claude Code + Codex</span>
+            </div>
+            <p>One command, four specialised reviewers in parallel, plus CodeRabbit CLI — findings merged, scored and de-duplicated instead of arriving as four separate walls of text.</p>
+
+            <h4>Agents</h4>
+<pre><span class="p">&gt;</span> <span class="k">/review</span> --base main
+
+<span class="o">▸ code-reviewer</span>            CLAUDE.md compliance, bugs, logic
+<span class="o">▸ git-historian</span>            reverted fixes, parallel-work conflicts
+<span class="o">▸ silent-failure-hunter</span>    swallowed errors, empty catch blocks
+<span class="o">▸ test-analyzer</span>            behavioural coverage gaps (criticality ≥ 7)
+<span class="o">▸ coderabbit</span>               CLI pass, auto-installed
+
+confidence scoring 0–100 · low-confidence findings filtered out</pre>
+            <!-- screenshot slot: drop res/plugins/combined-review.png in place, then uncomment
+            <img class="shot" src="res/plugins/combined-review.png" alt="Combined review output" loading="lazy">
+            -->
+
+            <h4>Inputs it accepts</h4>
+            <ul>
+                <li><code class="inline">/review</code> — uncommitted changes</li>
+                <li><code class="inline">/review 123</code> — GitHub PR or GitLab MR, forge auto-detected</li>
+                <li><code class="inline">/review !22 +threads</code> — GitLab MR with inline resolvable threads</li>
+                <li><code class="inline">/review feature/X feature/Y</code> — branch diff; <code class="inline">--base main</code> for current branch</li>
+                <li>Optional agents on demand: <code class="inline">+comments</code>, <code class="inline">+types</code>, <code class="inline">+simplify</code></li>
+            </ul>
+        </article>
+
+        <!-- Auto Theme -->
+        <article class="plugin" id="auto-theme">
+            <div class="plugin-head">
+                <h3>Auto Theme</h3>
+                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-ver">v1.1.2</span>
+                <span class="tag tag-target">Claude Code + Codex</span>
+            </div>
+            <p>Your terminal agent follows macOS appearance. Switch the system to dark and the next prompt is already dark — in Claude Code <em>and</em> in Codex. Bundles two custom themes: <code class="inline">gruvbox-light</code> and <code class="inline">sunset-drive</code>.</p>
+
+            <h4>How it works</h4>
+<pre><span class="c"># UserPromptSubmit hook, runs on every message</span>
+$ <span class="k">defaults read</span> -g AppleInterfaceStyle      <span class="c"># Dark | (absent) = Light</span>
+
+light → <span class="o">gruvbox-light</span>      dark → <span class="o">sunset-drive</span>
+
+~/.claude/settings.json   theme            <span class="c"># + ~/.claude.json mirror</span>
+~/.codex/config.toml      [tui] theme
+
+<span class="c"># idempotent: no write when the theme already matches</span></pre>
+            <!-- screenshot slot: drop res/plugins/auto-theme.png in place, then uncomment
+            <img class="shot" src="res/plugins/auto-theme.png" alt="Light and dark theme side by side" loading="lazy">
+            -->
+
+            <h4>Notable</h4>
+            <ul>
+                <li>Malformed configs and non-writable targets emit an explicit <code class="inline">WARN:</code> instead of failing silently</li>
+                <li>Unknown <code class="inline">custom:*</code> themes without a light/dark pair are preserved, not overwritten</li>
+                <li><code class="inline">/sync-theme</code> forces a re-sync when you want it now</li>
+            </ul>
+        </article>
+
+        <!-- Locale Notifications -->
+        <article class="plugin" id="locale-notifications">
+            <div class="plugin-head">
+                <h3>Locale Notifications</h3>
+                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-ver">v2.0.1</span>
+                <span class="tag tag-target">Claude Code only</span>
+            </div>
+            <p>Native macOS notifications from Claude Code, in your system language. Detects the locale, translates once via Google Translate, caches the result and works offline from then on.</p>
+
+<pre><span class="c"># Notification hook</span>
+$ <span class="k">defaults read</span> -g AppleLocale            <span class="c"># ru_KZ, uk_UA, de_DE …</span>
+  → translate once → cache → <span class="k">osascript</span> display notification
+
+<span class="c"># custom messages via config file, project-local config resolves from hook cwd</span></pre>
+            <!-- screenshot slot: drop res/plugins/locale-notifications.png in place, then uncomment
+            <img class="shot" src="res/plugins/locale-notifications.png" alt="macOS notification in a local language" loading="lazy">
+            -->
+        </article>
+
+        <!-- Drawbridge -->
+        <article class="plugin" id="drawbridge">
+            <div class="plugin-head">
+                <h3>Drawbridge</h3>
+                <span class="tag tag-beta">Beta</span>
+                <span class="tag tag-ver">v0.1.1</span>
+                <span class="tag tag-target">Claude Code + Codex</span>
+            </div>
+            <p>A bridge between a one-line brief and the image-gen web UIs you already pay nothing for. It writes a prompt tuned to the target model, puts it in the clipboard and opens the UI — no API keys, no billing.</p>
+
+<pre><span class="p">&gt;</span> <span class="k">/draw</span> закат на байкале с медведем у воды
+<span class="o">target</span>: gemini (default)  ·  brief auto-translated to English
+<span class="g">prompt copied</span> → opening Gemini Imagen 3
+
+<span class="p">&gt;</span> <span class="k">/draw</span> -t midjourney cyberpunk samurai   <span class="c"># one-shot target override</span>
+<span class="p">&gt;</span> <span class="k">/redraw</span> -t chatgpt                     <span class="c"># same brief, another target</span>
+<span class="p">&gt;</span> <span class="k">/draw-prompt</span> &lt;brief&gt;                   <span class="c"># prompt only, no browser</span></pre>
+            <!-- screenshot slot: drop res/plugins/drawbridge.png in place, then uncomment
+            <img class="shot" src="res/plugins/drawbridge.png" alt="Drawbridge prompt crafting" loading="lazy">
+            -->
+
+            <h4>Notable</h4>
+            <ul>
+                <li>Per-target tuning: Imagen prose, DALL·E structure, Aurora density, Midjourney tag syntax</li>
+                <li>Settings in <code class="inline">~/.claude/drawbridge.local.md</code>, overridable per project</li>
+                <li>History of the last 200 prompts feeds <code class="inline">/redraw</code></li>
+                <li>macOS only in 0.1.1</li>
+            </ul>
+        </article>
+
+        <!-- Plugin Cross Port -->
+        <article class="plugin" id="plugin-cross-port">
+            <div class="plugin-head">
+                <h3>Plugin Cross Port</h3>
+                <span class="tag tag-beta">Beta</span>
+                <span class="tag tag-ver">v0.10.1</span>
+                <span class="tag tag-target">Claude Code + Codex</span>
+            </div>
+            <p>The reason the rest of this marketplace is dual-target. It converts a plugin between Claude Code and Codex formats, then keeps both targets reconciled as the source changes — including the parts that cannot be derived mechanically.</p>
+
+<pre><span class="c"># one-shot conversion, interactively</span>
+<span class="p">&gt;</span> Convert plugins/obsidian-tracker to Codex
+
+<span class="c"># deterministic marketplace reconciliation</span>
+$ <span class="k">cross_port.py</span> marketplace attach --source claude-code
+$ <span class="k">cross_port.py</span> marketplace sync
+$ <span class="k">cross_port.py</span> marketplace check
+
+<span class="c"># semantic adaptations: plan first, then apply atomically</span>
+$ <span class="k">cross_port.py</span> plugin adapt plugins/example
+$ <span class="k">cross_port.py</span> plugin adapt plugins/example --apply</pre>
+            <!-- screenshot slot: drop res/plugins/plugin-cross-port.png in place, then uncomment
+            <img class="shot" src="res/plugins/plugin-cross-port.png" alt="Cross-port marketplace check" loading="lazy">
+            -->
+
+            <h4>Notable</h4>
+            <ul>
+                <li>CC → Codex: manifest conversion, <code class="inline">commands/</code> → <code class="inline">skills/generated-from-commands/</code>, agents → standalone skills</li>
+                <li>Codex → CC: the same trip in reverse</li>
+                <li>Per-plugin <code class="inline">.plugin-cross-port.json</code> records the source of truth; stale critical adaptations mark a Codex target unavailable rather than shipping it broken</li>
+                <li><code class="inline">skills_authored</code> flag lets hand-written Codex skills skip mechanical generation</li>
+                <li>Generated-output cleanup removes stale converted commands and skills</li>
+            </ul>
+        </article>
+
+        <!-- Clip Maker -->
+        <article class="plugin" id="clip-maker">
+            <div class="plugin-head">
+                <h3>Clip Maker</h3>
+                <span class="tag tag-beta">Beta</span>
+                <span class="tag tag-ver">v1.3.1</span>
+                <span class="tag tag-target">Claude Code + Codex</span>
+            </div>
+            <p>A recording of a talk goes in, vertical clips with subtitles and ready social copy come out. Whisper for the transcript, Opus to pick the moments worth cutting, ffmpeg to cut them.</p>
+
+<pre><span class="p">&gt;</span> <span class="k">/clip-maker</span> ~/Downloads/my-talk.mp4
+
+<span class="o">▸ transcribe</span>      Whisper (local or API)
+<span class="o">▸ find-moments</span>    Opus ranks quotable segments from the transcript
+<span class="o">▸ smart-crop</span>      vision-based speaker detection → 9:16
+<span class="o">▸ cut</span>             ffmpeg + burned-in subtitles
+<span class="o">▸ copy</span>            captions for Shorts / Reels / TikTok
+
+<span class="c"># or run a single stage</span>
+<span class="p">&gt;</span> <span class="k">/transcribe</span> ~/Downloads/my-talk.mp4
+<span class="p">&gt;</span> <span class="k">/find-moments</span> ~/Downloads/transcript.json</pre>
+            <!-- screenshot slot: drop res/plugins/clip-maker.png in place, then uncomment
+            <img class="shot" src="res/plugins/clip-maker.png" alt="Clip maker pipeline output" loading="lazy">
+            -->
+        </article>
+    </section>
+
+    <section class="band">
+        <div class="band-inner">
+            <h2>Contributing &amp; local development</h2>
+            <p class="section-lead">After cloning, enable the git hooks — they run the plugin tests before every push.</p>
+<pre>$ <span class="k">git clone</span> https://github.com/IvanLutsenko/awac-ai-agent-plugins
+$ <span class="k">git config</span> core.hooksPath .githooks</pre>
+            <p style="margin-top:1.2rem;">
+                <a class="btn" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">Repository</a>
+                <a class="btn btn-ghost" style="color:var(--dark-green);border-color:rgba(13,59,46,0.25);" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins/issues" target="_blank" rel="noopener">Issues</a>
+            </p>
+        </div>
+    </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Ivan Lutsenko · MIT · <a href="/">ivan.nullptr.party</a></p>
+    </footer>
+</body>
+</html>
