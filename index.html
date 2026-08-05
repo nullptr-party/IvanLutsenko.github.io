@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>document.documentElement.classList.add('js');</script>
+    <script>
+        // Stamp the language before first paint: no flash of English, and an unknown
+        // stored value can no longer hide every [data-lang] block on the page.
+        document.documentElement.classList.add('js');
+        (function () {
+            var l = localStorage.getItem('preferredLanguage');
+            document.documentElement.dataset.lang = ['en', 'uk', 'ru'].indexOf(l) < 0 ? 'en' : l;
+        })();
+    </script>
     <meta name="description" content="Ivan Lutsenko — Android Tech Lead at Bereke Bank, AI tools enthusiast, speaker and co-organizer of nullptr.party and GDG Almaty meetups.">
     <meta name="keywords" content="Ivan Lutsenko, Android Tech Lead, speaker, AI tools, Claude, MCP, Crashlytics, CI/CD, nullptr.party, GDG Almaty">
     <meta name="author" content="Ivan Lutsenko">
@@ -341,16 +349,20 @@
 
         h3 {
             font-size: 1.35rem;
-            color: var(--accent-green);
+            color: var(--dark-green);
             margin-bottom: 0.75rem;
             font-weight: 600;
             letter-spacing: -0.25px;
         }
 
         /* About Section — photo beside left-aligned name + bio */
+        /* Band rhythm follows DOM order, so reordering sections cannot break it */
+        main section:nth-of-type(even) {
+            background-color: var(--bg-band);
+        }
+
         #about {
-            background-color: var(--bg-light);
-            min-height: 70vh;
+            min-height: 60vh;
             display: grid;
             grid-template-columns: auto minmax(0, 1fr);
             grid-template-rows: auto auto;
@@ -432,7 +444,6 @@
 
         /* Contact Section */
         #contact {
-            background-color: var(--bg-light);
             padding-bottom: 4rem;
         }
 
@@ -507,7 +518,6 @@
 
         /* Video Gallery */
         #videos {
-            background: var(--bg-band);
             position: relative;
         }
 
@@ -626,7 +636,6 @@
 
         .video-title {
             font-size: 1.2rem;
-            color: var(--dark-green);
             margin-bottom: 0.5rem;
         }
 
@@ -641,25 +650,16 @@
         }
 
         /* Plugins Section */
-        #plugins {
-            background-color: var(--bg-band);
-        }
-
         .plugins-feature {
-            background: var(--card-surface);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow-sm);
-            margin-top: 2rem;
+            margin: 2rem auto 0;
             max-width: 820px;
         }
 
         .plugins-lead {
             color: var(--text-dark);
-            opacity: 0.85;
             line-height: 1.7;
             font-size: 1.05rem;
+            max-width: 72ch;
         }
 
         .plugin-chips {
@@ -670,8 +670,10 @@
             margin: 1.5rem 0;
         }
 
-        .plugin-chips li {
-            background: var(--bg-band);
+        .plugin-chips a {
+            display: block;
+            text-decoration: none;
+            background: var(--card-surface);
             border: 1px solid var(--card-border);
             border-radius: 999px;
             padding: 0.3rem 0.9rem;
@@ -680,8 +682,18 @@
             font-weight: 600;
         }
 
+        .plugin-chips a:hover {
+            border-color: var(--light-green);
+            box-shadow: var(--shadow-sm);
+        }
+
         .plugins-feature .resource-buttons {
             margin-top: 0;
+        }
+
+        /* Sized to their labels — .download-btn's flex:1 is for the 340px video cards */
+        .plugins-feature .download-btn {
+            flex: 0 0 auto;
         }
 
         .resource-buttons {
@@ -732,7 +744,6 @@
             color: var(--text-light);
             text-align: center;
             padding: 3rem 2rem;
-            margin-top: 4rem;
         }
 
         footer p {
@@ -740,8 +751,10 @@
             opacity: 0.95;
         }
 
-        /* Hide non-active language elements */
-        [data-lang]:not(.active) {
+        /* Visibility keyed off the root language, not a hand-placed .active class */
+        html[data-lang="en"] [data-lang]:not([data-lang="en"]),
+        html[data-lang="uk"] [data-lang]:not([data-lang="uk"]),
+        html[data-lang="ru"] [data-lang]:not([data-lang="ru"]) {
             display: none !important;
         }
 
@@ -842,7 +855,7 @@
             }
 
             .plugins-feature {
-                padding: 1.5rem;
+                margin-top: 1.5rem;
             }
 
             .social-links {
@@ -861,18 +874,6 @@
             }
             #about .profile-container { margin-bottom: 2rem; }
             #about .bio { margin-left: auto; margin-right: auto; }
-        }
-
-        /* Loading animation */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
         }
 
         /* Accessibility */
@@ -959,17 +960,17 @@
                 </a>
             </li>
             <li>
-                <a href="#contact">
-                    <span data-lang="en" class="active">Contact</span>
-                    <span data-lang="uk">Контакти</span>
-                    <span data-lang="ru">Контакты</span>
-                </a>
-            </li>
-            <li>
                 <a href="#videos">
                     <span data-lang="en" class="active">Videos</span>
                     <span data-lang="uk">Виступи</span>
                     <span data-lang="ru">Выступления</span>
+                </a>
+            </li>
+            <li>
+                <a href="#contact">
+                    <span data-lang="en" class="active">Contact</span>
+                    <span data-lang="uk">Контакти</span>
+                    <span data-lang="ru">Контакты</span>
                 </a>
             </li>
 
@@ -1038,42 +1039,267 @@
         <div class="plugins-feature">
             <!-- English -->
             <div data-lang="en" class="active">
-                <p class="plugins-lead">A marketplace of eight plugins I built for Claude Code and Codex CLI and use every day: Crashlytics crash forensics with git blame, multi-agent code review, an Obsidian-backed project tracker, a vertical-video clip maker. Most of them are dual-target — the same plugin runs in both CLIs. Open source, MIT.</p>
+                <p class="plugins-lead">AWAC — a marketplace of eight plugins I built for Claude Code and Codex CLI and use every day: Crashlytics crash forensics with git blame, multi-agent code review, an Obsidian-backed project tracker, a vertical-video clip maker. Most of them are dual-target — the same plugin runs in both CLIs. Open source, MIT.</p>
             </div>
             <!-- Ukrainian -->
             <div data-lang="uk">
-                <p class="plugins-lead">Маркетплейс із восьми плагінів, які я написав для Claude Code і Codex CLI та використовую щодня: форензика крашів Crashlytics із git blame, мультиагентний код-рев'ю, трекер проєктів на Obsidian, нарізач вертикальних відео. Більшість dual-target — той самий плагін працює в обох CLI. Відкритий код, MIT.</p>
+                <p class="plugins-lead">AWAC — маркетплейс із восьми плагінів, які я написав для Claude Code і Codex CLI та використовую щодня: форензика крашів Crashlytics із git blame, мультиагентний код-рев'ю, трекер проєктів на Obsidian, нарізач вертикальних відео. Більшість dual-target — той самий плагін працює в обох CLI. Відкритий код, MIT.</p>
             </div>
             <!-- Russian -->
             <div data-lang="ru">
-                <p class="plugins-lead">Маркетплейс из восьми плагинов, которые я написал для Claude Code и Codex CLI и использую каждый день: форензика крашей Crashlytics с git blame, мультиагентный код-ревью, трекер проектов на Obsidian, нарезатель вертикальных видео. Большинство dual-target — один и тот же плагин работает в обоих CLI. Открытый код, MIT.</p>
+                <p class="plugins-lead">AWAC — маркетплейс из восьми плагинов, которые я написал для Claude Code и Codex CLI и использую каждый день: форензика крашей Crashlytics с git blame, мультиагентный код-ревью, трекер проектов на Obsidian, нарезатель вертикальных видео. Большинство dual-target — один и тот же плагин работает в обоих CLI. Открытый код, MIT.</p>
             </div>
 
             <ul class="plugin-chips">
-                <li>Crashlytics</li>
-                <li>Obsidian Tracker</li>
-                <li>Combined Review</li>
-                <li>Auto Theme</li>
-                <li>Locale Notifications</li>
-                <li>Drawbridge</li>
-                <li>Plugin Cross Port</li>
-                <li>Clip Maker</li>
+                <li><a href="plugins.html#crashlytics">Crashlytics</a></li>
+                <li><a href="plugins.html#obsidian-tracker">Obsidian Tracker</a></li>
+                <li><a href="plugins.html#combined-review">Combined Review</a></li>
+                <li><a href="plugins.html#auto-theme">Auto Theme</a></li>
+                <li><a href="plugins.html#locale-notifications">Locale Notifications</a></li>
+                <li><a href="plugins.html#drawbridge">Drawbridge</a></li>
+                <li><a href="plugins.html#plugin-cross-port">Plugin Cross Port</a></li>
+                <li><a href="plugins.html#clip-maker">Clip Maker</a></li>
             </ul>
 
             <!-- English -->
             <div class="resource-buttons active" data-lang="en">
-                <a href="plugins.html" class="download-btn">Plugin overview</a>
+                <a href="plugins.html" class="download-btn">Explore all 8 plugins</a>
                 <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">View on GitHub</a>
             </div>
             <!-- Ukrainian -->
             <div class="resource-buttons" data-lang="uk">
-                <a href="plugins.html" class="download-btn">Огляд плагінів</a>
+                <a href="plugins.html" class="download-btn">Подивитись усі 8 плагінів</a>
                 <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">Дивитись на GitHub</a>
             </div>
             <!-- Russian -->
             <div class="resource-buttons" data-lang="ru">
-                <a href="plugins.html" class="download-btn">Обзор плагинов</a>
+                <a href="plugins.html" class="download-btn">Посмотреть все 8 плагинов</a>
                 <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">Смотреть на GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Videos Section -->
+    <section id="videos">
+        <!-- English Title -->
+        <h2 data-lang="en" class="active">Featured Presentations</h2>
+        <!-- Ukrainian Title -->
+        <h2 data-lang="uk">Виступи</h2>
+        <!-- Russian Title -->
+        <h2 data-lang="ru">Выступления</h2>
+        
+        <div class="video-grid">
+            <!-- Video Card 1 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <div class="video-placeholder" data-video-id="1W-1VoxvZn8" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.1" data-aria-en="Play video: Claude and MCPs in Tech Lead Work v.1" data-aria-uk="Відтворити відео: Claude and MCPs in Tech Lead Work v.1" data-aria-ru="Воспроизвести видео: Claude and MCPs in Tech Lead Work v.1">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/1W-1VoxvZn8/sddefault.jpg" alt="" loading="lazy">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">Claude & MCPs in Tech Lead Work v.1</h3>
+                        <p class="video-description">Practical experience using Claude AI and MCP servers in daily tech lead activities. Automation of routine tasks, Crashlytics analysis, custom-built task tracker, and real productivity gains. Presented at nullptr.party @ Bereke Bank.</p>
+                    </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">Claude та MCP у роботі техліда v.1</h3>
+                        <p class="video-description">Практичний досвід використання Claude AI та MCP-серверів у повсякденній роботі техліда. Автоматизація рутинних завдань, аналіз Crashlytics, самописний task tracker та реальний приріст продуктивності. Виступ на nullptr.party @ Bereke Bank.</p>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">Claude и MCP в работе техлида v.1</h3>
+                        <p class="video-description">Практический опыт использования Claude AI и MCP-серверов в повседневной работе техлида. Автоматизация рутинных задач, анализ Crashlytics, самописанный task tracker и реальный прирост продуктивности. Выступление на nullptr.party @ Bereke Bank.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Card 2 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <div class="video-placeholder" data-video-id="NClJR-HOp30" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.2" data-aria-en="Play video: Claude and MCPs in Tech Lead Work v.2" data-aria-uk="Відтворити відео: Claude and MCPs in Tech Lead Work v.2" data-aria-ru="Воспроизвести видео: Claude and MCPs in Tech Lead Work v.2">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/NClJR-HOp30/maxresdefault.jpg" alt="" loading="lazy">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">Claude & MCPs in Tech Lead Work v.2</h3>
+                        <p class="video-description">A condensed version with a larger audience. If you've watched v.1, feel free to skip to the Q&A section. Presented at AI Driven Development @ Most IT Hub.</p>
+                    </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">Claude та MCP у роботі техліда v.2</h3>
+                        <p class="video-description">Трохи скорочена версія, зате зі збільшеною аудиторією. Якщо дивилися першу версію, то рекомендував би відразу до Q&A секції переходити. Виступ на AI Driven Development @ Most IT Hub.</p>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">Claude и MCP в работе техлида v.2</h3>
+                        <p class="video-description">Чуть укороченная версия, зато с увеличенной аудиторией. Если смотрели первую версию, то рекомендовал бы сразу к Q&A секции переходить. Выступление на AI Driven Development @ Most IT Hub.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Card 3 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <div class="video-placeholder" data-video-id="2FXjctVWAQk" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.3" data-aria-en="Play video: Claude and MCPs in Tech Lead Work v.3" data-aria-uk="Відтворити відео: Claude and MCPs in Tech Lead Work v.3" data-aria-ru="Воспроизвести видео: Claude and MCPs in Tech Lead Work v.3">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/2FXjctVWAQk/2.jpg" alt="" loading="lazy">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">Claude & MCPs in Tech Lead Work v.3</h3>
+                        <p class="video-description">The ultimate version of the talk. Refined version of v.2 with a new section on prompt engineering best practices and advanced techniques. This is the definitive presentation on this topic. Presented at Terrikon Valley @ Karaganda.</p>
+                        <div class="resource-buttons">
+                            <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn" target="_blank" rel="noopener">Slides</a>
+                        </div>
+                    </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">Claude та MCP у роботі техліда v.3</h3>
+                        <p class="video-description">Ультимативна версія доклада. Доробка другої версії з новим блоком порад з промпт-інжинірингу та передовими методиками. Дуже сподіваюся, що більше не повертатимуся до цієї теми. Виступ на Терриконовій долині @ Караганда.</p>
+                        <div class="resource-buttons">
+                            <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn" target="_blank" rel="noopener">Слайди</a>
+                        </div>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">Claude и MCP в работе техлида v.3</h3>
+                        <p class="video-description">Ультимативная версия доклада, доработка второй версии с блоком советов по промпт-инжинирингу. Очень надеюсь, что больше не буду возвращаться к этой теме, устал. Выступление на Терриконовой долине @ Караганда.</p>
+                        <div class="resource-buttons">
+                            <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn" target="_blank" rel="noopener">Слайды</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Card 4 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <div class="video-placeholder" data-video-id="vv8IUVtMHrs" role="button" tabindex="0" aria-label="Play video: CI/CD: A Love Story" data-aria-en="Play video: CI/CD: A Love Story" data-aria-uk="Відтворити відео: CI/CD: A Love Story" data-aria-ru="Воспроизвести видео: CI/CD: A Love Story">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/vv8IUVtMHrs/maxresdefault.jpg" alt="" loading="lazy">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">CI/CD: A Love Story</h3>
+                        <p class="video-description">Getting into Android CI/CD from scratch, the 4-year evolution of CI/CD at a bank, and my take on building a delivery support and control system. For lazy mobile devs, the DevOps who sympathize with them, and anyone shaping the mobile SDLC. Presented at Qazcode Android Meetup.</p>
+                        <div class="resource-buttons">
+                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
+                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
+                        </div>
+                    </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">CI/CD: Історія кохання</h3>
+                        <p class="video-description">Знайомство з CI/CD в Android з нуля, еволюція CI/CD у банку за 4 роки та моє бачення побудови системи підтримки й контролю доставки. Для лінивих мобільників, співчутливих їм девопсів і всіх, хто вибудовує мобільний SDLC. Виступ на Qazcode Android Meetup.</p>
+                        <div class="resource-buttons">
+                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
+                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
+                        </div>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">CI/CD: История любви</h3>
+                        <p class="video-description">Знакомство с CI/CD в Android с нуля, эволюция CI/CD в банке за 4 года и моё видение построения системы поддержки и контроля доставки. Для ленивых мобильщиков, сочувствующих им девопсов и всех, кто выстраивает мобильный SDLC. Выступление на Qazcode Android Meetup.</p>
+                        <div class="resource-buttons">
+                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
+                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Card 5 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <div class="video-placeholder" data-video-id="5qFNEwlpnkg" role="button" tabindex="0" aria-label="Play video: LLM In & Out: Twenty Minutes Adventure" data-aria-en="Play video: LLM In & Out: Twenty Minutes Adventure" data-aria-uk="Відтворити відео: LLM In & Out: Twenty Minutes Adventure" data-aria-ru="Воспроизвести видео: LLM In & Out: Twenty Minutes Adventure">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/5qFNEwlpnkg/maxresdefault.jpg" alt="" loading="lazy">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">LLM In & Out: Twenty Minutes Adventure. As if...</h3>
+                        <p class="video-description">Common traps when working with LLMs: overestimating autonomy, trusting output without verification, and burning time on unproductive iterations. Key takeaways: provide clear context, set expectations, always verify results. Presented at How We AI @ Bereke Tech.</p>
+                        <div class="resource-buttons">
+                            <a href="res/LLM_In_Out.pdf" class="download-btn" target="_blank" rel="noopener">Slides</a>
+                        </div>
+                    </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">LLM In & Out: Twenty Minutes Adventure. As if...</h3>
+                        <p class="video-description">Типові пастки при роботі з LLM: переоцінка автономії, сліпа довіра до результатів і витрачений час на безрезультатні ітерації. Головні поради: давати чіткий контекст, встановлювати очікування й завжди перевіряти результат. Виступ на How We AI @ Bereke Tech.</p>
+                        <div class="resource-buttons">
+                            <a href="res/LLM_In_Out.pdf" class="download-btn" target="_blank" rel="noopener">Слайди</a>
+                        </div>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">LLM In & Out: Twenty Minutes Adventure. As if...</h3>
+                        <p class="video-description">Типичные ловушки при работе с LLM: переоценка автономии, слепое доверие к результатам и потраченное время на безрезультатные итерации. Главные советы: давать чёткий контекст, устанавливать ожидания и всегда проверять результат. Выступление на How We AI @ Bereke Tech.</p>
+                        <div class="resource-buttons">
+                            <a href="res/LLM_In_Out.pdf" class="download-btn" target="_blank" rel="noopener">Слайды</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Card 6 — hidden -->
+            <div class="video-card" hidden>
+                <div class="video-wrapper">
+                    <div class="video-placeholder" data-video-id="vQ5SkC84eYM" role="button" tabindex="0" aria-label="Play video: Crash Analysis Evolution" data-aria-en="Play video: Crash Analysis Evolution" data-aria-uk="Відтворити відео: Crash Analysis Evolution" data-aria-ru="Воспроизвести видео: Crash Analysis Evolution">
+                        <img class="video-thumb" src="https://img.youtube.com/vi/vQ5SkC84eYM/maxresdefault.jpg" alt="" loading="lazy">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">Crash Analysis Evolution: from Crashlytics to a Multi-Agent Pipeline</h3>
+                        <p class="video-description">How crash analysis evolved from manual Crashlytics digging to a multi-agent pipeline built on Claude AI and MCP servers — root cause analysis, git blame integration, and automated JIRA tickets, aiming for 99%+ crash-free users in an Android banking app. Presented at nullptr.talks[2].</p>
+                        <div class="resource-buttons">
+                            <a href="res/crashlytics-talk.html" class="download-btn" target="_blank" rel="noopener">Slides</a>
+                        </div>
+                    </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">Еволюція аналізу крешів: від Crashlytics до мультиагентного пайплайна</h3>
+                        <p class="video-description">Як аналіз крешів пройшов шлях від ручного копання в Crashlytics до мультиагентного пайплайна на базі Claude AI та MCP-серверів — аналіз першопричин, інтеграція з git blame і автоматична генерація JIRA тікетів із метою 99%+ crash-free users у банківському Android-додатку. Виступ на nullptr.talks[2].</p>
+                        <div class="resource-buttons">
+                            <a href="res/crashlytics-talk.html" class="download-btn" target="_blank" rel="noopener">Слайди</a>
+                        </div>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">Эволюция анализа крешей: от Crashlytics до мультиагентского пайплайна</h3>
+                        <p class="video-description">Как анализ крешей прошёл путь от ручного копания в Crashlytics до мультиагентского пайплайна на базе Claude AI и MCP-серверов — анализ первопричин, интеграция с git blame и автоматическая генерация JIRA тикетов с целью 99%+ crash-free users в банковском Android-приложении. Выступление на nullptr.talks[2].</p>
+                        <div class="resource-buttons">
+                            <a href="res/crashlytics-talk.html" class="download-btn" target="_blank" rel="noopener">Слайды</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1127,231 +1353,6 @@
         </div>
     </section>
 
-    <!-- Videos Section -->
-    <section id="videos">
-        <!-- English Title -->
-        <h2 data-lang="en" class="active">Featured Presentations</h2>
-        <!-- Ukrainian Title -->
-        <h2 data-lang="uk">Виступи</h2>
-        <!-- Russian Title -->
-        <h2 data-lang="ru">Выступления</h2>
-        
-        <div class="video-grid">
-            <!-- Video Card 1 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="1W-1VoxvZn8" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.1">
-                        <img class="video-thumb" src="https://img.youtube.com/vi/1W-1VoxvZn8/sddefault.jpg" alt="" loading="lazy">
-                        <div class="play-button">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <!-- English -->
-                    <div data-lang="en" class="active">
-                        <h3 class="video-title">Claude & MCPs in Tech Lead Work v.1</h3>
-                        <p class="video-description">Practical experience using Claude AI and MCP servers in daily tech lead activities. Automation of routine tasks, Crashlytics analysis, custom-built task tracker, and real productivity gains. Presented at nullptr.party @ Bereke Bank.</p>
-                    </div>
-                    <!-- Ukrainian -->
-                    <div data-lang="uk">
-                        <h3 class="video-title">Claude та MCP у роботі техліда v.1</h3>
-                        <p class="video-description">Практичний досвід використання Claude AI та MCP-серверів у повсякденній роботі техліда. Автоматизація рутинних завдань, аналіз Crashlytics, самописний task tracker та реальний приріст продуктивності. Виступ на nullptr.party @ Bereke Bank.</p>
-                    </div>
-                    <!-- Russian -->
-                    <div data-lang="ru">
-                        <h3 class="video-title">Claude и MCP в работе техлида v.1</h3>
-                        <p class="video-description">Практический опыт использования Claude AI и MCP-серверов в повседневной работе техлида. Автоматизация рутинных задач, анализ Crashlytics, самописанный task tracker и реальный прирост продуктивности. Выступление на nullptr.party @ Bereke Bank.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Video Card 2 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="NClJR-HOp30" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.2">
-                        <img class="video-thumb" src="https://img.youtube.com/vi/NClJR-HOp30/maxresdefault.jpg" alt="" loading="lazy">
-                        <div class="play-button">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <!-- English -->
-                    <div data-lang="en" class="active">
-                        <h3 class="video-title">Claude & MCPs in Tech Lead Work v.2</h3>
-                        <p class="video-description">A condensed version with a larger audience. If you've watched v.1, feel free to skip to the Q&A section. Presented at AI Driven Development @ Most IT Hub.</p>
-                    </div>
-                    <!-- Ukrainian -->
-                    <div data-lang="uk">
-                        <h3 class="video-title">Claude та MCP у роботі техліда v.2</h3>
-                        <p class="video-description">Трохи скорочена версія, зате зі збільшеною аудиторією. Якщо дивилися першу версію, то рекомендував би відразу до Q&A секції переходити. Виступ на AI Driven Development @ Most IT Hub.</p>
-                    </div>
-                    <!-- Russian -->
-                    <div data-lang="ru">
-                        <h3 class="video-title">Claude и MCP в работе техлида v.2</h3>
-                        <p class="video-description">Чуть укороченная версия, зато с увеличенной аудиторией. Если смотрели первую версию, то рекомендовал бы сразу к Q&A секции переходить. Выступление на AI Driven Development @ Most IT Hub.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Video Card 3 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="2FXjctVWAQk" role="button" tabindex="0" aria-label="Play video: Claude and MCPs in Tech Lead Work v.3">
-                        <img class="video-thumb" src="https://img.youtube.com/vi/2FXjctVWAQk/2.jpg" alt="" loading="lazy">
-                        <div class="play-button">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <!-- English -->
-                    <div data-lang="en" class="active">
-                        <h3 class="video-title">Claude & MCPs in Tech Lead Work v.3</h3>
-                        <p class="video-description">The ultimate version of the talk. Refined version of v.2 with a new section on prompt engineering best practices and advanced techniques. This is the definitive presentation on this topic. Presented at Terrikon Valley @ Karaganda.</p>
-                        <div class="resource-buttons">
-                            <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn" target="_blank" rel="noopener">Slides</a>
-                        </div>
-                    </div>
-                    <!-- Ukrainian -->
-                    <div data-lang="uk">
-                        <h3 class="video-title">Claude та MCP у роботі техліда v.3</h3>
-                        <p class="video-description">Ультимативна версія доклада. Доробка другої версії з новим блоком порад з промпт-інжинірингу та передовими методиками. Дуже сподіваюся, що більше не повертатимуся до цієї теми. Виступ на Терриконовій долині @ Караганда.</p>
-                        <div class="resource-buttons">
-                            <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn" target="_blank" rel="noopener">Слайди</a>
-                        </div>
-                    </div>
-                    <!-- Russian -->
-                    <div data-lang="ru">
-                        <h3 class="video-title">Claude и MCP в работе техлида v.3</h3>
-                        <p class="video-description">Ультимативная версия доклада, доработка второй версии с блоком советов по промпт-инжинирингу. Очень надеюсь, что больше не буду возвращаться к этой теме, устал. Выступление на Терриконовой долине @ Караганда.</p>
-                        <div class="resource-buttons">
-                            <a href="res/Ivan_for_terricon_valley_final.pdf" class="download-btn" target="_blank" rel="noopener">Слайды</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Video Card 4 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="vv8IUVtMHrs" role="button" tabindex="0" aria-label="Play video: CI/CD: A Love Story">
-                        <img class="video-thumb" src="https://img.youtube.com/vi/vv8IUVtMHrs/maxresdefault.jpg" alt="" loading="lazy">
-                        <div class="play-button">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <!-- English -->
-                    <div data-lang="en" class="active">
-                        <h3 class="video-title">CI/CD: A Love Story</h3>
-                        <p class="video-description">Getting into Android CI/CD from scratch, the 4-year evolution of CI/CD at a bank, and my take on building a delivery support and control system. For lazy mobile devs, the DevOps who sympathize with them, and anyone shaping the mobile SDLC. Presented at Qazcode Android Meetup.</p>
-                        <div class="resource-buttons">
-                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
-                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
-                        </div>
-                    </div>
-                    <!-- Ukrainian -->
-                    <div data-lang="uk">
-                        <h3 class="video-title">CI/CD: Історія кохання</h3>
-                        <p class="video-description">Знайомство з CI/CD в Android з нуля, еволюція CI/CD у банку за 4 роки та моє бачення побудови системи підтримки й контролю доставки. Для лінивих мобільників, співчутливих їм девопсів і всіх, хто вибудовує мобільний SDLC. Виступ на Qazcode Android Meetup.</p>
-                        <div class="resource-buttons">
-                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
-                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
-                        </div>
-                    </div>
-                    <!-- Russian -->
-                    <div data-lang="ru">
-                        <h3 class="video-title">CI/CD: История любви</h3>
-                        <p class="video-description">Знакомство с CI/CD в Android с нуля, эволюция CI/CD в банке за 4 года и моё видение построения системы поддержки и контроля доставки. Для ленивых мобильщиков, сочувствующих им девопсов и всех, кто выстраивает мобильный SDLC. Выступление на Qazcode Android Meetup.</p>
-                        <div class="resource-buttons">
-                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
-                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Video Card 5 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="5qFNEwlpnkg" role="button" tabindex="0" aria-label="Play video: LLM In & Out: Twenty Minutes Adventure">
-                        <img class="video-thumb" src="https://img.youtube.com/vi/5qFNEwlpnkg/maxresdefault.jpg" alt="" loading="lazy">
-                        <div class="play-button">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <!-- English -->
-                    <div data-lang="en" class="active">
-                        <h3 class="video-title">LLM In & Out: Twenty Minutes Adventure. As if...</h3>
-                        <p class="video-description">Common traps when working with LLMs: overestimating autonomy, trusting output without verification, and burning time on unproductive iterations. Key takeaways: provide clear context, set expectations, always verify results. Presented at How We AI @ Bereke Tech.</p>
-                        <div class="resource-buttons">
-                            <a href="res/LLM_In_Out.pdf" class="download-btn" target="_blank" rel="noopener">Slides</a>
-                        </div>
-                    </div>
-                    <!-- Ukrainian -->
-                    <div data-lang="uk">
-                        <h3 class="video-title">LLM In & Out: Twenty Minutes Adventure. As if...</h3>
-                        <p class="video-description">Типові пастки при роботі з LLM: переоцінка автономії, сліпа довіра до результатів і витрачений час на безрезультатні ітерації. Головні поради: давати чіткий контекст, встановлювати очікування й завжди перевіряти результат. Виступ на How We AI @ Bereke Tech.</p>
-                        <div class="resource-buttons">
-                            <a href="res/LLM_In_Out.pdf" class="download-btn" target="_blank" rel="noopener">Слайди</a>
-                        </div>
-                    </div>
-                    <!-- Russian -->
-                    <div data-lang="ru">
-                        <h3 class="video-title">LLM In & Out: Twenty Minutes Adventure. As if...</h3>
-                        <p class="video-description">Типичные ловушки при работе с LLM: переоценка автономии, слепое доверие к результатам и потраченное время на безрезультатные итерации. Главные советы: давать чёткий контекст, устанавливать ожидания и всегда проверять результат. Выступление на How We AI @ Bereke Tech.</p>
-                        <div class="resource-buttons">
-                            <a href="res/LLM_In_Out.pdf" class="download-btn" target="_blank" rel="noopener">Слайды</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Video Card 6 — hidden -->
-            <div class="video-card" hidden>
-                <div class="video-wrapper">
-                    <div class="video-placeholder" data-video-id="vQ5SkC84eYM" role="button" tabindex="0" aria-label="Play video: Crash Analysis Evolution">
-                        <img class="video-thumb" src="https://img.youtube.com/vi/vQ5SkC84eYM/maxresdefault.jpg" alt="" loading="lazy">
-                        <div class="play-button">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <!-- English -->
-                    <div data-lang="en" class="active">
-                        <h3 class="video-title">Crash Analysis Evolution: from Crashlytics to a Multi-Agent Pipeline</h3>
-                        <p class="video-description">How crash analysis evolved from manual Crashlytics digging to a multi-agent pipeline built on Claude AI and MCP servers — root cause analysis, git blame integration, and automated JIRA tickets, aiming for 99%+ crash-free users in an Android banking app. Presented at nullptr.talks[2].</p>
-                        <div class="resource-buttons">
-                            <a href="res/crashlytics-talk.html" class="download-btn" target="_blank" rel="noopener">Slides</a>
-                        </div>
-                    </div>
-                    <!-- Ukrainian -->
-                    <div data-lang="uk">
-                        <h3 class="video-title">Еволюція аналізу крешів: від Crashlytics до мультиагентного пайплайна</h3>
-                        <p class="video-description">Як аналіз крешів пройшов шлях від ручного копання в Crashlytics до мультиагентного пайплайна на базі Claude AI та MCP-серверів — аналіз першопричин, інтеграція з git blame і автоматична генерація JIRA тікетів із метою 99%+ crash-free users у банківському Android-додатку. Виступ на nullptr.talks[2].</p>
-                        <div class="resource-buttons">
-                            <a href="res/crashlytics-talk.html" class="download-btn" target="_blank" rel="noopener">Слайди</a>
-                        </div>
-                    </div>
-                    <!-- Russian -->
-                    <div data-lang="ru">
-                        <h3 class="video-title">Эволюция анализа крешей: от Crashlytics до мультиагентского пайплайна</h3>
-                        <p class="video-description">Как анализ крешей прошёл путь от ручного копания в Crashlytics до мультиагентского пайплайна на базе Claude AI и MCP-серверов — анализ первопричин, интеграция с git blame и автоматическая генерация JIRA тикетов с целью 99%+ crash-free users в банковском Android-приложении. Выступление на nullptr.talks[2].</p>
-                        <div class="resource-buttons">
-                            <a href="res/crashlytics-talk.html" class="download-btn" target="_blank" rel="noopener">Слайды</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     </main>
 
     <!-- Footer -->
@@ -1374,17 +1375,18 @@
     </footer>
 
     <script>
-        // Language Switcher
+        // Language Switcher — visibility comes from html[data-lang], set in <head>
+        const LANGS = ['en', 'uk', 'ru'];
         const langButtons = document.querySelectorAll('[data-lang-switch]');
-        const langElements = document.querySelectorAll('[data-lang]');
-        
-        // Get saved language or default to English
-        let currentLang = localStorage.getItem('preferredLanguage') || 'en';
-        
-        // Set initial language
-        setLanguage(currentLang);
-        
-        // Add click listeners to language buttons
+
+        // Labels that are not visible text, so the CSS rule cannot swap them
+        const ARIA_LABELS = {
+            menuToggle: { en: 'Open menu', uk: 'Відкрити меню', ru: 'Открыть меню' },
+            closeMenu: { en: 'Close menu', uk: 'Закрити меню', ru: 'Закрыть меню' }
+        };
+
+        setLanguage(document.documentElement.dataset.lang);
+
         langButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const lang = button.getAttribute('data-lang-switch');
@@ -1392,28 +1394,27 @@
                 localStorage.setItem('preferredLanguage', lang);
             });
         });
-        
+
         function setLanguage(lang) {
-            currentLang = lang;
-            
-            // Update all language elements
-            langElements.forEach(element => {
-                if (element.getAttribute('data-lang') === lang) {
-                    element.classList.add('active');
-                } else {
-                    element.classList.remove('active');
-                }
-            });
-            
-            // Update language buttons
+            if (LANGS.indexOf(lang) < 0) lang = 'en';
+
+            document.documentElement.dataset.lang = lang;
+            document.documentElement.lang = lang;
+
             langButtons.forEach(button => {
                 const isActive = button.getAttribute('data-lang-switch') === lang;
                 button.classList.toggle('active', isActive);
                 button.setAttribute('aria-pressed', String(isActive));
             });
-            
-            // Update HTML lang attribute
-            document.documentElement.lang = lang;
+
+            Object.keys(ARIA_LABELS).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.setAttribute('aria-label', ARIA_LABELS[id][lang]);
+            });
+
+            document.querySelectorAll('.video-placeholder[data-aria-' + lang + ']').forEach(el => {
+                el.setAttribute('aria-label', el.getAttribute('data-aria-' + lang));
+            });
         }
 
         // Mobile Menu
