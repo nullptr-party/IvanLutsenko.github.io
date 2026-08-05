@@ -64,19 +64,23 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        /* Hide non-active language elements */
+        [data-lang]:not(.active) { display: none !important; }
+
         /* Navigation */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             background: linear-gradient(135deg, var(--dark-green) 0%, var(--accent-green) 100%);
-            padding: 1rem 2rem;
+            padding: 0.7rem 2rem;
             box-shadow: var(--shadow-md);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         nav a {
@@ -88,13 +92,42 @@
 
         nav a:hover { color: #a8d5c2; }
 
-        .nav-links {
+        .nav-right {
             display: flex;
-            gap: 1.5rem;
+            align-items: center;
+            gap: 1.4rem;
             font-size: 0.95rem;
             flex-wrap: wrap;
             justify-content: flex-end;
         }
+
+        .language-switcher {
+            display: flex;
+            gap: 0.2rem;
+            background-color: rgba(253, 246, 227, 0.10);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn {
+            background-color: transparent;
+            color: var(--text-light);
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lang-btn:hover { background-color: rgba(253, 246, 227, 0.15); transform: translateY(-1px); }
+        .lang-btn.active { background-color: rgba(253, 246, 227, 0.25); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
 
         /* Hero */
         header.hero {
@@ -142,6 +175,7 @@
             font-weight: 600;
             box-shadow: var(--shadow-sm);
             transition: var(--transition);
+            margin: 0.2rem;
         }
 
         .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
@@ -155,26 +189,35 @@
 
         .btn-ghost:hover { background: rgba(253, 246, 227, 0.12); }
 
+        .btn-outline {
+            background: transparent;
+            color: var(--dark-green);
+            border: 1px solid rgba(13, 59, 46, 0.25);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover { background: rgba(13, 59, 46, 0.06); }
+
         /* Layout */
         section { padding: 3.5rem 2rem; max-width: 1000px; margin: 0 auto; }
 
-        section.band {
-            background: var(--bg-band);
-            max-width: none;
-        }
-
+        section.band { background: var(--bg-band); max-width: none; }
         .band-inner { max-width: 1000px; margin: 0 auto; }
 
-        h2 {
-            font-size: 1.8rem;
-            color: var(--dark-green);
-            margin-bottom: 0.5rem;
-        }
+        h2 { font-size: 1.8rem; color: var(--dark-green); margin-bottom: 0.5rem; }
 
         .section-lead {
             color: #52616b;
             margin-bottom: 2rem;
             max-width: 720px;
+        }
+
+        .sub-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #7a8a94;
+            margin: 1.4rem 0 0.6rem;
         }
 
         /* Code blocks */
@@ -190,12 +233,11 @@
             box-shadow: var(--shadow-sm);
         }
 
-        pre .c { color: #7fa695; }          /* comment */
-        pre .p { color: #7fd1a8; }          /* prompt sign */
-        pre .k { color: #f0c674; }          /* command / key */
-        pre .o { color: #9ec9ff; }          /* agent / step */
-        pre .g { color: #a5d6a7; }          /* good */
-        pre .r { color: #ef9a9a; }          /* bad */
+        pre .c { color: #7fa695; }   /* comment */
+        pre .p { color: #7fd1a8; }   /* prompt sign */
+        pre .k { color: #f0c674; }   /* command */
+        pre .o { color: #9ec9ff; }   /* agent / step */
+        pre .g { color: #a5d6a7; }   /* success */
 
         code.inline {
             font-family: var(--mono);
@@ -224,10 +266,7 @@
             margin-bottom: 0.6rem;
         }
 
-        .plugin-head h3 {
-            font-size: 1.35rem;
-            color: var(--dark-green);
-        }
+        .plugin-head h3 { font-size: 1.35rem; color: var(--dark-green); }
 
         .tag {
             font-size: 0.75rem;
@@ -242,15 +281,7 @@
         .tag-ver { background: rgba(13, 59, 46, 0.07); color: #52616b; font-family: var(--mono); }
         .tag-target { background: #e2ecf7; color: #2c5378; }
 
-        .plugin > p { margin-bottom: 1rem; }
-
-        .plugin h4 {
-            font-size: 0.8rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #7a8a94;
-            margin: 1.4rem 0 0.6rem;
-        }
+        .plugin-desc { margin-bottom: 1rem; }
 
         .plugin ul { margin: 0 0 0 1.1rem; }
         .plugin li { margin-bottom: 0.35rem; }
@@ -270,7 +301,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 0.9rem;
-            margin-bottom: 1rem;
         }
 
         .toc a {
@@ -287,7 +317,7 @@
         }
 
         .toc a:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-        .toc a span { display: block; font-weight: 400; font-size: 0.85rem; color: #52616b; margin-top: 0.2rem; }
+        .toc a span[data-lang] { display: block; font-weight: 400; font-size: 0.85rem; color: #52616b; margin-top: 0.2rem; }
 
         footer {
             background: var(--dark-green);
@@ -300,9 +330,9 @@
         footer a { color: #a8d5c2; }
 
         @media (max-width: 768px) {
-            nav { padding: 0.9rem 1.1rem; }
-            .nav-links { gap: 1rem; font-size: 0.85rem; }
-            header.hero { padding: 7rem 1.2rem 3rem; }
+            nav { padding: 0.6rem 1rem; }
+            .nav-right { gap: 0.9rem; font-size: 0.85rem; }
+            header.hero { padding: 7.5rem 1.2rem 3rem; }
             section { padding: 2.5rem 1.2rem; }
             .plugin { padding: 1.3rem; }
         }
@@ -315,55 +345,140 @@
 </head>
 <body>
     <nav>
-        <a href="/">← Portfolio</a>
-        <div class="nav-links">
-            <a href="#install">Install</a>
-            <a href="#plugins">Plugins</a>
+        <a href="/">
+            <span data-lang="en" class="active">← Portfolio</span>
+            <span data-lang="uk">← Портфоліо</span>
+            <span data-lang="ru">← Портфолио</span>
+        </a>
+        <div class="nav-right">
+            <a href="#install">
+                <span data-lang="en" class="active">Install</span>
+                <span data-lang="uk">Встановлення</span>
+                <span data-lang="ru">Установка</span>
+            </a>
+            <a href="#plugins">
+                <span data-lang="en" class="active">Plugins</span>
+                <span data-lang="uk">Плагіни</span>
+                <span data-lang="ru">Плагины</span>
+            </a>
             <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">GitHub</a>
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang-switch="en" aria-pressed="true" aria-label="Switch language to English">EN</button>
+                <button class="lang-btn" data-lang-switch="uk" aria-pressed="false" aria-label="Switch language to Ukrainian">UK</button>
+                <button class="lang-btn" data-lang-switch="ru" aria-pressed="false" aria-label="Switch language to Russian">RU</button>
+            </div>
         </div>
     </nav>
 
     <header class="hero">
         <h1>🧩 AWAC AI Agent Plugins</h1>
-        <p>Eight plugins I use daily as an Android Tech Lead — crash forensics, multi-agent code review, project tracking, plugin porting, clip making. Most of them are dual-target: the same plugin runs in Claude Code and in Codex CLI.</p>
-        <div class="hero-badges">
+
+        <p data-lang="en" class="active">Eight plugins I use daily as an Android Tech Lead — crash forensics, multi-agent code review, project tracking, plugin porting, clip making. Most of them are dual-target: the same plugin runs in Claude Code and in Codex CLI.</p>
+        <p data-lang="uk">Вісім плагінів, якими я користуюсь щодня як Android Tech Lead — форензика крашів, мультиагентний код-рев'ю, трекінг проєктів, портування плагінів, нарізка кліпів. Більшість із них dual-target: той самий плагін працює і в Claude Code, і в Codex CLI.</p>
+        <p data-lang="ru">Восемь плагинов, которыми я пользуюсь каждый день как Android Tech Lead — форензика крашей, мультиагентный код-ревью, трекинг проектов, портирование плагинов, нарезка клипов. Большинство из них dual-target: один и тот же плагин работает и в Claude Code, и в Codex CLI.</p>
+
+        <div class="hero-badges active" data-lang="en">
             <span>8 plugins</span>
             <span>Claude Code + Codex CLI</span>
             <span>Sub-agents · Hooks · MCP servers</span>
             <span>MIT</span>
         </div>
+        <div class="hero-badges" data-lang="uk">
+            <span>8 плагінів</span>
+            <span>Claude Code + Codex CLI</span>
+            <span>Субагенти · Хуки · MCP-сервери</span>
+            <span>MIT</span>
+        </div>
+        <div class="hero-badges" data-lang="ru">
+            <span>8 плагинов</span>
+            <span>Claude Code + Codex CLI</span>
+            <span>Субагенты · Хуки · MCP-серверы</span>
+            <span>MIT</span>
+        </div>
+
         <p>
-            <a class="btn" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">View on GitHub</a>
-            <a class="btn btn-ghost" href="#install">Install</a>
+            <a class="btn" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">
+                <span data-lang="en" class="active">View on GitHub</span>
+                <span data-lang="uk">Дивитись на GitHub</span>
+                <span data-lang="ru">Смотреть на GitHub</span>
+            </a>
+            <a class="btn btn-ghost" href="#install">
+                <span data-lang="en" class="active">Install</span>
+                <span data-lang="uk">Встановлення</span>
+                <span data-lang="ru">Установка</span>
+            </a>
         </p>
     </header>
 
     <main>
     <section id="what">
-        <h2>What this is</h2>
-        <p class="section-lead">A marketplace repository. You add it once to your agent CLI, then install plugins by name. Each plugin is a self-contained bundle of slash commands, sub-agents, hooks, skills and — where it needs persistent state — its own MCP server.</p>
+        <h2 data-lang="en" class="active">What this is</h2>
+        <h2 data-lang="uk">Що це таке</h2>
+        <h2 data-lang="ru">Что это такое</h2>
+
+        <p class="section-lead active" data-lang="en">A marketplace repository. You add it once to your agent CLI, then install plugins by name. Each plugin is a self-contained bundle of slash commands, sub-agents, hooks, skills and — where it needs persistent state — its own MCP server.</p>
+        <p class="section-lead" data-lang="uk">Репозиторій-маркетплейс. Додаєте його до свого агентського CLI один раз, далі ставите плагіни на ім'я. Кожен плагін — самодостатній набір слеш-команд, субагентів, хуків, скілів і — там, де потрібен постійний стан — власного MCP-сервера.</p>
+        <p class="section-lead" data-lang="ru">Репозиторий-маркетплейс. Добавляете его в свой агентский CLI один раз, дальше ставите плагины по имени. Каждый плагин — самодостаточный набор слеш-команд, субагентов, хуков, скилов и — там, где нужно постоянное состояние — собственного MCP-сервера.</p>
+
         <div class="toc">
-            <a href="#crashlytics">Crashlytics<span>Android &amp; iOS crash analysis with git blame forensics</span></a>
-            <a href="#obsidian-tracker">Obsidian Tracker<span>Projects, kanban tasks, bugs, ADRs, session logs</span></a>
-            <a href="#combined-review">Combined Review<span>4 review agents + CodeRabbit in one pass</span></a>
-            <a href="#auto-theme">Auto Theme<span>Terminal theme follows macOS light/dark</span></a>
-            <a href="#locale-notifications">Locale Notifications<span>macOS notifications in your system language</span></a>
-            <a href="#drawbridge">Drawbridge<span>Brief → tuned prompt → image-gen web UI</span></a>
-            <a href="#plugin-cross-port">Plugin Cross Port<span>Claude Code ⇄ Codex plugin conversion</span></a>
-            <a href="#clip-maker">Clip Maker<span>Talks → vertical clips with subtitles</span></a>
+            <a href="#crashlytics">Crashlytics
+                <span data-lang="en" class="active">Android &amp; iOS crash analysis with git blame forensics</span>
+                <span data-lang="uk">Аналіз крашів Android та iOS із форензикою git blame</span>
+                <span data-lang="ru">Анализ крашей Android и iOS с форензикой git blame</span>
+            </a>
+            <a href="#obsidian-tracker">Obsidian Tracker
+                <span data-lang="en" class="active">Projects, kanban tasks, bugs, ADRs, session logs</span>
+                <span data-lang="uk">Проєкти, канбан-задачі, баги, ADR, логи сесій</span>
+                <span data-lang="ru">Проекты, канбан-задачи, баги, ADR, логи сессий</span>
+            </a>
+            <a href="#combined-review">Combined Review
+                <span data-lang="en" class="active">4 review agents + CodeRabbit in one pass</span>
+                <span data-lang="uk">4 агенти рев'ю + CodeRabbit за один прохід</span>
+                <span data-lang="ru">4 агента ревью + CodeRabbit за один проход</span>
+            </a>
+            <a href="#auto-theme">Auto Theme
+                <span data-lang="en" class="active">Terminal theme follows macOS light/dark</span>
+                <span data-lang="uk">Тема терміналу слідує за light/dark macOS</span>
+                <span data-lang="ru">Тема терминала следует за light/dark macOS</span>
+            </a>
+            <a href="#locale-notifications">Locale Notifications
+                <span data-lang="en" class="active">macOS notifications in your system language</span>
+                <span data-lang="uk">Сповіщення macOS мовою вашої системи</span>
+                <span data-lang="ru">Уведомления macOS на языке вашей системы</span>
+            </a>
+            <a href="#drawbridge">Drawbridge
+                <span data-lang="en" class="active">Brief → tuned prompt → image-gen web UI</span>
+                <span data-lang="uk">Бриф → налаштований промпт → веб-UI генерації зображень</span>
+                <span data-lang="ru">Бриф → настроенный промпт → веб-UI генерации изображений</span>
+            </a>
+            <a href="#plugin-cross-port">Plugin Cross Port
+                <span data-lang="en" class="active">Claude Code ⇄ Codex plugin conversion</span>
+                <span data-lang="uk">Конвертація плагінів Claude Code ⇄ Codex</span>
+                <span data-lang="ru">Конвертация плагинов Claude Code ⇄ Codex</span>
+            </a>
+            <a href="#clip-maker">Clip Maker
+                <span data-lang="en" class="active">Talks → vertical clips with subtitles</span>
+                <span data-lang="uk">Доповіді → вертикальні кліпи з субтитрами</span>
+                <span data-lang="ru">Доклады → вертикальные клипы с субтитрами</span>
+            </a>
         </div>
     </section>
 
     <section class="band" id="install">
         <div class="band-inner">
-            <h2>Install</h2>
-            <p class="section-lead">Add the marketplace once, then install whatever you need. Nothing is installed globally — every plugin is opt-in.</p>
+            <h2 data-lang="en" class="active">Install</h2>
+            <h2 data-lang="uk">Встановлення</h2>
+            <h2 data-lang="ru">Установка</h2>
 
-            <h4 style="font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;color:#7a8a94;margin:1.4rem 0 0.6rem;">Claude Code</h4>
+            <p class="section-lead active" data-lang="en">Add the marketplace once, then install whatever you need. Nothing is installed globally — every plugin is opt-in.</p>
+            <p class="section-lead" data-lang="uk">Додайте маркетплейс один раз, далі ставте те, що потрібно. Нічого не ставиться глобально — кожен плагін підключається окремо.</p>
+            <p class="section-lead" data-lang="ru">Добавьте маркетплейс один раз, дальше ставьте что нужно. Ничего не ставится глобально — каждый плагин подключается отдельно.</p>
+
+            <p class="sub-label">Claude Code</p>
 <pre><span class="p">&gt;</span> <span class="k">/plugin marketplace add</span> https://github.com/IvanLutsenko/awac-ai-agent-plugins
 <span class="p">&gt;</span> <span class="k">/plugin install</span> crashlytics        <span class="c"># then any plugin by name</span></pre>
 
-            <h4 style="font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;color:#7a8a94;margin:1.4rem 0 0.6rem;">Codex CLI</h4>
+            <p class="sub-label">Codex CLI</p>
 <pre><span class="c"># add this repo as a Codex marketplace (Git source, or a local clone path)</span>
 $ <span class="k">codex plugin marketplace add</span> IvanLutsenko/awac-ai-agent-plugins
 
@@ -373,26 +488,45 @@ $ <span class="k">codex plugin add</span> combined-review@awac-ai-agent-plugins
 <span class="c"># verify</span>
 $ <span class="k">codex plugin marketplace list</span>   <span class="c"># marketplaces and their roots</span>
 $ <span class="k">codex plugin list</span>                <span class="c"># plugins and install status</span></pre>
-            <p style="margin-top:1rem;color:#52616b;font-size:0.92rem;">Claude Code commands are converted into Codex skills under <code class="inline">skills/generated-from-commands/</code>, agents into <code class="inline">skills/generated-from-agents/</code>. The one exception is <em>Locale Notifications</em> — Claude Code only. The old repository slug <code class="inline">awac-claude-code-plugins</code> still works for existing installations.</p>
+
+            <p class="active" style="margin-top:1rem;color:#52616b;font-size:0.92rem;" data-lang="en">Claude Code commands are converted into Codex skills under <code class="inline">skills/generated-from-commands/</code>, agents into <code class="inline">skills/generated-from-agents/</code>. The one exception is <em>Locale Notifications</em> — Claude Code only. The old repository slug <code class="inline">awac-claude-code-plugins</code> still works for existing installations.</p>
+            <p style="margin-top:1rem;color:#52616b;font-size:0.92rem;" data-lang="uk">Команди Claude Code конвертуються в скіли Codex у <code class="inline">skills/generated-from-commands/</code>, агенти — у <code class="inline">skills/generated-from-agents/</code>. Єдиний виняток — <em>Locale Notifications</em>, лише для Claude Code. Старий слаг репозиторію <code class="inline">awac-claude-code-plugins</code> досі працює для наявних інсталяцій.</p>
+            <p style="margin-top:1rem;color:#52616b;font-size:0.92rem;" data-lang="ru">Команды Claude Code конвертируются в скилы Codex в <code class="inline">skills/generated-from-commands/</code>, агенты — в <code class="inline">skills/generated-from-agents/</code>. Единственное исключение — <em>Locale Notifications</em>, только для Claude Code. Старый слаг репозитория <code class="inline">awac-claude-code-plugins</code> по-прежнему работает для уже установленных копий.</p>
         </div>
     </section>
 
     <section id="plugins">
-        <h2>The plugins</h2>
-        <p class="section-lead">Versions below reflect the current release in the repository; the README in the repo is the authoritative changelog.</p>
+        <h2 data-lang="en" class="active">The plugins</h2>
+        <h2 data-lang="uk">Плагіни</h2>
+        <h2 data-lang="ru">Плагины</h2>
+
+        <p class="section-lead active" data-lang="en">Versions below reflect the current release in the repository; the README in the repo is the authoritative changelog.</p>
+        <p class="section-lead" data-lang="uk">Версії нижче відповідають поточному релізу в репозиторії; авторитетний чейнджлог — README самої репи.</p>
+        <p class="section-lead" data-lang="ru">Версии ниже соответствуют текущему релизу в репозитории; авторитетный чейнджлог — README самой репы.</p>
 
         <!-- Crashlytics -->
         <article class="plugin" id="crashlytics">
             <div class="plugin-head">
                 <h3>Crashlytics</h3>
-                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-stable active" data-lang="en">Production</span>
+                <span class="tag tag-stable" data-lang="uk">Продакшн</span>
+                <span class="tag tag-stable" data-lang="ru">Продакшн</span>
                 <span class="tag tag-ver">v4.4.4</span>
                 <span class="tag tag-target">Claude Code + Codex</span>
             </div>
-            <p>Turns a Crashlytics issue id into a report you can act on: what broke, which commit introduced it, who should fix it, and a before/after patch. Android and iOS, platform auto-detected from project config.</p>
 
-            <h4>Pipeline</h4>
-            <p>Four steps, each its own sub-agent, ending in a deterministic quality gate — the report is rejected if the forensics section is missing or the fix is not code-level.</p>
+            <p class="plugin-desc active" data-lang="en">Turns a Crashlytics issue id into a report you can act on: what broke, which commit introduced it, who should fix it, and a before/after patch. Android and iOS, platform auto-detected from project config.</p>
+            <p class="plugin-desc" data-lang="uk">Перетворює id іссюї в Crashlytics на звіт, з яким можна працювати: що зламалось, який коміт це приніс, хто має чинити, і патч до/після. Android та iOS, платформа визначається з конфігу проєкту автоматично.</p>
+            <p class="plugin-desc" data-lang="ru">Превращает id иссюи в Crashlytics в отчёт, с которым можно работать: что сломалось, какой коммит это принёс, кому чинить, и патч до/после. Android и iOS, платформа определяется из конфига проекта автоматически.</p>
+
+            <p class="sub-label active" data-lang="en">Pipeline</p>
+            <p class="sub-label" data-lang="uk">Пайплайн</p>
+            <p class="sub-label" data-lang="ru">Пайплайн</p>
+
+            <p class="active" data-lang="en" style="margin-bottom:0.8rem;">Four steps, each its own sub-agent, ending in a deterministic quality gate — the report is rejected if the forensics section is missing or the fix is not code-level.</p>
+            <p data-lang="uk" style="margin-bottom:0.8rem;">Чотири кроки, кожен — окремий субагент, наприкінці детермінований quality gate: звіт відхиляється, якщо немає секції форензики або фікс не на рівні коду.</p>
+            <p data-lang="ru" style="margin-bottom:0.8rem;">Четыре шага, каждый — отдельный субагент, в конце детерминированный quality gate: отчёт отклоняется, если нет секции форензики или фикс не на уровне кода.</p>
+
 <pre><span class="p">&gt;</span> <span class="k">/crash-report</span> ca8f7f21e3b4...
 
 <span class="o">▸ crash-classifier-android</span>   type, component, trigger
@@ -408,20 +542,56 @@ Fix         : cancel the collection job in onDestroyView (patch below)</pre>
             <img class="shot" src="res/plugins/crashlytics.png" alt="Crashlytics report in the terminal" loading="lazy">
             -->
 
-            <h4>Commands</h4>
+            <p class="sub-label active" data-lang="en">Commands</p>
+            <p class="sub-label" data-lang="uk">Команди</p>
+            <p class="sub-label" data-lang="ru">Команды</p>
             <ul>
-                <li><code class="inline">/crash-report &lt;id|console-url&gt;</code> — unified entry point, auto-detects platform</li>
-                <li><code class="inline">/crash-report-android</code>, <code class="inline">/crash-report-ios</code> — explicit platform</li>
-                <li><code class="inline">/crash-config</code> — language, branch, platform, model, Firebase ids</li>
-                <li><code class="inline">/crashlytics:install-permissions</code> — one-time read-only allowlist, no more prompts mid-report</li>
+                <li><code class="inline">/crash-report &lt;id|console-url&gt;</code> —
+                    <span data-lang="en" class="active">unified entry point, auto-detects platform</span>
+                    <span data-lang="uk">єдина точка входу, платформа визначається сама</span>
+                    <span data-lang="ru">единая точка входа, платформа определяется сама</span>
+                </li>
+                <li><code class="inline">/crash-report-android</code>, <code class="inline">/crash-report-ios</code> —
+                    <span data-lang="en" class="active">explicit platform</span>
+                    <span data-lang="uk">явно задана платформа</span>
+                    <span data-lang="ru">явно заданная платформа</span>
+                </li>
+                <li><code class="inline">/crash-config</code> —
+                    <span data-lang="en" class="active">language, branch, platform, model, Firebase ids</span>
+                    <span data-lang="uk">мова, гілка, платформа, модель, Firebase id</span>
+                    <span data-lang="ru">язык, ветка, платформа, модель, Firebase id</span>
+                </li>
+                <li><code class="inline">/crashlytics:install-permissions</code> —
+                    <span data-lang="en" class="active">one-time read-only allowlist, no more prompts mid-report</span>
+                    <span data-lang="uk">одноразовий read-only allowlist, більше жодних запитів посеред звіту</span>
+                    <span data-lang="ru">одноразовый read-only allowlist, больше никаких запросов посреди отчёта</span>
+                </li>
             </ul>
 
-            <h4>Notable</h4>
+            <p class="sub-label active" data-lang="en">Notable</p>
+            <p class="sub-label" data-lang="uk">Особливості</p>
+            <p class="sub-label" data-lang="ru">Особенности</p>
             <ul>
-                <li>MCP-primary fetch with REST <code class="inline">v1alpha</code> fallback and a manual offline mode</li>
-                <li>Assignee identification is mandatory, not best-effort</li>
-                <li>Reports render with English headers and a body in any language</li>
-                <li>Firebase MCP launcher pinned to <code class="inline">firebase-tools@15</code> so startup does not drift on silent major updates</li>
+                <li>
+                    <span data-lang="en" class="active">MCP-primary fetch with REST <code class="inline">v1alpha</code> fallback and a manual offline mode</span>
+                    <span data-lang="uk">Основний шлях — MCP, із фолбеком на REST <code class="inline">v1alpha</code> та ручним офлайн-режимом</span>
+                    <span data-lang="ru">Основной путь — MCP, с фолбеком на REST <code class="inline">v1alpha</code> и ручным офлайн-режимом</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Assignee identification is mandatory, not best-effort</span>
+                    <span data-lang="uk">Визначення відповідального обов'язкове, а не «як вийде»</span>
+                    <span data-lang="ru">Определение ответственного обязательно, а не «как получится»</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Reports render with English headers and a body in any language</span>
+                    <span data-lang="uk">Звіти з англійськими заголовками й тілом будь-якою мовою</span>
+                    <span data-lang="ru">Отчёты с английскими заголовками и телом на любом языке</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Firebase MCP launcher pinned to <code class="inline">firebase-tools@15</code> so startup does not drift on silent major updates</span>
+                    <span data-lang="uk">Лаунчер Firebase MCP закріплений на <code class="inline">firebase-tools@15</code>, щоб старт не «їхав» від тихих мажорних оновлень</span>
+                    <span data-lang="ru">Лаунчер Firebase MCP закреплён на <code class="inline">firebase-tools@15</code>, чтобы старт не «уезжал» от тихих мажорных обновлений</span>
+                </li>
             </ul>
         </article>
 
@@ -429,13 +599,20 @@ Fix         : cancel the collection job in onDestroyView (patch below)</pre>
         <article class="plugin" id="obsidian-tracker">
             <div class="plugin-head">
                 <h3>Obsidian Tracker</h3>
-                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-stable active" data-lang="en">Production</span>
+                <span class="tag tag-stable" data-lang="uk">Продакшн</span>
+                <span class="tag tag-stable" data-lang="ru">Продакшн</span>
                 <span class="tag tag-ver">v4.5.2</span>
                 <span class="tag tag-target">Claude Code + Codex</span>
             </div>
-            <p>Makes an Obsidian vault the single source of truth for what you are working on: projects, a kanban board, bugs, architecture decision records and session logs. Hooks record sessions, actions and commits on their own — the tracking survives <code class="inline">/compact</code>.</p>
 
-            <h4>A session</h4>
+            <p class="plugin-desc active" data-lang="en">Makes an Obsidian vault the single source of truth for what you are working on: projects, a kanban board, bugs, architecture decision records and session logs. Hooks record sessions, actions and commits on their own — the tracking survives <code class="inline">/compact</code>.</p>
+            <p class="plugin-desc" data-lang="uk">Робить сховище Obsidian єдиним джерелом правди про те, над чим ви працюєте: проєкти, канбан-дошка, баги, записи архітектурних рішень і логи сесій. Хуки самі фіксують сесії, дії та коміти — трекінг переживає <code class="inline">/compact</code>.</p>
+            <p class="plugin-desc" data-lang="ru">Делает хранилище Obsidian единственным источником правды о том, над чем вы работаете: проекты, канбан-доска, баги, записи архитектурных решений и логи сессий. Хуки сами фиксируют сессии, действия и коммиты — трекинг переживает <code class="inline">/compact</code>.</p>
+
+            <p class="sub-label active" data-lang="en">A session</p>
+            <p class="sub-label" data-lang="uk">Сесія</p>
+            <p class="sub-label" data-lang="ru">Сессия</p>
 <pre><span class="p">&gt;</span> <span class="k">/track-start</span> kidkiosk
 <span class="g">tracking on</span> — session note created, PostToolUse hook recording
 
@@ -451,22 +628,61 @@ session saved: 41 min, 12 actions, 2 commits, 1 decision</pre>
             <img class="shot" src="res/plugins/obsidian-tracker.png" alt="Obsidian kanban board written by the plugin" loading="lazy">
             -->
 
-            <h4>Commands</h4>
+            <p class="sub-label active" data-lang="en">Commands</p>
+            <p class="sub-label" data-lang="uk">Команди</p>
+            <p class="sub-label" data-lang="ru">Команды</p>
             <ul>
-                <li>Projects — <code class="inline">/projects</code>, <code class="inline">/project-new</code>, <code class="inline">/project-archive</code></li>
-                <li>Tasks — <code class="inline">/task</code>, <code class="inline">/done</code>, <code class="inline">/today</code>, <code class="inline">/import</code></li>
-                <li>Bugs — <code class="inline">/project-bug</code>, <code class="inline">/bug-close</code></li>
-                <li>Decisions — <code class="inline">/decision-new</code>, <code class="inline">/decision-close</code>, <code class="inline">/decision-supersede</code>, <code class="inline">/decision-link</code></li>
-                <li>Context — <code class="inline">/where-was-i</code>, <code class="inline">/pulse</code>, <code class="inline">/session-log</code></li>
+                <li>
+                    <span data-lang="en" class="active">Projects</span><span data-lang="uk">Проєкти</span><span data-lang="ru">Проекты</span>
+                    — <code class="inline">/projects</code>, <code class="inline">/project-new</code>, <code class="inline">/project-archive</code>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Tasks</span><span data-lang="uk">Задачі</span><span data-lang="ru">Задачи</span>
+                    — <code class="inline">/task</code>, <code class="inline">/done</code>, <code class="inline">/today</code>, <code class="inline">/import</code>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Bugs</span><span data-lang="uk">Баги</span><span data-lang="ru">Баги</span>
+                    — <code class="inline">/project-bug</code>, <code class="inline">/bug-close</code>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Decisions</span><span data-lang="uk">Рішення</span><span data-lang="ru">Решения</span>
+                    — <code class="inline">/decision-new</code>, <code class="inline">/decision-close</code>, <code class="inline">/decision-supersede</code>, <code class="inline">/decision-link</code>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Context</span><span data-lang="uk">Контекст</span><span data-lang="ru">Контекст</span>
+                    — <code class="inline">/where-was-i</code>, <code class="inline">/pulse</code>, <code class="inline">/session-log</code>
+                </li>
             </ul>
 
-            <h4>Notable</h4>
+            <p class="sub-label active" data-lang="en">Notable</p>
+            <p class="sub-label" data-lang="uk">Особливості</p>
+            <p class="sub-label" data-lang="ru">Особенности</p>
             <ul>
-                <li>Own MCP server, builds itself on first run — no manual <code class="inline">npm install</code></li>
-                <li>Board writes preserve <code class="inline">%% kanban:settings %%</code>, frontmatter and custom sections</li>
-                <li>Obsidian-safe filenames — mobile Obsidian and Sync stop complaining; a normalizer fixes existing vaults</li>
-                <li>Zero-padded, race-safe task ids (<code class="inline">TASK-007</code>)</li>
-                <li>83 vitest + 86 bats tests behind it</li>
+                <li>
+                    <span data-lang="en" class="active">Own MCP server, builds itself on first run — no manual <code class="inline">npm install</code></span>
+                    <span data-lang="uk">Власний MCP-сервер, збирається сам при першому запуску — жодного ручного <code class="inline">npm install</code></span>
+                    <span data-lang="ru">Собственный MCP-сервер, собирается сам при первом запуске — никакого ручного <code class="inline">npm install</code></span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Board writes preserve <code class="inline">%% kanban:settings %%</code>, frontmatter and custom sections</span>
+                    <span data-lang="uk">Запис у дошку зберігає <code class="inline">%% kanban:settings %%</code>, frontmatter і власні секції</span>
+                    <span data-lang="ru">Запись в доску сохраняет <code class="inline">%% kanban:settings %%</code>, frontmatter и собственные секции</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Obsidian-safe filenames — mobile Obsidian and Sync stop complaining; a normalizer fixes existing vaults</span>
+                    <span data-lang="uk">Безпечні для Obsidian імена файлів — мобільний Obsidian і Sync більше не скаржаться; нормалізатор чинить наявні сховища</span>
+                    <span data-lang="ru">Безопасные для Obsidian имена файлов — мобильный Obsidian и Sync больше не жалуются; нормализатор чинит существующие хранилища</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Zero-padded, race-safe task ids (<code class="inline">TASK-007</code>)</span>
+                    <span data-lang="uk">Id задач із провідними нулями та без гонок (<code class="inline">TASK-007</code>)</span>
+                    <span data-lang="ru">Id задач с ведущими нулями и без гонок (<code class="inline">TASK-007</code>)</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">83 vitest + 86 bats tests behind it</span>
+                    <span data-lang="uk">Позаду 83 тести vitest і 86 bats</span>
+                    <span data-lang="ru">Позади 83 теста vitest и 86 bats</span>
+                </li>
             </ul>
         </article>
 
@@ -474,13 +690,20 @@ session saved: 41 min, 12 actions, 2 commits, 1 decision</pre>
         <article class="plugin" id="combined-review">
             <div class="plugin-head">
                 <h3>Combined Review</h3>
-                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-stable active" data-lang="en">Production</span>
+                <span class="tag tag-stable" data-lang="uk">Продакшн</span>
+                <span class="tag tag-stable" data-lang="ru">Продакшн</span>
                 <span class="tag tag-ver">v1.4.0</span>
                 <span class="tag tag-target">Claude Code + Codex</span>
             </div>
-            <p>One command, four specialised reviewers in parallel, plus CodeRabbit CLI — findings merged, scored and de-duplicated instead of arriving as four separate walls of text.</p>
 
-            <h4>Agents</h4>
+            <p class="plugin-desc active" data-lang="en">One command, four specialised reviewers in parallel, plus CodeRabbit CLI — findings merged, scored and de-duplicated instead of arriving as four separate walls of text.</p>
+            <p class="plugin-desc" data-lang="uk">Одна команда, чотири спеціалізовані рев'юери паралельно плюс CodeRabbit CLI — знахідки зводяться, оцінюються й дедуплікуються, а не падають чотирма окремими стінами тексту.</p>
+            <p class="plugin-desc" data-lang="ru">Одна команда, четыре специализированных ревьюера параллельно плюс CodeRabbit CLI — находки сводятся, оцениваются и дедуплицируются, а не падают четырьмя отдельными стенами текста.</p>
+
+            <p class="sub-label active" data-lang="en">Agents</p>
+            <p class="sub-label" data-lang="uk">Агенти</p>
+            <p class="sub-label" data-lang="ru">Агенты</p>
 <pre><span class="p">&gt;</span> <span class="k">/review</span> --base main
 
 <span class="o">▸ code-reviewer</span>            CLAUDE.md compliance, bugs, logic
@@ -494,13 +717,36 @@ confidence scoring 0–100 · low-confidence findings filtered out</pre>
             <img class="shot" src="res/plugins/combined-review.png" alt="Combined review output" loading="lazy">
             -->
 
-            <h4>Inputs it accepts</h4>
+            <p class="sub-label active" data-lang="en">Inputs it accepts</p>
+            <p class="sub-label" data-lang="uk">Що приймає на вхід</p>
+            <p class="sub-label" data-lang="ru">Что принимает на вход</p>
             <ul>
-                <li><code class="inline">/review</code> — uncommitted changes</li>
-                <li><code class="inline">/review 123</code> — GitHub PR or GitLab MR, forge auto-detected</li>
-                <li><code class="inline">/review !22 +threads</code> — GitLab MR with inline resolvable threads</li>
-                <li><code class="inline">/review feature/X feature/Y</code> — branch diff; <code class="inline">--base main</code> for current branch</li>
-                <li>Optional agents on demand: <code class="inline">+comments</code>, <code class="inline">+types</code>, <code class="inline">+simplify</code></li>
+                <li><code class="inline">/review</code> —
+                    <span data-lang="en" class="active">uncommitted changes</span>
+                    <span data-lang="uk">незакомічені зміни</span>
+                    <span data-lang="ru">незакоммиченные изменения</span>
+                </li>
+                <li><code class="inline">/review 123</code> —
+                    <span data-lang="en" class="active">GitHub PR or GitLab MR, forge auto-detected</span>
+                    <span data-lang="uk">GitHub PR або GitLab MR, форж визначається сам</span>
+                    <span data-lang="ru">GitHub PR или GitLab MR, форж определяется сам</span>
+                </li>
+                <li><code class="inline">/review !22 +threads</code> —
+                    <span data-lang="en" class="active">GitLab MR with inline resolvable threads</span>
+                    <span data-lang="uk">GitLab MR з інлайновими тредами, які можна закривати</span>
+                    <span data-lang="ru">GitLab MR с инлайновыми тредами, которые можно закрывать</span>
+                </li>
+                <li><code class="inline">/review feature/X feature/Y</code> —
+                    <span data-lang="en" class="active">branch diff; <code class="inline">--base main</code> for the current branch</span>
+                    <span data-lang="uk">дифф гілок; <code class="inline">--base main</code> для поточної гілки</span>
+                    <span data-lang="ru">дифф веток; <code class="inline">--base main</code> для текущей ветки</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Optional agents on demand:</span>
+                    <span data-lang="uk">Опційні агенти за потреби:</span>
+                    <span data-lang="ru">Опциональные агенты по требованию:</span>
+                    <code class="inline">+comments</code>, <code class="inline">+types</code>, <code class="inline">+simplify</code>
+                </li>
             </ul>
         </article>
 
@@ -508,13 +754,20 @@ confidence scoring 0–100 · low-confidence findings filtered out</pre>
         <article class="plugin" id="auto-theme">
             <div class="plugin-head">
                 <h3>Auto Theme</h3>
-                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-stable active" data-lang="en">Production</span>
+                <span class="tag tag-stable" data-lang="uk">Продакшн</span>
+                <span class="tag tag-stable" data-lang="ru">Продакшн</span>
                 <span class="tag tag-ver">v1.1.2</span>
                 <span class="tag tag-target">Claude Code + Codex</span>
             </div>
-            <p>Your terminal agent follows macOS appearance. Switch the system to dark and the next prompt is already dark — in Claude Code <em>and</em> in Codex. Bundles two custom themes: <code class="inline">gruvbox-light</code> and <code class="inline">sunset-drive</code>.</p>
 
-            <h4>How it works</h4>
+            <p class="plugin-desc active" data-lang="en">Your terminal agent follows macOS appearance. Switch the system to dark and the next prompt is already dark — in Claude Code <em>and</em> in Codex. Bundles two custom themes: <code class="inline">gruvbox-light</code> and <code class="inline">sunset-drive</code>.</p>
+            <p class="plugin-desc" data-lang="uk">Ваш термінальний агент слідує за оформленням macOS. Перемкнули систему в темну — наступний промпт уже темний, і в Claude Code, <em>і</em> в Codex. У комплекті дві власні теми: <code class="inline">gruvbox-light</code> і <code class="inline">sunset-drive</code>.</p>
+            <p class="plugin-desc" data-lang="ru">Ваш терминальный агент следует за оформлением macOS. Переключили систему в тёмную — следующий промпт уже тёмный, и в Claude Code, <em>и</em> в Codex. В комплекте две свои темы: <code class="inline">gruvbox-light</code> и <code class="inline">sunset-drive</code>.</p>
+
+            <p class="sub-label active" data-lang="en">How it works</p>
+            <p class="sub-label" data-lang="uk">Як працює</p>
+            <p class="sub-label" data-lang="ru">Как работает</p>
 <pre><span class="c"># UserPromptSubmit hook, runs on every message</span>
 $ <span class="k">defaults read</span> -g AppleInterfaceStyle      <span class="c"># Dark | (absent) = Light</span>
 
@@ -528,11 +781,26 @@ light → <span class="o">gruvbox-light</span>      dark → <span class="o">sun
             <img class="shot" src="res/plugins/auto-theme.png" alt="Light and dark theme side by side" loading="lazy">
             -->
 
-            <h4>Notable</h4>
+            <p class="sub-label active" data-lang="en">Notable</p>
+            <p class="sub-label" data-lang="uk">Особливості</p>
+            <p class="sub-label" data-lang="ru">Особенности</p>
             <ul>
-                <li>Malformed configs and non-writable targets emit an explicit <code class="inline">WARN:</code> instead of failing silently</li>
-                <li>Unknown <code class="inline">custom:*</code> themes without a light/dark pair are preserved, not overwritten</li>
-                <li><code class="inline">/sync-theme</code> forces a re-sync when you want it now</li>
+                <li>
+                    <span data-lang="en" class="active">Malformed configs and non-writable targets emit an explicit <code class="inline">WARN:</code> instead of failing silently</span>
+                    <span data-lang="uk">Побиті конфіги й недоступні для запису цілі дають явний <code class="inline">WARN:</code>, а не тихий провал</span>
+                    <span data-lang="ru">Битые конфиги и недоступные для записи цели дают явный <code class="inline">WARN:</code>, а не тихий провал</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Unknown <code class="inline">custom:*</code> themes without a light/dark pair are preserved, not overwritten</span>
+                    <span data-lang="uk">Невідомі теми <code class="inline">custom:*</code> без пари light/dark зберігаються, а не перетираються</span>
+                    <span data-lang="ru">Неизвестные темы <code class="inline">custom:*</code> без пары light/dark сохраняются, а не перетираются</span>
+                </li>
+                <li>
+                    <code class="inline">/sync-theme</code>
+                    <span data-lang="en" class="active">forces a re-sync when you want it now</span>
+                    <span data-lang="uk">примусово пересинхронізує, коли треба зараз</span>
+                    <span data-lang="ru">принудительно пересинхронизирует, когда надо сейчас</span>
+                </li>
             </ul>
         </article>
 
@@ -540,11 +808,18 @@ light → <span class="o">gruvbox-light</span>      dark → <span class="o">sun
         <article class="plugin" id="locale-notifications">
             <div class="plugin-head">
                 <h3>Locale Notifications</h3>
-                <span class="tag tag-stable">Production</span>
+                <span class="tag tag-stable active" data-lang="en">Production</span>
+                <span class="tag tag-stable" data-lang="uk">Продакшн</span>
+                <span class="tag tag-stable" data-lang="ru">Продакшн</span>
                 <span class="tag tag-ver">v2.0.1</span>
-                <span class="tag tag-target">Claude Code only</span>
+                <span class="tag tag-target active" data-lang="en">Claude Code only</span>
+                <span class="tag tag-target" data-lang="uk">Лише Claude Code</span>
+                <span class="tag tag-target" data-lang="ru">Только Claude Code</span>
             </div>
-            <p>Native macOS notifications from Claude Code, in your system language. Detects the locale, translates once via Google Translate, caches the result and works offline from then on.</p>
+
+            <p class="plugin-desc active" data-lang="en">Native macOS notifications from Claude Code, in your system language. Detects the locale, translates once via Google Translate, caches the result and works offline from then on.</p>
+            <p class="plugin-desc" data-lang="uk">Нативні сповіщення macOS від Claude Code мовою вашої системи. Визначає локаль, один раз перекладає через Google Translate, кешує результат і далі працює офлайн.</p>
+            <p class="plugin-desc" data-lang="ru">Нативные уведомления macOS от Claude Code на языке вашей системы. Определяет локаль, один раз переводит через Google Translate, кеширует результат и дальше работает офлайн.</p>
 
 <pre><span class="c"># Notification hook</span>
 $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"># ru_KZ, uk_UA, de_DE …</span>
@@ -564,7 +839,10 @@ $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"
                 <span class="tag tag-ver">v0.1.1</span>
                 <span class="tag tag-target">Claude Code + Codex</span>
             </div>
-            <p>A bridge between a one-line brief and the image-gen web UIs you already pay nothing for. It writes a prompt tuned to the target model, puts it in the clipboard and opens the UI — no API keys, no billing.</p>
+
+            <p class="plugin-desc active" data-lang="en">A bridge between a one-line brief and the image-gen web UIs you already have open. It writes a prompt tuned to the target model, puts it in the clipboard and opens the UI — no API keys, no billing.</p>
+            <p class="plugin-desc" data-lang="uk">Міст між однорядковим брифом і веб-інтерфейсами генерації зображень, які у вас і так відкриті. Пише промпт під конкретну модель, кладе його в буфер обміну й відкриває UI — без API-ключів і оплати.</p>
+            <p class="plugin-desc" data-lang="ru">Мост между однострочным брифом и веб-интерфейсами генерации изображений, которые у вас и так открыты. Пишет промпт под конкретную модель, кладёт его в буфер обмена и открывает UI — без API-ключей и оплаты.</p>
 
 <pre><span class="p">&gt;</span> <span class="k">/draw</span> закат на байкале с медведем у воды
 <span class="o">target</span>: gemini (default)  ·  brief auto-translated to English
@@ -577,12 +855,30 @@ $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"
             <img class="shot" src="res/plugins/drawbridge.png" alt="Drawbridge prompt crafting" loading="lazy">
             -->
 
-            <h4>Notable</h4>
+            <p class="sub-label active" data-lang="en">Notable</p>
+            <p class="sub-label" data-lang="uk">Особливості</p>
+            <p class="sub-label" data-lang="ru">Особенности</p>
             <ul>
-                <li>Per-target tuning: Imagen prose, DALL·E structure, Aurora density, Midjourney tag syntax</li>
-                <li>Settings in <code class="inline">~/.claude/drawbridge.local.md</code>, overridable per project</li>
-                <li>History of the last 200 prompts feeds <code class="inline">/redraw</code></li>
-                <li>macOS only in 0.1.1</li>
+                <li>
+                    <span data-lang="en" class="active">Per-target tuning: Imagen prose, DALL·E structure, Aurora density, Midjourney tag syntax</span>
+                    <span data-lang="uk">Тюнінг під кожну ціль: проза для Imagen, структура для DALL·E, щільність для Aurora, теговий синтаксис Midjourney</span>
+                    <span data-lang="ru">Тюнинг под каждую цель: проза для Imagen, структура для DALL·E, плотность для Aurora, теговый синтаксис Midjourney</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Settings in <code class="inline">~/.claude/drawbridge.local.md</code>, overridable per project</span>
+                    <span data-lang="uk">Налаштування в <code class="inline">~/.claude/drawbridge.local.md</code>, перевизначаються на рівні проєкту</span>
+                    <span data-lang="ru">Настройки в <code class="inline">~/.claude/drawbridge.local.md</code>, переопределяются на уровне проекта</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">History of the last 200 prompts feeds <code class="inline">/redraw</code></span>
+                    <span data-lang="uk">Історія останніх 200 промптів живить <code class="inline">/redraw</code></span>
+                    <span data-lang="ru">История последних 200 промптов питает <code class="inline">/redraw</code></span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">macOS only in 0.1.1</span>
+                    <span data-lang="uk">У 0.1.1 лише macOS</span>
+                    <span data-lang="ru">В 0.1.1 только macOS</span>
+                </li>
             </ul>
         </article>
 
@@ -594,7 +890,10 @@ $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"
                 <span class="tag tag-ver">v0.10.1</span>
                 <span class="tag tag-target">Claude Code + Codex</span>
             </div>
-            <p>The reason the rest of this marketplace is dual-target. It converts a plugin between Claude Code and Codex formats, then keeps both targets reconciled as the source changes — including the parts that cannot be derived mechanically.</p>
+
+            <p class="plugin-desc active" data-lang="en">The reason the rest of this marketplace is dual-target. It converts a plugin between Claude Code and Codex formats, then keeps both targets reconciled as the source changes — including the parts that cannot be derived mechanically.</p>
+            <p class="plugin-desc" data-lang="uk">Причина, чому решта цього маркетплейсу dual-target. Конвертує плагін між форматами Claude Code і Codex, а далі тримає обидві цілі узгодженими, поки джерело змінюється — включно з тим, що неможливо вивести механічно.</p>
+            <p class="plugin-desc" data-lang="ru">Причина, по которой остальной маркетплейс dual-target. Конвертирует плагин между форматами Claude Code и Codex, а дальше держит обе цели согласованными, пока источник меняется — включая то, что нельзя вывести механически.</p>
 
 <pre><span class="c"># one-shot conversion, interactively</span>
 <span class="p">&gt;</span> Convert plugins/obsidian-tracker to Codex
@@ -611,13 +910,35 @@ $ <span class="k">cross_port.py</span> plugin adapt plugins/example --apply</pre
             <img class="shot" src="res/plugins/plugin-cross-port.png" alt="Cross-port marketplace check" loading="lazy">
             -->
 
-            <h4>Notable</h4>
+            <p class="sub-label active" data-lang="en">Notable</p>
+            <p class="sub-label" data-lang="uk">Особливості</p>
+            <p class="sub-label" data-lang="ru">Особенности</p>
             <ul>
-                <li>CC → Codex: manifest conversion, <code class="inline">commands/</code> → <code class="inline">skills/generated-from-commands/</code>, agents → standalone skills</li>
-                <li>Codex → CC: the same trip in reverse</li>
-                <li>Per-plugin <code class="inline">.plugin-cross-port.json</code> records the source of truth; stale critical adaptations mark a Codex target unavailable rather than shipping it broken</li>
-                <li><code class="inline">skills_authored</code> flag lets hand-written Codex skills skip mechanical generation</li>
-                <li>Generated-output cleanup removes stale converted commands and skills</li>
+                <li>
+                    <span data-lang="en" class="active">CC → Codex: manifest conversion, <code class="inline">commands/</code> → <code class="inline">skills/generated-from-commands/</code>, agents → standalone skills</span>
+                    <span data-lang="uk">CC → Codex: конвертація маніфесту, <code class="inline">commands/</code> → <code class="inline">skills/generated-from-commands/</code>, агенти → самостійні скіли</span>
+                    <span data-lang="ru">CC → Codex: конвертация манифеста, <code class="inline">commands/</code> → <code class="inline">skills/generated-from-commands/</code>, агенты → самостоятельные скилы</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Codex → CC: the same trip in reverse</span>
+                    <span data-lang="uk">Codex → CC: та сама подорож у зворотний бік</span>
+                    <span data-lang="ru">Codex → CC: тот же путь в обратную сторону</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Per-plugin <code class="inline">.plugin-cross-port.json</code> records the source of truth; stale critical adaptations mark a Codex target unavailable rather than shipping it broken</span>
+                    <span data-lang="uk">Файл <code class="inline">.plugin-cross-port.json</code> на плагін фіксує джерело правди; протухлі критичні адаптації позначають Codex-ціль недоступною, замість того щоб віддати її зламаною</span>
+                    <span data-lang="ru">Файл <code class="inline">.plugin-cross-port.json</code> на плагин фиксирует источник правды; протухшие критические адаптации помечают Codex-цель недоступной, вместо того чтобы отдать её сломанной</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">The <code class="inline">skills_authored</code> flag lets hand-written Codex skills skip mechanical generation</span>
+                    <span data-lang="uk">Прапорець <code class="inline">skills_authored</code> дозволяє рукописним скілам Codex пропустити механічну генерацію</span>
+                    <span data-lang="ru">Флаг <code class="inline">skills_authored</code> позволяет рукописным скилам Codex пропустить механическую генерацию</span>
+                </li>
+                <li>
+                    <span data-lang="en" class="active">Generated-output cleanup removes stale converted commands and skills</span>
+                    <span data-lang="uk">Прибирання згенерованого видаляє застарілі сконвертовані команди та скіли</span>
+                    <span data-lang="ru">Уборка сгенерированного удаляет устаревшие сконвертированные команды и скилы</span>
+                </li>
             </ul>
         </article>
 
@@ -629,7 +950,10 @@ $ <span class="k">cross_port.py</span> plugin adapt plugins/example --apply</pre
                 <span class="tag tag-ver">v1.3.1</span>
                 <span class="tag tag-target">Claude Code + Codex</span>
             </div>
-            <p>A recording of a talk goes in, vertical clips with subtitles and ready social copy come out. Whisper for the transcript, Opus to pick the moments worth cutting, ffmpeg to cut them.</p>
+
+            <p class="plugin-desc active" data-lang="en">A recording of a talk goes in, vertical clips with subtitles and ready social copy come out. Whisper for the transcript, Opus to pick the moments worth cutting, ffmpeg to cut them.</p>
+            <p class="plugin-desc" data-lang="uk">На вхід — запис доповіді, на вихід — вертикальні кліпи з субтитрами й готові тексти для соцмереж. Whisper для транскрипту, Opus для вибору моментів, ffmpeg для нарізки.</p>
+            <p class="plugin-desc" data-lang="ru">На вход — запись доклада, на выход — вертикальные клипы с субтитрами и готовые тексты для соцсетей. Whisper для транскрипта, Opus для выбора моментов, ffmpeg для нарезки.</p>
 
 <pre><span class="p">&gt;</span> <span class="k">/clip-maker</span> ~/Downloads/my-talk.mp4
 
@@ -650,20 +974,61 @@ $ <span class="k">cross_port.py</span> plugin adapt plugins/example --apply</pre
 
     <section class="band">
         <div class="band-inner">
-            <h2>Contributing &amp; local development</h2>
-            <p class="section-lead">After cloning, enable the git hooks — they run the plugin tests before every push.</p>
+            <h2 data-lang="en" class="active">Contributing &amp; local development</h2>
+            <h2 data-lang="uk">Контриб'ют і локальна розробка</h2>
+            <h2 data-lang="ru">Контрибьют и локальная разработка</h2>
+
+            <p class="section-lead active" data-lang="en">After cloning, enable the git hooks — they run the plugin tests before every push.</p>
+            <p class="section-lead" data-lang="uk">Після клонування увімкніть git-хуки — вони ганяють тести плагінів перед кожним пушем.</p>
+            <p class="section-lead" data-lang="ru">После клонирования включите git-хуки — они гоняют тесты плагинов перед каждым пушем.</p>
+
 <pre>$ <span class="k">git clone</span> https://github.com/IvanLutsenko/awac-ai-agent-plugins
 $ <span class="k">git config</span> core.hooksPath .githooks</pre>
+
             <p style="margin-top:1.2rem;">
-                <a class="btn" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">Repository</a>
-                <a class="btn btn-ghost" style="color:var(--dark-green);border-color:rgba(13,59,46,0.25);" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins/issues" target="_blank" rel="noopener">Issues</a>
+                <a class="btn" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">
+                    <span data-lang="en" class="active">Repository</span>
+                    <span data-lang="uk">Репозиторій</span>
+                    <span data-lang="ru">Репозиторий</span>
+                </a>
+                <a class="btn btn-outline" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins/issues" target="_blank" rel="noopener">Issues</a>
             </p>
         </div>
     </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Ivan Lutsenko · MIT · <a href="/">ivan.nullptr.party</a></p>
+        <p data-lang="en" class="active">&copy; 2026 Ivan Lutsenko · MIT · <a href="/">ivan.nullptr.party</a></p>
+        <p data-lang="uk">&copy; 2026 Іван Луценко · MIT · <a href="/">ivan.nullptr.party</a></p>
+        <p data-lang="ru">&copy; 2026 Иван Луценко · MIT · <a href="/">ivan.nullptr.party</a></p>
     </footer>
+
+    <script>
+        // Language Switcher — same contract as index.html (shared localStorage key)
+        const langButtons = document.querySelectorAll('[data-lang-switch]');
+        const langElements = document.querySelectorAll('[data-lang]');
+
+        setLanguage(localStorage.getItem('preferredLanguage') || 'en');
+
+        langButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const lang = button.getAttribute('data-lang-switch');
+                setLanguage(lang);
+                localStorage.setItem('preferredLanguage', lang);
+            });
+        });
+
+        function setLanguage(lang) {
+            langElements.forEach(element => {
+                element.classList.toggle('active', element.getAttribute('data-lang') === lang);
+            });
+            langButtons.forEach(button => {
+                const isActive = button.getAttribute('data-lang-switch') === lang;
+                button.classList.toggle('active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
+            });
+            document.documentElement.lang = lang;
+        }
+    </script>
 </body>
 </html>
