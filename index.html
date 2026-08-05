@@ -432,7 +432,7 @@
 
         /* Contact Section */
         #contact {
-            background-color: var(--bg-band);
+            background-color: var(--bg-light);
             padding-bottom: 4rem;
         }
 
@@ -507,7 +507,7 @@
 
         /* Video Gallery */
         #videos {
-            background: var(--bg-light);
+            background: var(--bg-band);
             position: relative;
         }
 
@@ -640,54 +640,48 @@
             margin-top: 1rem;
         }
 
-        /* Resources Section */
-        #resources {
+        /* Plugins Section */
+        #plugins {
             background-color: var(--bg-band);
         }
 
-        .resources-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .resource-card {
+        .plugins-feature {
             background: var(--card-surface);
             border: 1px solid var(--card-border);
             border-radius: 16px;
-            padding: 2rem;
+            padding: 2.5rem;
             box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            flex: 0 1 340px;
+            margin-top: 2rem;
+            max-width: 820px;
         }
 
-        .resource-card > div {
-            display: flex;
-            flex-direction: column;
-            min-height: 100%;
-        }
-
-        .resource-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .resource-title {
-            font-size: 1.25rem;
-            color: var(--dark-green);
-            margin-bottom: 1rem;
-        }
-
-        .resource-description {
+        .plugins-lead {
             color: var(--text-dark);
-            opacity: 0.8;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
+            opacity: 0.85;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .plugin-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .plugin-chips li {
+            background: var(--bg-band);
+            border: 1px solid var(--card-border);
+            border-radius: 999px;
+            padding: 0.3rem 0.9rem;
+            font-size: 0.88rem;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .plugins-feature .resource-buttons {
+            margin-top: 0;
         }
 
         .resource-buttons {
@@ -843,9 +837,12 @@
                 font-size: 1.75rem;
             }
 
-            .video-card,
-            .resource-card {
+            .video-card {
                 flex: 1 1 100%;
+            }
+
+            .plugins-feature {
+                padding: 1.5rem;
             }
 
             .social-links {
@@ -955,6 +952,13 @@
                 </a>
             </li>
             <li>
+                <a href="#plugins">
+                    <span data-lang="en" class="active">Plugins</span>
+                    <span data-lang="uk">Плагіни</span>
+                    <span data-lang="ru">Плагины</span>
+                </a>
+            </li>
+            <li>
                 <a href="#contact">
                     <span data-lang="en" class="active">Contact</span>
                     <span data-lang="uk">Контакти</span>
@@ -966,13 +970,6 @@
                     <span data-lang="en" class="active">Videos</span>
                     <span data-lang="uk">Виступи</span>
                     <span data-lang="ru">Выступления</span>
-                </a>
-            </li>
-            <li>
-                <a href="#resources">
-                    <span data-lang="en" class="active">Resources</span>
-                    <span data-lang="uk">Матеріали</span>
-                    <span data-lang="ru">Материалы</span>
                 </a>
             </li>
 
@@ -1029,6 +1026,58 @@
         </div>
     </section>
 
+    <!-- Plugins Section -->
+    <section id="plugins">
+        <!-- English Title -->
+        <h2 data-lang="en" class="active">🧩 AI Agent Plugins</h2>
+        <!-- Ukrainian Title -->
+        <h2 data-lang="uk">🧩 Плагіни для AI-агентів</h2>
+        <!-- Russian Title -->
+        <h2 data-lang="ru">🧩 Плагины для AI-агентов</h2>
+
+        <div class="plugins-feature">
+            <!-- English -->
+            <div data-lang="en" class="active">
+                <p class="plugins-lead">A marketplace of eight plugins I built for Claude Code and Codex CLI and use every day: Crashlytics crash forensics with git blame, multi-agent code review, an Obsidian-backed project tracker, a vertical-video clip maker. Most of them are dual-target — the same plugin runs in both CLIs. Open source, MIT.</p>
+            </div>
+            <!-- Ukrainian -->
+            <div data-lang="uk">
+                <p class="plugins-lead">Маркетплейс із восьми плагінів, які я написав для Claude Code і Codex CLI та використовую щодня: форензика крашів Crashlytics із git blame, мультиагентний код-рев'ю, трекер проєктів на Obsidian, нарізач вертикальних відео. Більшість dual-target — той самий плагін працює в обох CLI. Відкритий код, MIT.</p>
+            </div>
+            <!-- Russian -->
+            <div data-lang="ru">
+                <p class="plugins-lead">Маркетплейс из восьми плагинов, которые я написал для Claude Code и Codex CLI и использую каждый день: форензика крашей Crashlytics с git blame, мультиагентный код-ревью, трекер проектов на Obsidian, нарезатель вертикальных видео. Большинство dual-target — один и тот же плагин работает в обоих CLI. Открытый код, MIT.</p>
+            </div>
+
+            <ul class="plugin-chips">
+                <li>Crashlytics</li>
+                <li>Obsidian Tracker</li>
+                <li>Combined Review</li>
+                <li>Auto Theme</li>
+                <li>Locale Notifications</li>
+                <li>Drawbridge</li>
+                <li>Plugin Cross Port</li>
+                <li>Clip Maker</li>
+            </ul>
+
+            <!-- English -->
+            <div class="resource-buttons active" data-lang="en">
+                <a href="plugins.html" class="download-btn">Plugin overview</a>
+                <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">View on GitHub</a>
+            </div>
+            <!-- Ukrainian -->
+            <div class="resource-buttons" data-lang="uk">
+                <a href="plugins.html" class="download-btn">Огляд плагінів</a>
+                <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">Дивитись на GitHub</a>
+            </div>
+            <!-- Russian -->
+            <div class="resource-buttons" data-lang="ru">
+                <a href="plugins.html" class="download-btn">Обзор плагинов</a>
+                <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">Смотреть на GitHub</a>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact">
         <!-- English Title -->
@@ -1056,7 +1105,7 @@
             <a href="https://t.me/maliastra" target="_blank" rel="noopener" class="social-card">
                 <svg><use href="#telegram-icon"></use></svg>
                 <div class="social-info">
-                    <div class="social-name" data-lang="en">Telegram Channel</div>
+                    <div class="social-name active" data-lang="en">Telegram Channel</div>
                     <div class="social-name" data-lang="uk">Telegram-канал</div>
                     <div class="social-name" data-lang="ru">Telegram-канал</div>
                 </div>
@@ -1303,78 +1352,6 @@
         </div>
     </section>
 
-    <!-- Resources Section -->
-    <section id="resources">
-        <!-- English Title -->
-        <h2 data-lang="en" class="active">Resources & Downloads</h2>
-        <!-- Ukrainian Title -->
-        <h2 data-lang="uk">Матеріали та завантаження</h2>
-        <!-- Russian Title -->
-        <h2 data-lang="ru">Материалы и загрузки</h2>
-        
-        <div class="resources-grid">
-            <div class="resource-card">
-                <!-- English -->
-                <div data-lang="en" class="active">
-                    <h3 class="resource-title">🧩 AI Agent Plugins Marketplace</h3>
-                    <p class="resource-description">Eight plugins for Claude Code and Codex CLI: Crashlytics crash analysis, multi-agent code review, an Obsidian task tracker, a vertical-video clip maker, and more. Inside: details on the current lineup and setup instructions.</p>
-                    <div class="resource-buttons">
-                        <a href="plugins.html" class="download-btn">Overview</a>
-                        <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn" target="_blank" rel="noopener">View on GitHub</a>
-                    </div>
-                </div>
-                <!-- Ukrainian -->
-                <div data-lang="uk">
-                    <h3 class="resource-title">🧩 Маркетплейс плагінів для AI-агентів</h3>
-                    <p class="resource-description">Вісім плагінів для Claude Code і Codex CLI: аналіз крашів Crashlytics, мультиагентний код-рев'ю, трекер задач в Obsidian, нарізач вертикальних відео та інше. Усередині — подробиці про поточний склад та інструкція з підключення.</p>
-                    <div class="resource-buttons">
-                        <a href="plugins.html" class="download-btn">Огляд</a>
-                        <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn" target="_blank" rel="noopener">Дивитись на GitHub</a>
-                    </div>
-                </div>
-                <!-- Russian -->
-                <div data-lang="ru">
-                    <h3 class="resource-title">🧩 Маркетплейс плагинов для AI-агентов</h3>
-                    <p class="resource-description">Восемь плагинов для Claude Code и Codex CLI: анализ крашей Crashlytics, мультиагентный код-ревью, трекер задач в Obsidian, нарезатель вертикальных видео и другое. Внутри подробности по текущему составу и инструкция по подключению.</p>
-                    <div class="resource-buttons">
-                        <a href="plugins.html" class="download-btn">Обзор</a>
-                        <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn" target="_blank" rel="noopener">Смотреть на GitHub</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="resource-card">
-                <!-- English -->
-                <div data-lang="en" class="active">
-                    <h3 class="resource-title">🐛 Crashlytics Analysis Prompt</h3>
-                    <p class="resource-description">Professional system prompt for Firebase Crashlytics analysis using Claude AI and MCP servers. Structured approach for root cause analysis, git blame integration, and automated JIRA ticket generation. Designed for Android banking applications with 99%+ crash-free users target.</p>
-                    <div class="resource-buttons">
-                        <a href="res/crashlytics-prompt.md" class="download-btn" target="_blank" rel="noopener">View</a>
-                        <a href="res/crashlytics-prompt.md" class="download-btn secondary" download>Download</a>
-                    </div>
-                </div>
-                <!-- Ukrainian -->
-                <div data-lang="uk">
-                    <h3 class="resource-title">🐛 Промпт для аналізу Crashlytics</h3>
-                    <p class="resource-description">Професійний системний промпт для аналізу Firebase Crashlytics з використанням Claude AI та MCP-серверів. Структурований підхід до аналізу першопричин, інтеграція з git blame та автоматична генерація JIRA тікетів. Розроблено для Android банківських додатків з метою 99%+ crash-free users.</p>
-                    <div class="resource-buttons">
-                        <a href="res/crashlytics-prompt.md" class="download-btn" target="_blank" rel="noopener">Переглянути</a>
-                        <a href="res/crashlytics-prompt.md" class="download-btn secondary" download>Завантажити</a>
-                    </div>
-                </div>
-                <!-- Russian -->
-                <div data-lang="ru">
-                    <h3 class="resource-title">🐛 Промпт для анализа Crashlytics</h3>
-                    <p class="resource-description">Профессиональный системный промпт для анализа Firebase Crashlytics с использованием Claude AI и MCP-серверов. Структурированный подход к анализу первопричин, интеграция с git blame и автоматическая генерация JIRA тикетов. Разработан для Android банковских приложений с целью 99%+ crash-free users.</p>
-                    <div class="resource-buttons">
-                        <a href="res/crashlytics-prompt.md" class="download-btn" target="_blank" rel="noopener">Посмотреть</a>
-                        <a href="res/crashlytics-prompt.md" class="download-btn secondary" download>Скачать</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
     </main>
 
     <!-- Footer -->
