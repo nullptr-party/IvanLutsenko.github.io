@@ -1,0 +1,47 @@
+name: sync-plugins
+
+# Держит номера версий и таргеты на plugins.html в согласии с манифестами
+# awac-ai-agent-plugins. Живёт здесь, а не в репе плагинов, чтобы обойтись
+# встроенным GITHUB_TOKEN: кросс-репный workflow_dispatch потребовал бы PAT.
+# Цена — лаг до следующего прогона по расписанию вместо мгновенной реакции.
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'plugins.html'
+      - 'index.html'
+      - 'scripts/sync-plugins.py'
+      - '.github/workflows/sync-plugins.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-plugins
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Падает, если манифест недоступен или если на странице не хватает карточки
+      # под новый плагин — такое чинится только руками, текстом на трёх языках.
+      - name: Sync versions and targets
+        run: python3 scripts/sync-plugins.py
+
+      - name: Commit if the manifests moved
+        run: |
+          if git diff --quiet; then
+            echo "манифесты не двигались, коммитить нечего"
+            exit 0
+          fi
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am 'Sync plugin versions from the marketplace manifest'
+          git push
