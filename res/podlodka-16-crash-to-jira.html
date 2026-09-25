@@ -92,6 +92,11 @@ b { color: var(--accent); font-weight: 600; }
 .qr img { width: 100%; height: 100%; object-fit: contain; }
 .qr-cap { text-align: center; font-size: 21px; color: var(--dim); margin-top: 10px; }
 a { color: var(--accent); }
+.cover { padding: 0; align-items: stretch; }
+.deck.bleed { inset: 0; border-color: transparent; outline-color: transparent; }
+.deck.bleed .chrome { display: none; }
+.deck.bleed .stamp { visibility: hidden; }   /* не display:none — иначе ломается замер ширины */
+.cover img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .closing { flex: 1; display: flex; align-items: center; justify-content: center; gap: 64px; }
 .closing .plate { flex: none; border: 1px solid var(--line); padding: 9px; position: relative; }
 .closing .plate img { display: block; width: 1230px; filter: url(#duo) contrast(1.04); }
@@ -128,7 +133,7 @@ a { color: var(--accent); }
 </svg>
 <div class="deck">
   <div class="stage">
-<div class="slide"><div class="center"><h1>crash → llm → jira</h1><div class="lead frag">разбор одного краша: 30–∞ минут руками — или одна команда</div><div class="rows tight" style="max-width:900px"><div class="row frag"><div class="label">автор</div><div class="value">Иван Луценко</div></div><div class="row frag"><div class="label">роль</div><div class="value">Android Tech Lead, Bereke Bank</div></div></div></div></div>
+<div class="slide nostamp"><div class="center"><h1>crash → llm → jira</h1><div class="lead frag">разбор одного краша: 30–∞ минут руками — или одна команда</div><div class="rows tight" style="max-width:900px"><div class="row frag"><div class="label">автор</div><div class="value">Иван Луценко</div></div><div class="row frag"><div class="label">роль</div><div class="value">Android Tech Lead, Bereke Bank</div></div></div></div></div>
 <div class="slide"><h2>Как дошли до плагина</h2><div class="rows"><div class="row frag"><div class="label">Май 2024</div><div class="value">Gemini прямо в консоли Crashlytics: «что могло произойти» — без кода проекта</div></div><div class="row frag"><div class="label">Весна 2025</div><div class="value">Проектный промпт на 249 строк в Claude Desktop</div></div><div class="row frag"><div class="label">Январь 2026</div><div class="value">Плагин <b>v3.0.0</b>: агенты, <code>git blame</code>, Android и iOS. Сегодня <b>v4.4.5</b> — дальше про то, из чего он собран</div></div></div></div>
 <div class="slide"><h2>Рецепт: чего не хватало проекту в Claude Desktop</h2><div class="rakes"><div class="rake frag"><div class="sym">Удобства</div><div class="fix">Промпту стектрейс приносишь руками. В плагине <b>4 уровня</b>: <code>MCP fast-path</code> → fetcher-агент → REST → ручной ввод. Отвалился верхний — работает следующий, на входе по-прежнему один issue ID. <span class="ver">v4.2.0 → 4.4.4</span></div></div><div class="rake frag"><div class="sym">Разделения контекстов</div><div class="fix">Классификация — 17 секунд на дешёвой модели, форензика — Opus, 27 обращений к инструментам, почти 7 минут. Один большой промпт гонит всё по верхней ставке и тонет в собственном контексте. <span class="ver">5 агентов</span></div></div><div class="rake frag"><div class="sym">Честной проверки результата</div><div class="fix">Проверка скриптом, не той же моделью, которая только что написала отчёт. <span class="ver">следующий слайд</span></div></div><div class="rake frag"><div class="sym">Проверки правок</div><div class="fix">Хук на пуше в маркетплейс - 7 эталонных отчётов. Без них промпт не рефакторишь: правишь строку — и не уверен, не сломал ли чего в остальных шести. <span class="ver">v4.4.3</span></div></div></div></div>
 <div class="slide"><h2>Гейт: почему скрипт, а не модель</h2><div class="split"><div class="rakes"><div class="rake frag"><div class="sym">Было 3–5 секунд, стало 0.03</div><div class="fix">Гейт был отдельным агентом на Haiku: токены на каждый прогон и вердикт каждый раз чуть-чуть другой. Стал скриптом <code>validate-report.py</code> — те же 14 полей <b>в сто раз быстрее</b> и за ноль токенов. Один и тот же отчёт всегда даёт один и тот же вердикт. <span class="ver">v4.3.0</span></div></div><div class="rake frag"><div class="sym">Скрипт смотрит на следы, а не на выводы</div><div class="fix">Есть ли в отчёте <code>git blame</code>, есть ли файл с автором и коммитом и т.д. Модель может уверенно написать вывод, не сходив ни в один файл — <b>скрипт видит, что она туда не ходила</b>. <span class="ver">v4.3.0 → 4.4.5</span></div></div><div class="rake frag"><div class="sym">Модель нужна только там, где нужно суждение</div><div class="fix">Вердикта три: <code>pass</code>, <code>fail</code> и <code>null</code>. Поля нет — режет скрипт. Поле есть, но выглядит отпиской — <code>needs_review</code>, и дальше решает модель. <span class="ver">v4.4.3</span></div></div></div><pre class="code">def chk_executed_commands(sections):
@@ -144,7 +149,7 @@ elif needs_review:
 else:
     pass_val = True</pre></div></div>
 <div class="slide"><div class="center" style="align-items:center;text-align:center"><div class="big">demo</div></div></div>
-<div class="slide"><div class="closing"><figure class="plate"><img src="podlodka-16-img/harold-lead.jpg" alt=""><span class="meme top">БУДУТ ВОПРОСЫ</span><span class="meme bottom">ОБРАЩАЙТЕСЬ</span></figure><div class="close-right"><div class="lk"><img src="podlodka-16-img/qr-telegram-channel.png" alt=""><span>t.me/maliastra</span></div></div></div></div>
+<div class="slide nostamp"><div class="closing"><figure class="plate"><img src="podlodka-16-img/harold-lead.jpg" alt=""><span class="meme top">БУДУТ ВОПРОСЫ</span><span class="meme bottom">ОБРАЩАЙТЕСЬ</span></figure><div class="close-right"><div class="lk"><img src="podlodka-16-img/qr-telegram-channel.png" alt=""><span>t.me/maliastra</span></div></div></div></div>
   </div>
   <div class="chrome chrome-bottom"><span>SHEET <span id="cur">01</span> OF <span id="total">7</span></span><span id="clock"></span><span>REV. 4.4.5 · 15.09.2026</span></div>
   <div class="stamp"><img src="podlodka-16-img/qr-plugins.png" alt="QR: страница плагинов"><span>ivan.nullptr.party/plugins</span></div>
@@ -158,7 +163,8 @@ let si = 0, fi = 0;
 document.getElementById('total').textContent = slides.length;
 function render() {
   tick();
-  stamp.classList.toggle('off', si === 0 || si === slides.length - 1);  // не на титуле и не на финале
+  stamp.classList.toggle('off', slides[si].classList.contains('nostamp'));
+  deck.classList.toggle('bleed', slides[si].classList.contains('cover'));  // чужой макет — во весь экран
   slides.forEach((s, i) => s.classList.toggle('active', i === si));
   frags(slides[si]).forEach((f, i) => f.classList.toggle('on', i < fi));
   document.getElementById('cur').textContent = String(si + 1).padStart(2, '0');
@@ -186,8 +192,12 @@ function tick() {                    // вызывается из render(), si �
 }
 const clock = document.getElementById('clock');
 const stamp = document.querySelector('.stamp');
+const deck = document.querySelector('.deck');
 // сторона квадрата = ширина подписи; меряем после загрузки шрифта
-const fitStamp = () => { stamp.style.width = stamp.querySelector('span').offsetWidth + 'px'; };
+const fitStamp = () => {           // 0 = элемент скрыт через display:none, ширину не трогаем
+  const w = stamp.querySelector('span').offsetWidth;
+  if (w > 20) stamp.style.width = w + 'px';
+};
 fitStamp();
 if (document.fonts) document.fonts.ready.then(fitStamp);
 const mmss = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');

@@ -95,7 +95,7 @@ a { color: var(--accent); }
 .cover { padding: 0; align-items: stretch; }
 .deck.bleed { inset: 0; border-color: transparent; outline-color: transparent; }
 .deck.bleed .chrome { display: none; }
-.deck.bleed .stamp { display: none; }
+.deck.bleed .stamp { visibility: hidden; }   /* не display:none — иначе ломается замер ширины */
 .cover img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .closing { flex: 1; display: flex; align-items: center; justify-content: center; gap: 64px; }
 .closing .plate { flex: none; border: 1px solid var(--line); padding: 9px; position: relative; }
@@ -195,7 +195,10 @@ const clock = document.getElementById('clock');
 const stamp = document.querySelector('.stamp');
 const deck = document.querySelector('.deck');
 // сторона квадрата = ширина подписи; меряем после загрузки шрифта
-const fitStamp = () => { stamp.style.width = stamp.querySelector('span').offsetWidth + 'px'; };
+const fitStamp = () => {           // 0 = элемент скрыт через display:none, ширину не трогаем
+  const w = stamp.querySelector('span').offsetWidth;
+  if (w > 20) stamp.style.width = w + 'px';
+};
 fitStamp();
 if (document.fonts) document.fonts.ready.then(fitStamp);
 const mmss = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
