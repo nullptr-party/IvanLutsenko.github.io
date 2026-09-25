@@ -616,6 +616,28 @@
             background: rgba(0, 0, 0, 0.5);
         }
 
+        /* Обложка колоды: та же рамка, что у видео, но ведёт на слайды */
+        .deck-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: hidden;
+        }
+
+        .deck-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .deck-cover:hover img {
+            transform: scale(1.04);
+        }
+
         .play-button {
             width: 80px;
             height: 80px;
@@ -1284,8 +1306,8 @@
                 </div>
             </div>
 
-            <!-- Video Card 6 — hidden -->
-            <div class="video-card" hidden>
+            <!-- Video Card 6 -->
+            <div class="video-card">
                 <div class="video-wrapper">
                     <div class="video-placeholder" data-video-id="vQ5SkC84eYM" role="button" tabindex="0" aria-label="Play video: Crash Analysis Evolution" data-aria-en="Play video: Crash Analysis Evolution" data-aria-uk="Відтворити відео: Crash Analysis Evolution" data-aria-ru="Воспроизвести видео: Crash Analysis Evolution">
                         <img class="video-thumb" src="https://img.youtube.com/vi/vQ5SkC84eYM/maxresdefault.jpg" alt="" loading="lazy">
@@ -1317,6 +1339,41 @@
                         <p class="video-description">Как анализ крешей прошёл путь от ручного копания в Crashlytics до мультиагентского пайплайна на базе Claude AI и MCP-серверов — анализ первопричин, интеграция с git blame и автоматическая генерация JIRA тикетов с целью 99%+ crash-free users в банковском Android-приложении. Выступление на nullptr.talks[2].</p>
                         <div class="resource-buttons">
                             <a href="res/crashlytics-talk.html" class="download-btn" target="_blank" rel="noopener">Слайды</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Card 7 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <a class="deck-cover" href="res/podlodka-16-crash-to-jira.html" target="_blank" rel="noopener" aria-label="Open slides: crash to llm to jira" data-aria-en="Open slides: crash to llm to jira" data-aria-uk="Відкрити слайди: crash to llm to jira" data-aria-ru="Открыть слайды: crash to llm to jira">
+                        <img src="res/podlodka-16-img/cover.jpg" alt="" loading="lazy">
+                    </a>
+                </div>
+                <div class="video-info">
+                    <!-- English -->
+                    <div data-lang="en" class="active">
+                        <h3 class="video-title">crash &rarr; llm &rarr; jira: One Crash, One Command</h3>
+                        <p class="video-description">A recipe for a crash-analysis plugin and why a prompt alone is not enough: fetching the data itself, facts pulled from the repository instead of the model's memory, roles split across agents, and a quality gate moved out of the LLM into a script. Presented at Podlodka Android Crew #16.</p>
+                        <div class="resource-buttons">
+                            <a href="res/podlodka-16-crash-to-jira.html" class="download-btn" target="_blank" rel="noopener">Slides</a>
+                        </div>
+                    </div>
+                    <!-- Ukrainian -->
+                    <div data-lang="uk">
+                        <h3 class="video-title">crash &rarr; llm &rarr; jira: один креш, одна команда</h3>
+                        <p class="video-description">Рецепт плагіна для розбору крешів і чому самого промпта не вистачає: дані приходять самі, факти з репозиторію, а не з пам'яті моделі, ролі рознесені по агентах, а гейт якості винесений із LLM у скрипт. Виступ на Podlodka Android Crew #16.</p>
+                        <div class="resource-buttons">
+                            <a href="res/podlodka-16-crash-to-jira.html" class="download-btn" target="_blank" rel="noopener">Слайди</a>
+                        </div>
+                    </div>
+                    <!-- Russian -->
+                    <div data-lang="ru">
+                        <h3 class="video-title">crash &rarr; llm &rarr; jira: один краш, одна команда</h3>
+                        <p class="video-description">Рецепт плагина для разбора крашей и почему промпта может не хватить: данные приходят сами, факты берутся из репозитория, а не из памяти модели, роли разведены по агентам, а гейт качества вынесен из LLM в скрипт. Выступление на Podlodka Android Crew #16.</p>
+                        <div class="resource-buttons">
+                            <a href="res/podlodka-16-crash-to-jira.html" class="download-btn" target="_blank" rel="noopener">Слайды</a>
                         </div>
                     </div>
                 </div>
