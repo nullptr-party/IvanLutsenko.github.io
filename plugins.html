@@ -592,6 +592,20 @@
                     <span class="tag tag-target" data-plugin="clip-maker" data-lang="ru">Claude Code + Codex</span>
                 </span>
             </a>
+            <a href="#talk-deck">Talk Deck
+                <span data-lang="en" class="active">Talk decks on Craft → PDF and a site card</span>
+                <span data-lang="uk">Деки доповідей на Craft → PDF і картка на сайті</span>
+                <span data-lang="ru">Деки докладов на Craft → PDF и карточка на сайте</span>
+                <span class="toc-meta">
+                    <span class="tag tag-beta" data-lang="en">Beta</span>
+                    <span class="tag tag-beta" data-lang="uk">Бета</span>
+                    <span class="tag tag-beta" data-lang="ru">Бета</span>
+                    <span class="tag tag-ver" data-plugin="talk-deck">v0.1.0</span>
+                    <span class="tag tag-target" data-plugin="talk-deck" data-lang="en">Claude Code + Codex</span>
+                    <span class="tag tag-target" data-plugin="talk-deck" data-lang="uk">Claude Code + Codex</span>
+                    <span class="tag tag-target" data-plugin="talk-deck" data-lang="ru">Claude Code + Codex</span>
+                </span>
+            </a>
             <a href="#nyan-progress">Nyan Progress
                 <span data-lang="en" class="active">Nyan Cat over the turn spinner</span>
                 <span data-lang="uk">Nyan Cat над спінером ходу</span>
@@ -1153,6 +1167,28 @@ $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"
             <!-- screenshot slot: drop res/plugins/clip-maker.png in place, then uncomment
             <img class="shot" src="res/plugins/clip-maker.png" alt="Clip maker pipeline output" loading="lazy">
             -->
+        </article>
+
+        <article class="plugin" id="talk-deck">
+            <div class="plugin-head">
+                <h4>Talk Deck</h4>
+                <span class="tag tag-beta active" data-lang="en">Beta</span>
+                <span class="tag tag-beta" data-lang="uk">Бета</span>
+                <span class="tag tag-beta" data-lang="ru">Бета</span>
+                <span class="tag tag-ver" data-plugin="talk-deck">v0.1.0</span>
+                <span class="tag tag-target active" data-plugin="talk-deck" data-lang="en">Claude Code + Codex</span>
+                <span class="tag tag-target" data-plugin="talk-deck" data-lang="uk">Claude Code + Codex</span>
+                <span class="tag tag-target" data-plugin="talk-deck" data-lang="ru">Claude Code + Codex</span>
+            </div>
+
+            <p class="plugin-desc active" data-lang="en">Talk decks on top of the Craft skill: a fresh holiday theme for every talk, the author's defaults, a themed Harold on the closing slide, a PDF for organizers and a card on the author's site. A static check runs after every edit inside a deck.</p>
+            <p class="plugin-desc" data-lang="uk">Деки доповідей поверх скіла Craft: нова святкова тема на кожну доповідь, дефолти автора, тематичний Гарольд на фінальному слайді, PDF для організаторів і картка на сайті автора. Після кожної правки в деку запускається статична перевірка.</p>
+            <p class="plugin-desc" data-lang="ru">Деки докладов поверх скилла Craft: свежая праздничная тема на каждый доклад, дефолты автора, тематический Гарольд на финальном слайде, PDF для организаторов и карточка на сайте автора. После каждой правки в деке запускается статическая проверка.</p>
+
+<pre><span class="p">&gt;</span> <span class="k">/deck-new</span> CI/CD in a bank --date 2026-12-20
+<span class="p">&gt;</span> <span class="k">/deck-harold</span> place     <span class="c"># Harold onto the closing slide</span>
+<span class="p">&gt;</span> <span class="k">/deck-pdf</span> --final      <span class="c"># one PDF page per slide</span>
+<span class="p">&gt;</span> <span class="k">/deck-publish</span> --event "Podlodka #17"</pre>
         </article>
 
         <article class="plugin" id="nyan-progress">
