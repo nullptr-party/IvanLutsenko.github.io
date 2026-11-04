@@ -536,6 +536,20 @@
                     <span class="tag tag-target" data-plugin="plugin-cross-port" data-lang="ru">Claude Code + Codex</span>
                 </span>
             </a>
+            <a href="#push-gate">Push Gate
+                <span data-lang="en" class="active">Confirm every git push the model runs</span>
+                <span data-lang="uk">Підтвердження кожного git push від моделі</span>
+                <span data-lang="ru">Подтверждение каждого git push от модели</span>
+                <span class="toc-meta">
+                    <span class="tag tag-beta" data-lang="en">Beta</span>
+                    <span class="tag tag-beta" data-lang="uk">Бета</span>
+                    <span class="tag tag-beta" data-lang="ru">Бета</span>
+                    <span class="tag tag-ver" data-plugin="push-gate">v0.2.0</span>
+                    <span class="tag tag-target" data-plugin="push-gate" data-lang="en">Claude Code only</span>
+                    <span class="tag tag-target" data-plugin="push-gate" data-lang="uk">Лише Claude Code</span>
+                    <span class="tag tag-target" data-plugin="push-gate" data-lang="ru">Только Claude Code</span>
+                </span>
+            </a>
             <a href="#auto-theme">Auto Theme
                 <span data-lang="en" class="active">Terminal theme follows macOS light/dark</span>
                 <span data-lang="uk">Тема терміналу слідує за light/dark macOS</span>
@@ -618,20 +632,6 @@
                     <span class="tag tag-target" data-plugin="nyan-progress" data-lang="en">Claude Code only</span>
                     <span class="tag tag-target" data-plugin="nyan-progress" data-lang="uk">Лише Claude Code</span>
                     <span class="tag tag-target" data-plugin="nyan-progress" data-lang="ru">Только Claude Code</span>
-                </span>
-            </a>
-            <a href="#push-gate">Push Gate
-                <span data-lang="en" class="active">Confirm every git push the model runs</span>
-                <span data-lang="uk">Підтвердження кожного git push від моделі</span>
-                <span data-lang="ru">Подтверждение каждого git push от модели</span>
-                <span class="toc-meta">
-                    <span class="tag tag-beta" data-lang="en">Beta</span>
-                    <span class="tag tag-beta" data-lang="uk">Бета</span>
-                    <span class="tag tag-beta" data-lang="ru">Бета</span>
-                    <span class="tag tag-ver" data-plugin="push-gate">v0.2.0</span>
-                    <span class="tag tag-target" data-plugin="push-gate" data-lang="en">Claude Code only</span>
-                    <span class="tag tag-target" data-plugin="push-gate" data-lang="uk">Лише Claude Code</span>
-                    <span class="tag tag-target" data-plugin="push-gate" data-lang="ru">Только Claude Code</span>
                 </span>
             </a>
         </div>
@@ -997,6 +997,27 @@ $ <span class="k">cross_port.py</span> plugin adapt plugins/example --apply</pre
                 </li>
             </ul>
         </article>
+
+        <article class="plugin" id="push-gate">
+            <div class="plugin-head">
+                <h4>Push Gate</h4>
+                <span class="tag tag-beta active" data-lang="en">Beta</span>
+                <span class="tag tag-beta" data-lang="uk">Бета</span>
+                <span class="tag tag-beta" data-lang="ru">Бета</span>
+                <span class="tag tag-ver" data-plugin="push-gate">v0.2.0</span>
+                <span class="tag tag-target active" data-plugin="push-gate" data-lang="en">Claude Code only</span>
+                <span class="tag tag-target" data-plugin="push-gate" data-lang="uk">Лише Claude Code</span>
+                <span class="tag tag-target" data-plugin="push-gate" data-lang="ru">Только Claude Code</span>
+            </div>
+
+            <p class="plugin-desc active" data-lang="en">Asks before every git push the model runs, in Claude Code's own question dialog: a click confirms that one command, anything else refuses it. Built as a mod with function hooks, so prefix tricks like git -C &lt;path&gt; push do not slip past it.</p>
+            <p class="plugin-desc" data-lang="uk">Питає перед кожним git push, який запускає модель, у власному діалозі питань Claude Code: клік підтверджує саме цю команду, будь-що інше її відхиляє. Зроблено як мод на function hooks, тож префіксні трюки на кшталт git -C &lt;path&gt; push повз нього не проходять.</p>
+            <p class="plugin-desc" data-lang="ru">Спрашивает перед каждым git push, который запускает модель, в собственном диалоге вопросов Claude Code: клик подтверждает именно эту команду, всё остальное её отклоняет. Сделано как мод на function hooks, поэтому префиксные трюки вроде git -C &lt;path&gt; push мимо него не проходят.</p>
+
+<pre><span class="p">&gt;</span> git -C ~/repo push origin main
+
+<span class="o">▸ push-gate</span>   command, repo, branch, commits  «Пушить» / «Отмена»</pre>
+        </article>
         <h3 class="group-label" data-lang="en">Environment &amp; media</h3>
         <h3 class="group-label" data-lang="uk">Середовище та медіа</h3>
         <h3 class="group-label" data-lang="ru">Среда и медиа</h3>
@@ -1210,27 +1231,6 @@ $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"
 <pre><span class="p">&gt;</span> <span class="k">/nyan</span> gif     <span class="c"># animated picture</span>
 <span class="p">&gt;</span> <span class="k">/nyan</span> pixel   <span class="c"># static picture</span>
 <span class="p">&gt;</span> <span class="k">/nyan</span> dots    <span class="c"># braille, any terminal</span></pre>
-        </article>
-
-        <article class="plugin" id="push-gate">
-            <div class="plugin-head">
-                <h4>Push Gate</h4>
-                <span class="tag tag-beta active" data-lang="en">Beta</span>
-                <span class="tag tag-beta" data-lang="uk">Бета</span>
-                <span class="tag tag-beta" data-lang="ru">Бета</span>
-                <span class="tag tag-ver" data-plugin="push-gate">v0.2.0</span>
-                <span class="tag tag-target active" data-plugin="push-gate" data-lang="en">Claude Code only</span>
-                <span class="tag tag-target" data-plugin="push-gate" data-lang="uk">Лише Claude Code</span>
-                <span class="tag tag-target" data-plugin="push-gate" data-lang="ru">Только Claude Code</span>
-            </div>
-
-            <p class="plugin-desc active" data-lang="en">Asks before every git push the model runs, in Claude Code's own question dialog: a click confirms that one command, anything else refuses it. Built as a mod with function hooks, so prefix tricks like git -C &lt;path&gt; push do not slip past it.</p>
-            <p class="plugin-desc" data-lang="uk">Питає перед кожним git push, який запускає модель, у власному діалозі питань Claude Code: клік підтверджує саме цю команду, будь-що інше її відхиляє. Зроблено як мод на function hooks, тож префіксні трюки на кшталт git -C &lt;path&gt; push повз нього не проходять.</p>
-            <p class="plugin-desc" data-lang="ru">Спрашивает перед каждым git push, который запускает модель, в собственном диалоге вопросов Claude Code: клик подтверждает именно эту команду, всё остальное её отклоняет. Сделано как мод на function hooks, поэтому префиксные трюки вроде git -C &lt;path&gt; push мимо него не проходят.</p>
-
-<pre><span class="p">&gt;</span> git -C ~/repo push origin main
-
-<span class="o">▸ push-gate</span>   command, repo, branch, commits  «Пушить» / «Отмена»</pre>
         </article>
     </section>
 
