@@ -4,11 +4,11 @@
 
 ## Деплой и домен ⚠️ (главная пастка)
 
-- Боевой домен: **https://ivan.nullptr.party** (custom domain).
-- Дефолтный github.io-адрес **НЕ работает**: `ivanlutsenko.github.io` → 404. Репозиторий лежит под организацией `nullptr-party` (`github.com/nullptr-party/IvanLutsenko.github.io`), и default Pages URL был бы `nullptr-party.github.io/...`, а не `ivanlutsenko.github.io`.
+- Боевой домен: **https://ivan.nullptr.party**. Хостинг — **Netlify**, не GitHub Pages: DNS указывает на `apex-loadbalancer.netlify.com`, ответы с `server: Netlify`. 404 на сайте — страница Netlify «Page not found».
+- Репозиторий лежит под организацией `nullptr-party` (`github.com/nullptr-party/IvanLutsenko.github.io`). Адреса github.io (`ivanlutsenko.github.io`, `nullptr-party.github.io/...`) отдают 404 — сайт там не живёт.
 - **Все абсолютные URL** (`og:image`, `og:url`, `twitter:image`, `canonical`, JSON-LD `url`/`image`) обязаны указывать на `https://ivan.nullptr.party`, иначе картинки/превью отдают 404 и в соцсетях не показываются.
-- CNAME-файла в репо нет — домен настроен в GitHub Pages settings (не удивляйся отсутствию CNAME).
-- Деплой: push в `master` → GitHub Pages подхватывает за 1–2 мин. Проверять изменения на ivan.nullptr.party.
+- `netlify.toml`, CNAME и `_redirects` в репо нет — домен и деплой настроены в панели Netlify.
+- Деплой: push в `master` → Netlify подхватывает за 1–2 мин. Проверять изменения на ivan.nullptr.party.
 - Telegram/соцсети агрессивно кешируют OG-превью. Принудительно обновить — прогнать ссылку через `@WebpageBot` в Telegram.
 
 ## Структура
