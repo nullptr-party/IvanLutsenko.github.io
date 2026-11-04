@@ -1,0 +1,121 @@
+{
+  "name": "kolesa-ai-meetup-2026",
+  "title": "Читать логи и MR? А агенты зачем?",
+  "built": "2026-11-04T20:45:40+00:00",
+  "craft": "1.0.0",
+  "source": {
+    "commit": null,
+    "dirty": null
+  },
+  "pages": 60,
+  "files": {
+    "base.css": {
+      "bytes": 17623,
+      "sha256": "33fc24cbdb6171ced0c6bef23206a21aa2280be94aa10c80fd3dd05ada74209c"
+    },
+    "code-highlight.js": {
+      "bytes": 2638,
+      "sha256": "454112f359a8d3afee6b794b2baa00efb618a02cbe58727ce7a614d9dc14f25f"
+    },
+    "deck-theme.css": {
+      "bytes": 27457,
+      "sha256": "1c116242ac031bd6d5468e914e26ed6d965fee23697c02fb703d38863e12b40b"
+    },
+    "deck.js": {
+      "bytes": 38036,
+      "sha256": "3fd3e3cc2e71073319707de0564377af0a040b7fe114755a5320683d32cacf87"
+    },
+    "favicon.svg": {
+      "bytes": 310,
+      "sha256": "729569403b250453ba601ceac3964b3bf289ae66fe5545828f48b4d8de3cd2f0"
+    },
+    "fonts/caveat-normal-400-700-cyrillic.woff2": {
+      "bytes": 77224,
+      "sha256": "cb0aa78eef73dfb083068a56ba321a4a5cc9841721d261ea8ab5f549db8c7e18"
+    },
+    "fonts/caveat-normal-400-700-latin.woff2": {
+      "bytes": 74572,
+      "sha256": "7a0049db01fdd8fc7af7ef36675862a72a5c76d0cb45ae63c9f5b6f1b769dac7"
+    },
+    "fonts/geologica-cyrillic.woff2": {
+      "bytes": 16428,
+      "sha256": "a7dc739efa0c2d4066164b40b15276440978d8efb6003b5f10a6b9c3e5c1cd30"
+    },
+    "fonts/geologica-latin.woff2": {
+      "bytes": 24944,
+      "sha256": "b14f1edee95a57f8782d505232e54584c80c673acbd25a0e7c6366332977b47d"
+    },
+    "fonts/onest-cyrillic.woff2": {
+      "bytes": 14228,
+      "sha256": "37bc16874135c16134679b1db25b87fe80eb9fcd4ef3666af7c531bfde204fe2"
+    },
+    "fonts/onest-latin.woff2": {
+      "bytes": 32236,
+      "sha256": "67849bcc11e02177442da14ad954bfe1cc709553dad137b5003449b303e83fc3"
+    },
+    "fonts/unbounded-normal-700-900-cyrillic.woff2": {
+      "bytes": 31460,
+      "sha256": "c3880f0c5afb7890a102bc4b9c8257703664388f708b4be880ec5f5f68e8ea9d"
+    },
+    "fonts/unbounded-normal-700-900-latin.woff2": {
+      "bytes": 50892,
+      "sha256": "d7f07f8a308ce0a7287d79a65a85cfbc0f4741ef426bf1a3902d24392cc71723"
+    },
+    "index.html": {
+      "bytes": 39352,
+      "sha256": "37d73a27ff456fd5748dc87cdc5ccf08598b1e8bf78f142848619f706fdc5381"
+    },
+    "media/crashlytics-issue.png": {
+      "bytes": 388415,
+      "sha256": "eb563129d2066c2a85b8fd5ea34e6154e539a78218a5a45488a30bc16f5147fb"
+    },
+    "media/crashlytics-overview.png": {
+      "bytes": 651889,
+      "sha256": "9f93dacff77bc90f00a0dd2c8d38d2d0b3895e7f092488a8ad162d65c692769f"
+    },
+    "media/harold.webp": {
+      "bytes": 95562,
+      "sha256": "adf6c2d6f58e34437fb9e555f0c5c5a765dc122208e80b5b2ffc589862006a0e"
+    },
+    "media/slide-005.png": {
+      "bytes": 757678,
+      "sha256": "2118c510ce0ffb6d467bd393886e87bafbff94ee4a71548b6eaa335580a17de9"
+    },
+    "media/slide-006.png": {
+      "bytes": 531635,
+      "sha256": "72891b0e6d472e92d9e3363bcdf5509b5b01df214ac156427fe05df136b80cf5"
+    },
+    "media/slide-007.png": {
+      "bytes": 628001,
+      "sha256": "f3dbe27a31bde4dbd5d6c10beb1895fbca0735e27f6a7a5b9f1e2255fc7b5b8c"
+    },
+    "media/slide-009.png": {
+      "bytes": 570232,
+      "sha256": "416bec588dd0b10452ead4dc35c2cfb9dc2b629c985867972ca6e2ae0a474be1"
+    },
+    "media/slide-010.png": {
+      "bytes": 624031,
+      "sha256": "859761727f8f8eee56cc090b5c41298ad6f8a919c5c1640a9750bcea490bed22"
+    },
+    "media.js": {
+      "bytes": 13613,
+      "sha256": "2571c68ab8fb762833615c8b03730d9117f77556ec2203ea56c67d22178b739f"
+    },
+    "report-lang.js": {
+      "bytes": 538,
+      "sha256": "96fbe52e896b769810a6be98ae69d0dedab8af0a76527047ead08ad79208a635"
+    },
+    "slides.css": {
+      "bytes": 68636,
+      "sha256": "1fe20adaf36f98a9a66dfe0b963b1060c47af45443bd262902d112d30da883ea"
+    },
+    "tokens.css": {
+      "bytes": 11524,
+      "sha256": "1bfea9765aaf660bb541ea15490cb3db95c80d6ad19019b8fd6a8972cf631cea"
+    },
+    "vendor/highlight.min.js": {
+      "bytes": 121727,
+      "sha256": "837a6fa5b0c736b52bbde2b2b6190f305da3fc9ed41681db5321507057b5c846"
+    }
+  }
+}

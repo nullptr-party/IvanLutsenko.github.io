@@ -1,0 +1,487 @@
+/* Тема «11.11». Распродажа: белая витрина, распродажный красный,
+   жёлтые ценники. Подпись темы — заголовок обложки на жёлтой бирке
+   с дыркой под нитку. Летящие ценники — отдельный слой body::before,
+   под панелью слайда: при экспорте в Google Slides он уходит в GIF-фон. */
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 700 900;
+  font-display: swap;
+  src: url("fonts/unbounded-normal-700-900-cyrillic.woff2?v=c3880f0c5a") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 700 900;
+  font-display: swap;
+  src: url("fonts/unbounded-normal-700-900-latin.woff2?v=d7f07f8a30") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("fonts/caveat-normal-400-700-cyrillic.woff2?v=cb0aa78eef") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("fonts/caveat-normal-400-700-latin.woff2?v=7a0049db01") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --craft-bg: #fffaf2;
+  --craft-surface: #ffffff;
+  --craft-surface-muted: #fbefdc;
+  --craft-sunken: #1a0a10;
+  --craft-text: #1a0a10;
+  --craft-text-body: #2e1820;
+  --craft-muted: #6b4f58;
+  --craft-line: #ecd6c4;
+  --craft-line-strong: #1a0a10;
+  --craft-accent: #c4001a;
+  --craft-accent-mark: #e3001f;
+  --craft-accent-fill: #c4001a;
+  --craft-accent-tint: rgb(227 0 31 / .1);
+  --craft-on-accent: #ffffff;
+  --craft-on-accent-muted: #ffdfe2;
+  --craft-on-accent-line: rgb(255 255 255 / .4);
+  --craft-data-blue: #2d5bd6;
+  --craft-data-amber: #a86a00;
+  --craft-data-green: #2f8a3e;
+  --craft-selection: rgb(227 0 31 / .2);
+  --craft-code-text: #1a0a10;
+  --craft-code-gold: #8a5600;
+  --craft-code-blue: #2d5bd6;
+}
+
+/* Подпись: hero-строка обложки на жёлтой бирке. Бирка — фон элемента,
+   дырка под нитку — радиальная маска слева, текст на ней не лежит. */
+.s-cover .type-hero {
+  font-family: "Unbounded", var(--font-display);
+  font-weight: 900;
+  letter-spacing: -.01em;
+  font-size: 5.6cqw;
+  line-height: 1.08;
+  max-width: 66cqw;
+  color: #1a0a10;
+  background: #ffd400;
+  padding: 3.4cqh 4cqw 3.4cqh 7cqw;
+  clip-path: polygon(3.4cqw 0, 100% 0, 100% 100%, 3.4cqw 100%, 0 50%);
+  -webkit-mask: radial-gradient(circle at 3.6cqw 50%, transparent .9cqw, #000 1cqw);
+          mask: radial-gradient(circle at 3.6cqw 50%, transparent .9cqw, #000 1cqw);
+}
+
+/* Обложка — постер распродажи: красная заливка и огромное «11.11» краской справа. */
+.s-cover.surface-accent { background: #c4001a; }
+.s-cover .lanes { display: none; }
+.s-cover .pad { justify-content: flex-start; padding-top: 11cqh; }
+/* «11.11» — краска справа внизу, как раньше; поверх — исправление от руки
+   на 10.11 (митап 10 ноября): зачёркивание и «10» в одной статичной SVG. */
+.s-cover::after {
+  content: "";
+  position: absolute;
+  right: -2cqw; bottom: 6cqh;
+  width: 62cqw; height: 46cqh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .8;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 960 260'><text x='950' y='230' text-anchor='end' font-family='Arial Black,Arial,sans-serif' font-weight='900' font-size='250' fill='%23ffd400'>11.11</text></svg>") right bottom / contain no-repeat;
+}
+.s-cover .cover-date {
+  position: absolute;
+  right: -2cqw; bottom: 6cqh;
+  width: 62cqw; height: 46cqh;
+  overflow: visible;
+  pointer-events: none;
+}
+.s-cover .cover-date__strike {
+  fill: none;
+  stroke: #10131f;
+  stroke-width: 13;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.s-cover .cover-date__ink {
+  font: 700 190px/1 "Caveat", cursive;
+  fill: #10131f;
+}
+
+/* Разделы — чёрная пятница: почти чёрный фон, жёлтый номер. */
+.s-section {
+  background: #1a0a10;
+  color: #fff4f0;
+  --text: #fff4f0;
+  --muted: #e2c6c9;
+}
+.s-section .lanes { display: none; }
+.s-section .jersey { color: #ffd400; }
+.s-section .type-hero { font-family: "Unbounded", var(--font-display); font-weight: 800; }
+
+/* Тонкая «ценниковая» перфорация по верху обычных слайдов. Статично. */
+.slide:not(.s-cover, .s-section)::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: .7cqh;
+  z-index: -1;
+  background: repeating-linear-gradient(90deg, #e3001f 0 3cqw, #ffd400 3cqw 6cqw);
+}
+
+/* Слоты под мемы: пустая витрина. */
+.slide .placeholder {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 14px, rgb(227 0 31 / .06) 14px 15px),
+    var(--craft-surface-muted);
+  color: var(--craft-muted);
+}
+
+/* Летящие ценники — один слой на всю деку, под панелями слайдов.
+   Шесть слоёв, по одному знаку на слой. Размеры плиток без общего шага,
+   каждый слой летит в свою сторону: картинка не складывается в ряды.
+   Двигается только background-position, M останавливает. За 33 с каждый
+   слой проходит ровно одну плитку, цикл бесшовный (для bg.gif). */
+@media screen and (min-width: 700px) { :root { --stage-pad: 5vh; } }
+@media screen {
+  .deck { position: relative; z-index: 1; }
+  body { background: #1a0a10; }
+  .deck:not([data-mode="grid"], [data-mode="strip"]) .slide {
+    box-shadow: 0 0 0 .4vh #ffd400;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='410' height='290'><text x='240' y='71' font-size='22'>%F0%9F%8F%B7%EF%B8%8F</text><text x='72' y='48' font-size='30'>%F0%9F%8F%B7%EF%B8%8F</text><text x='57' y='236' font-size='20'>%F0%9F%8F%B7%EF%B8%8F</text></svg>") 0 0 / 41vw 29vw,
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='470' height='370'><text x='75' y='44' font-size='24'>%F0%9F%9B%8D%EF%B8%8F</text><text x='69' y='163' font-size='18'>%F0%9F%9B%8D%EF%B8%8F</text><text x='289' y='299' font-size='30'>%F0%9F%9B%8D%EF%B8%8F</text></svg>") 0 0 / 47vw 37vw,
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='370' height='430'><text x='303' y='67' font-size='26' font-family='Arial Black,Arial' font-weight='900' fill='%23ffd400'>%25</text><text x='10' y='411' font-size='20' font-family='Arial Black,Arial' font-weight='900' fill='%23ffd400'>%25</text><text x='174' y='227' font-size='32' font-family='Arial Black,Arial' font-weight='900' fill='%23ffd400'>%25</text></svg>") 0 0 / 37vw 43vw,
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='530' height='310'><text x='169' y='220' font-size='22'>%F0%9F%9B%92</text><text x='355' y='111' font-size='28'>%F0%9F%9B%92</text></svg>") 0 0 / 53vw 31vw,
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='430' height='230'><text x='299' y='196' font-size='22' font-family='Arial Black,Arial' font-weight='900' fill='%23e3001f'>11.11</text><text x='26' y='129' font-size='16' font-family='Arial Black,Arial' font-weight='900' fill='%23e3001f'>11.11</text></svg>") 0 0 / 43vw 23vw,
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='590' height='410'><text x='151' y='212' font-size='24'>%F0%9F%92%B8</text><text x='88' y='390' font-size='18'>%F0%9F%92%B8</text><text x='449' y='323' font-size='30'>%F0%9F%92%B8</text></svg>") 0 0 / 59vw 41vw;
+    opacity: .7;
+    animation: sale-drift 33s linear infinite;
+  }
+}
+@keyframes sale-drift { to { background-position: 41vw -29vw, -47vw 37vw, 0vw -43vw, 0vw 31vw, -43vw 0vw, 59vw 41vw; } }
+
+/* Ценник: старая цена красная и зачёркнута, новая — на жёлтой бирке. */
+.s-pricetag .is-before .comparison-value s {
+  /* Черта цвета текста: при проверке контраста прячется вместе с буквами. */
+  text-decoration: line-through currentColor .4cqw;
+  color: var(--craft-accent);
+}
+.s-pricetag .is-after .comparison-value {
+  justify-self: start;
+  width: fit-content;
+  background: #ffd400;
+  color: #1a0a10;
+  padding: .4cqw 1.6cqw .4cqw 2.6cqw;
+  clip-path: polygon(1.2cqw 0, 100% 0, 100% 100%, 1.2cqw 100%, 0 50%);
+}
+
+
+/* ===== Раскладка слайдов (раунд 6: собрано из правок раундов 3–5) ===== */
+
+/* Контент под заголовком стартует с общей линии движка, а внутри области
+   центрируется по высоте: auto-поля делят пустоту поровну. */
+.pad:has(> .slide-title) > .slide-title + * { margin-top: auto; }
+.pad:has(> .slide-title) > :last-child:not(.slide-title) { margin-bottom: auto; }
+
+/* Без полосок между пунктами: отбивка воздухом. */
+.plain-list > li, .bullets > li { border-top: 0; }
+.bullets li::after { display: none; }
+.bullets > li { grid-template-columns: 6cqw 1fr; }
+.bullets li > div { padding-left: 1cqw; }
+
+/* Акцент в тексте — слово контраста, красным. Смысл держит и позиция. */
+.slide em { font-style: normal; color: var(--craft-accent); }
+
+/* Обо мне: крупно, каждая строка в одну строку, QR по центру правой половины. */
+.slide[data-key="about"] .about { grid-template-columns: 1.35fr 1fr; align-items: center; column-gap: 3cqw; }
+.slide[data-key="about"] .about p { white-space: nowrap; max-width: none; font-size: 2.6cqw; line-height: 1.35; margin: 0 0 2.6cqh; }
+.slide[data-key="about"] .about .name { font-size: 7.6cqw; line-height: 1; margin-bottom: 3.6cqh; }
+.slide[data-key="about"] .about .role { font-weight: 600; font-size: 3cqw; margin-bottom: 6cqh; }
+.slide[data-key="about"] .qr-link { justify-self: center; justify-items: center; }
+.slide[data-key="about"] .qr { width: 27cqw; }
+.slide[data-key="about"] .where { font-size: 2.2cqw; }
+
+/* Фрейм: заголовок и вопрос одного кегля, три плашки на всю ширину. */
+.s-framing .pad { gap: 7cqh; }
+.s-framing .type-hero { font-size: 4.6cqw; max-width: none; }
+.s-framing .chips { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2cqw; }
+.s-framing .chips li {
+  font: 600 3.6cqw/1 var(--font-display); letter-spacing: -.02em;
+  padding: 5.5cqh 2.4cqw; text-align: center;
+  background: var(--craft-surface-muted);
+  border: var(--rule) solid var(--craft-line);
+}
+.s-framing .framing-ask { font: 500 4.6cqw/1.2 var(--font-text); letter-spacing: -.01em; color: var(--craft-text); max-width: none; }
+
+/* Скриншоты Crashlytics: картинке ~65% ширины, пункты крупные. */
+.s-figure[data-key^="crashlytics-"] .content-aside { grid-template-columns: 1.85fr 1fr; gap: 3.4cqw; }
+.s-figure[data-key^="crashlytics-"] .plain-list { --row-pad: 2.4cqh; --marker-size: .9cqw; }
+.s-figure[data-key^="crashlytics-"] .plain-list > li { font: 400 2.3cqw/1.3 var(--font-text); }
+
+/* Анализ руками: четыре коротких пункта — крупно. */
+.slide[data-key="crash-manual"] .bullets { --row-pad: 2.6cqh; }
+.slide[data-key="crash-manual"] .bullets li::before { font-size: 3.8cqw; }
+.slide[data-key="crash-manual"] .bullets li h3 { font-size: 3.4cqw; margin: 0; }
+.slide[data-key="crash-manual"] .bullets > li { align-items: center; }
+
+/* Первый пункт шкалы виден сразу: акцент ведёт с первого события. */
+.deck[data-reveal-mode="steps"] .timeline > li:first-child:not(:has(~ .frag[data-shown])) > i::after { background: var(--accent-mark); }
+.deck[data-reveal-mode="steps"] .timeline > li:first-child:not(:has(~ .frag[data-shown])) :is(.timeline-key, h3) { color: var(--accent); }
+.timeline > li:first-child:not(:has(~ .frag[data-shown])) > i::before { display: none; }
+
+/* Эволюция: вертикальная шкала слева, связи — линия со стрелкой вниз.
+   Справа одна и та же рамка-окно; при смене шага меняется только содержимое. */
+.s-evo .evo { position: relative; flex: 1; min-height: 0; }
+.s-evo .timeline {
+  --evo-gap: 4.2cqh;
+  width: 40%; height: 100%;
+  grid-template-columns: 1fr;
+  grid-auto-rows: auto;
+  row-gap: var(--evo-gap);
+  align-content: center;
+}
+.s-evo .timeline li {
+  display: grid;
+  grid-template-columns: 1.25cqw 1fr;
+  grid-template-rows: auto auto auto;
+  column-gap: 1.4cqw;
+  padding-right: 0;
+}
+.s-evo .timeline li > i { grid-row: 1; grid-column: 1; margin: .5cqh 0 0; height: 1.25cqw; }
+.s-evo .timeline li > i::before { display: none; }
+.s-evo .timeline li > :is(.timeline-key, h3, p) { grid-column: 2; }
+.s-evo .timeline p { max-width: none; margin-top: .3cqh; }
+.s-evo .timeline > li:has(+ li[data-shown])::after,
+.deck:not([data-reveal-mode="steps"]) .s-evo .timeline > li:not(:last-child)::after {
+  content: "";
+  grid-column: 1;
+  grid-row: 2 / span 2;
+  justify-self: center;
+  width: .85cqw;
+  margin-top: .8cqh;
+  margin-bottom: calc(-1 * var(--evo-gap) + .2cqh);
+  background: var(--craft-muted);
+  clip-path: polygon(42% 0, 58% 0, 58% calc(100% - .8cqw), 100% calc(100% - .8cqw), 50% 100%, 0 calc(100% - .8cqw), 42% calc(100% - .8cqw));
+}
+.s-evo .evo-shot {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 56%;
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  background: var(--craft-surface);
+  border: var(--rule) solid var(--craft-line-strong);
+}
+.s-evo .evo-bar {
+  display: flex; align-items: center; gap: .6cqw;
+  padding: 1.2cqh 1.2cqw;
+  background: #1a0a10; color: #fff4f0;
+  font: 500 1.5cqw/1 var(--font-text);
+}
+.s-evo .evo-bar i { width: .8cqw; aspect-ratio: 1; border-radius: 50%; background: #ff5f57; }
+.s-evo .evo-bar i:nth-child(2) { background: #ffd400; }
+.s-evo .evo-bar i:nth-child(3) { background: #28c840; }
+/* Подпись инструмента — краска (attr): окна ложатся друг на друга без наложения текста. */
+.s-evo .evo-bar::after { content: attr(data-tool); margin-left: .8cqw; }
+.s-evo .evo-body {
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 2cqh 1.4cqw;
+  background: var(--craft-surface-muted);
+}
+.s-evo .evo-body img { width: 100%; height: 100%; min-height: 0; object-fit: contain; object-position: 50% 50%; }
+.s-evo .evo-pair { grid-template-rows: 1fr 1fr; gap: 1.6cqh; }
+.s-evo .evo-pair img { min-height: 0; height: 100%; object-fit: contain; }
+/* Приписка от руки прямо по скриншоту: картинка (svg role=img), не текст. */
+.s-evo .evo-note {
+  position: absolute; right: 2cqw; bottom: 5cqh;
+  width: 34cqw; height: auto;
+  overflow: visible; pointer-events: none;
+}
+.s-evo .evo-note text { font: 700 64px/1 "Caveat", cursive; fill: #10131f; }
+
+/* Таблица Desktop против плагина: сетка ячеек с зазорами вместо линий. */
+.slide[data-key="desktop-vs-plugin"] .data-table {
+  table-layout: fixed; width: 100%;
+  border-collapse: separate; border-spacing: .6cqw 1cqh;
+  margin-inline: -.6cqw; width: calc(100% + 1.2cqw);
+  font: 500 1.95cqw/1.3 var(--font-text);
+}
+.slide[data-key="desktop-vs-plugin"] .data-table col:nth-child(1) { width: 17%; }
+.slide[data-key="desktop-vs-plugin"] .data-table :is(th, td) { padding: 2.2cqh 1.6cqw; border: 0; vertical-align: middle; }
+.slide[data-key="desktop-vs-plugin"] .data-table td { background: var(--craft-surface-muted); white-space: nowrap; }
+.slide[data-key="desktop-vs-plugin"] .data-table th {
+  font: 600 1.8cqw/1.2 var(--font-display);
+  background: #f0d6b8; color: var(--craft-text);
+}
+.slide[data-key="desktop-vs-plugin"] .data-table td:first-child {
+  background: none; padding-left: .2cqw;
+  font: 700 1.95cqw/1.2 var(--font-display); color: var(--craft-text);
+}
+.slide[data-key="desktop-vs-plugin"] .data-table th:first-child { background: none; padding-left: .2cqw; color: var(--craft-muted); }
+.slide[data-key="desktop-vs-plugin"] .data-table tbody tr { border: 0; }
+
+/* Агенты: развилка. Классификатор слева, две форензики в середине, скрипт справа.
+   Сборщик данных — пунктирная врезка над классификатором. */
+.s-agents .flow-node { gap: 1cqh; padding: 3cqh 1.4cqw; background: var(--craft-surface); }
+.s-agents .flow-node > strong { font-size: 2.4cqw; }
+.s-agents .agents-model { font: 700 2.3cqw/1.1 var(--font-display); color: var(--craft-accent); }
+.s-agents .flow-node small { font: 400 1.7cqw/1.35 var(--font-text); color: var(--craft-muted); }
+.s-agents .agents-fork {
+  display: grid;
+  grid-template-columns: 1fr 6cqw 1fr 6cqw 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 0; row-gap: 0;
+  align-content: center; align-self: stretch; width: 100%;
+  padding-top: 12cqh;
+}
+.s-agents .agents-fork > .agents-start { grid-row: 1 / 3; grid-column: 1; align-self: center; position: relative; }
+.s-agents .agents-fork > .agents-forensics--android { grid-row: 1; grid-column: 3; margin: 1.2cqh 0; align-self: center; }
+.s-agents .agents-fork > .agents-forensics--ios { grid-row: 2; grid-column: 3; margin: 1.2cqh 0; align-self: center; }
+.s-agents .agents-fork > .agents-script { grid-row: 1 / 3; grid-column: 5; align-self: center; }
+.s-agents .agents-fetcher {
+  position: absolute; left: 0; right: 0; bottom: calc(100% + 4cqh);
+  display: grid; gap: .6cqh; justify-items: center; text-align: center;
+  padding: 1.8cqh 1.4cqw;
+  border: var(--rule-strong, 2px) dashed var(--craft-muted);
+  color: var(--craft-text-body);
+}
+.s-agents .agents-fetcher strong { font: 600 1.7cqw/1.2 var(--font-display); }
+.s-agents .agents-fetcher span { font: 400 1.45cqw/1.3 var(--font-text); color: var(--craft-muted); }
+.s-agents .agents-fetcher b {
+  position: absolute; left: calc(50% - .45cqw); top: 100%;
+  width: .9cqw; height: 4cqh;
+  background: var(--craft-muted);
+  clip-path: polygon(40% 0, 60% 0, 60% calc(100% - .8cqw), 100% calc(100% - .8cqw), 50% 100%, 0 calc(100% - .8cqw), 40% calc(100% - .8cqw));
+}
+.s-agents .agents-link { grid-row: 1 / 3; position: relative; }
+.s-agents .agents-link--fork { grid-column: 2; }
+.s-agents .agents-link--join { grid-column: 4; }
+.s-agents .agents-link i, .s-agents .agents-link b { position: absolute; background: var(--craft-muted); }
+.s-agents .agents-link--fork i:nth-child(1) { left: 0; width: 50%; top: calc(50% - .12cqw); height: .24cqw; }
+.s-agents .agents-link--fork i:nth-child(2) { left: calc(50% - .12cqw); width: .24cqw; top: 25%; height: 50%; }
+.s-agents .agents-link--fork i:nth-child(3) { display: none; }
+.s-agents .agents-link--fork b { left: 50%; right: .9cqw; height: .24cqw; }
+.s-agents .agents-link--fork b:nth-of-type(1) { top: calc(25% - .12cqw); }
+.s-agents .agents-link--fork b:nth-of-type(2) { top: calc(75% - .12cqw); }
+.s-agents .agents-link--fork b::after,
+.s-agents .agents-link--join b::after {
+  content: ""; position: absolute; right: -.9cqw; top: calc(50% - .55cqw);
+  width: .9cqw; height: 1.1cqw;
+  background: var(--craft-muted);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.s-agents .agents-link--join i:nth-child(1) { left: 0; width: 50%; top: calc(25% - .12cqw); height: .24cqw; }
+.s-agents .agents-link--join i:nth-child(2) { left: 0; width: 50%; top: calc(75% - .12cqw); height: .24cqw; }
+.s-agents .agents-link--join i:nth-child(3) { left: calc(50% - .12cqw); width: .24cqw; top: 25%; height: 50%; }
+.s-agents .agents-link--join b { left: 50%; right: .9cqw; top: calc(50% - .12cqw); height: .24cqw; }
+
+/* Окна кода: тёмный терминал темы (движок даёт форму окна и перенос строк). */
+.code-window { border-radius: .8cqw; background: #1a0a10; box-shadow: 0 0 0 1px #1a0a10; display: grid; grid-template-rows: auto 1fr; min-height: 0; }
+.code-window-bar { background: #2e1820; color: #f3dfe2; }
+.code-window-bar i { background: #ff5f57; }
+.code-window-bar i:nth-child(2) { background: #ffd400; }
+.code-window-bar i:nth-child(3) { background: #28c840; }
+.code-window .code { margin: 0; color: #f3dfe2; background: transparent; }
+
+/* Два отчёта: пара окон, Detailed шире. Ключи отчёта — жёлтым (язык report),
+   значения светлые. Полный текст: кегль — максимум, что влезает. */
+.s-reports .code-windows--pair { flex: 1; min-height: 0; grid-template-columns: 1.8fr 1fr; gap: 1.4cqw; align-items: stretch; }
+.s-reports .pad { padding-bottom: calc(var(--pad-y) + 7cqh); }
+.s-reports .code-window .code { padding: 1.4cqh 1.1cqw; overflow: hidden; }
+.s-reports .code-window .code-line { min-height: 0; padding-top: 0; padding-bottom: 0; line-height: inherit; }
+.s-reports .report--detailed .code { font-size: .74cqw; line-height: 1.17; }
+.s-reports .report--brief .code { font-size: .86cqw; line-height: 1.2; }
+.s-reports .code [class^="hljs-"] { color: #f3dfe2; font-weight: 400; }
+.s-reports .code .hljs-attr { color: #ffd400; font-weight: 700; }
+
+/* Скрипты: подписи метрик читаемые. */
+.slide[data-key="crash-gate"] .scoreboard .k { font-size: 1.9cqw; line-height: 1.35; }
+
+/* Ценник: перфорация поверх обеих панелей. Колонки на общей сетке:
+   подпись, цена, пункты на одних уровнях; три пункта справа равноправны.
+   Зачёркивание старой цены появляется вместе с новой. */
+.slide.s-pricetag.s-comparison::after { z-index: 3; }
+.s-pricetag .comparison-side { justify-content: flex-start; padding-top: 24cqh; }
+.s-pricetag .comparison-label { font-size: 2.1cqw; }
+.s-pricetag .comparison-value { --metric-size: 8cqw; line-height: 1; padding-block: .4cqw; }
+.s-pricetag .comparison-points { font-size: 2.5cqw; }
+.s-pricetag .comparison-side .comparison-points.plain-list { --row-pad: 1.9cqh; --marker-size: .65cqw; }
+.s-pricetag .comparison-points > li { align-items: start; }
+.s-pricetag .comparison-points > li::before { margin-top: calc((1.3em - var(--marker-size)) / 2); }
+.s-pricetag .is-before .comparison-value s { text-decoration: none; }
+.s-pricetag:not(:has(.is-after.frag:not([data-shown]))) .is-before .comparison-value s { text-decoration: line-through currentColor .45cqw; }
+
+/* «11» в «Цена 11.11» зачёркнуто от руки, сверху приписано «10». */
+.date-fix { position: relative; display: inline-block; }
+.date-fix__old::before { content: "11"; }
+.date-fix__strike { position: absolute; left: -6%; top: 22%; width: 112%; height: 60%; overflow: visible; }
+.date-fix__strike path { fill: none; stroke: #ffd400; stroke-width: .35cqw; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.date-fix__ink {
+  position: absolute; left: 4%; bottom: 78%;
+  font: 700 1.25em/1 "Caveat", cursive;
+  color: #ffd400;
+  transform: rotate(-9deg);
+  white-space: nowrap;
+}
+
+/* Ревью: агенты и минусы. */
+.slide[data-key="review-agents"] .bullets { --row-pad: 1.3cqh; }
+.slide[data-key="review-agents"] .bullets li h3 { font-size: 2.6cqw; margin-bottom: .3cqh; }
+.slide[data-key="review-agents"] .bullets li small { font-size: 1.85cqw; line-height: 1.3; }
+.slide[data-key="review-agents"] .type-note { font-size: 1.85cqw; margin-top: 1cqh; color: var(--craft-text-body); }
+.slide[data-key="review-cons"] .bullets { --row-pad: 2cqh; }
+.slide[data-key="review-cons"] .bullets li h3 { font-size: 2.4cqw; }
+.slide[data-key="review-cons"] .bullets li small { font-size: 1.75cqw; }
+
+/* Находки: три карточки на всю высоту области. */
+.plain-list.finds { grid-template-columns: repeat(3, 1fr); gap: 2.4cqw; align-items: stretch; }
+.plain-list.finds > li { display: block; padding: 7cqh 2.2cqw; border: var(--rule) solid var(--craft-line-strong); background: var(--craft-surface); }
+.plain-list.finds > li::before { display: none; }
+.plain-list.finds h3 { font: 700 2.7cqw/1.15 var(--font-display); letter-spacing: -.02em; white-space: nowrap; margin: 0 0 3.6cqh; color: var(--craft-text); }
+.plain-list.finds p { font: 400 2.8cqw/1.4 var(--font-text); margin: 0; color: var(--craft-text-body); }
+
+/* Цикл ревью: три шага на три колонки, приписка под ними. */
+.slide[data-key="review-cycle"] .steps { flex: 0 0 auto; grid-template-columns: repeat(3, 1fr); }
+.slide[data-key="review-cycle"] .steps .n { font-size: 3.2cqw; }
+.slide[data-key="review-cycle"] .steps h3 { font-size: 2.5cqw; }
+.slide[data-key="review-cycle"] .steps p { font-size: 1.95cqw; }
+.slide[data-key="review-cycle"] .type-note { font-size: 2cqw; color: var(--craft-text-body); margin-top: 4cqh; }
+
+/* Подключение: окна команд, QR на репу справа с полным адресом. */
+.s-plugins .plugins-grid { flex: 1; min-height: 0; align-self: stretch; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4cqw; align-items: center; }
+.s-plugins .code-window .code { padding: 2.4cqh 1.6cqw; font-size: 1.5cqw; line-height: 1.6; }
+.s-plugins .code-window .code-line::before { content: "❯ "; color: #ffd400; }
+.s-plugins .plugins-qr { display: grid; justify-items: center; }
+.s-plugins .qr-link { justify-items: center; }
+.s-plugins .qr { width: 17cqw; }
+.s-plugins .where { font-size: 1.5cqw; text-align: center; max-width: 24cqw; }
+
+/* Выводы: пять пунктов — крупно и с воздухом. */
+.slide[data-key="takeaways"] .bullets { --row-pad: 2cqh; }
+.slide[data-key="takeaways"] .bullets li h3 { font-size: 2.6cqw; margin: 0; }
+.slide[data-key="takeaways"] .bullets > li { align-items: center; }
+
+/* Harold: без имени, QR по центру свободного места справа. */
+.s-harold .harold-side { flex: 1; justify-items: center; align-self: stretch; align-content: center; }
+.s-harold .qr { width: 20cqw; }
+.s-harold .qr-link { justify-items: center; }
+.s-harold .where { font-size: 1.8cqw; }
