@@ -495,9 +495,9 @@
                 </span>
             </a>
             <a href="#combined-review">Combined Review
-                <span data-lang="en" class="active">4 review agents + CodeRabbit in one pass</span>
-                <span data-lang="uk">4 агенти рев'ю + CodeRabbit за один прохід</span>
-                <span data-lang="ru">4 агента ревью + CodeRabbit за один проход</span>
+                <span data-lang="en" class="active">5 review agents + CodeRabbit in one pass</span>
+                <span data-lang="uk">5 агентів рев'ю + CodeRabbit за один прохід</span>
+                <span data-lang="ru">5 агентов ревью + CodeRabbit за один проход</span>
                 <span class="toc-meta">
                     <span class="tag tag-stable" data-lang="en">Production</span>
                     <span class="tag tag-stable" data-lang="uk">Продакшн</span>
@@ -786,9 +786,9 @@ Fix         : cancel the collection job in onDestroyView (patch below)</pre>
                 <span class="tag tag-target" data-plugin="combined-review" data-lang="ru">Claude Code + Codex</span>
             </div>
 
-            <p class="plugin-desc active" data-lang="en">One command, four specialised reviewers in parallel, plus CodeRabbit CLI — findings merged, scored and de-duplicated instead of arriving as four separate walls of text.</p>
-            <p class="plugin-desc" data-lang="uk">Одна команда, чотири спеціалізовані рев'юери паралельно плюс CodeRabbit CLI — знахідки зводяться, оцінюються й дедуплікуються, а не падають чотирма окремими стінами тексту.</p>
-            <p class="plugin-desc" data-lang="ru">Одна команда, четыре специализированных ревьюера параллельно плюс CodeRabbit CLI — находки сводятся, оцениваются и дедуплицируются, а не падают четырьмя отдельными стенами текста.</p>
+            <p class="plugin-desc active" data-lang="en">One command, five specialised reviewers in parallel, plus CodeRabbit CLI — findings merged, filtered and de-duplicated instead of arriving as five separate walls of text.</p>
+            <p class="plugin-desc" data-lang="uk">Одна команда, п'ять спеціалізованих рев'юерів паралельно плюс CodeRabbit CLI — знахідки зводяться, фільтруються й дедуплікуються, а не падають п'ятьма окремими стінами тексту.</p>
+            <p class="plugin-desc" data-lang="ru">Одна команда, пять специализированных ревьюеров параллельно плюс CodeRabbit CLI — находки сводятся, фильтруются и дедуплицируются, а не падают пятью отдельными стенами текста.</p>
 
             <p class="sub-label active" data-lang="en">Agents</p>
             <p class="sub-label" data-lang="uk">Агенти</p>
@@ -799,9 +799,10 @@ Fix         : cancel the collection job in onDestroyView (patch below)</pre>
 <span class="o">▸ git-historian</span>            reverted fixes, parallel-work conflicts
 <span class="o">▸ silent-failure-hunter</span>    swallowed errors, empty catch blocks
 <span class="o">▸ test-analyzer</span>            behavioural coverage gaps (criticality ≥ 7)
-<span class="o">▸ coderabbit</span>               CLI pass, auto-installed
+<span class="o">▸ security-reviewer</span>        secrets, injection, authn/authz, storage
+<span class="o">▸ coderabbit</span>               CLI pass, installed on consent, off by config
 
-confidence scoring 0–100 · low-confidence findings filtered out</pre>
+scope map · evidence rule · falsifiability gate on every Critical</pre>
             <!-- screenshot slot: drop res/plugins/combined-review.png in place, then uncomment
             <img class="shot" src="res/plugins/combined-review.png" alt="Combined review output" loading="lazy">
             -->
