@@ -1,13 +1,13 @@
 {
   "name": "kolesa-ai-meetup-2026",
   "title": "Читать логи и MR? А агенты зачем?",
-  "built": "2026-11-04T20:45:40+00:00",
+  "built": "2026-11-05T14:23:40+00:00",
   "craft": "1.0.0",
   "source": {
     "commit": null,
     "dirty": null
   },
-  "pages": 60,
+  "pages": null,
   "files": {
     "base.css": {
       "bytes": 17623,
@@ -18,8 +18,8 @@
       "sha256": "454112f359a8d3afee6b794b2baa00efb618a02cbe58727ce7a614d9dc14f25f"
     },
     "deck-theme.css": {
-      "bytes": 27457,
-      "sha256": "1c116242ac031bd6d5468e914e26ed6d965fee23697c02fb703d38863e12b40b"
+      "bytes": 41347,
+      "sha256": "96ed3d13a2e682ce026356e421f1e995fa3f6155d8f5729545aea8eb89bb7254"
     },
     "deck.js": {
       "bytes": 38036,
@@ -62,16 +62,16 @@
       "sha256": "d7f07f8a308ce0a7287d79a65a85cfbc0f4741ef426bf1a3902d24392cc71723"
     },
     "index.html": {
-      "bytes": 39352,
-      "sha256": "37d73a27ff456fd5748dc87cdc5ccf08598b1e8bf78f142848619f706fdc5381"
+      "bytes": 48547,
+      "sha256": "258e36e1556bd985cc87b821f473c0e2f62fb995bef2ad0057f2f50ab88a068d"
     },
     "media/crashlytics-issue.png": {
       "bytes": 388415,
       "sha256": "eb563129d2066c2a85b8fd5ea34e6154e539a78218a5a45488a30bc16f5147fb"
     },
     "media/crashlytics-overview.png": {
-      "bytes": 651889,
-      "sha256": "9f93dacff77bc90f00a0dd2c8d38d2d0b3895e7f092488a8ad162d65c692769f"
+      "bytes": 649996,
+      "sha256": "ea395dc36dada41785775b0b62acc5c59eb4e7892b26ece2293c0e78f14c4c91"
     },
     "media/harold.webp": {
       "bytes": 95562,
@@ -106,8 +106,8 @@
       "sha256": "96fbe52e896b769810a6be98ae69d0dedab8af0a76527047ead08ad79208a635"
     },
     "slides.css": {
-      "bytes": 68636,
-      "sha256": "1fe20adaf36f98a9a66dfe0b963b1060c47af45443bd262902d112d30da883ea"
+      "bytes": 70434,
+      "sha256": "aacf07a92d3504a802e3801e74597210c9f7e8fd0e12a41089981ebe3946610d"
     },
     "tokens.css": {
       "bytes": 11524,
