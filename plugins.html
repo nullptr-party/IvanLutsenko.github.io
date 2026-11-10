@@ -11,14 +11,14 @@
             document.documentElement.dataset.lang = ['en', 'uk', 'ru'].indexOf(l) < 0 ? 'en' : l;
         })();
     </script>
-    <meta name="description" content="AWAC AI Agent Plugins — ten plugins for Claude Code and Codex CLI: Crashlytics crash forensics, multi-agent code review, Obsidian project tracking, vertical clip maker and more.">
+    <meta name="description" content="AWAC AI Agent Plugins — 11 plugins for Claude Code and Codex CLI: Crashlytics crash forensics, multi-agent code review, Obsidian project tracking, vertical clip maker and more.">
     <meta name="keywords" content="Claude Code plugins, Codex CLI plugins, Crashlytics, code review agents, Obsidian tracker, MCP, Ivan Lutsenko">
     <meta name="author" content="Ivan Lutsenko">
     <link rel="canonical" href="https://ivan.nullptr.party/plugins.html">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="AWAC AI Agent Plugins — Claude Code &amp; Codex CLI">
-    <meta property="og:description" content="Ten plugins for Claude Code and Codex CLI: crash forensics, multi-agent code review, project tracking, clip making.">
+    <meta property="og:description" content="11 plugins for Claude Code and Codex CLI: crash forensics, multi-agent code review, project tracking, clip making.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ivan.nullptr.party/plugins.html">
     <meta property="og:image" content="https://ivan.nullptr.party/res/1000094492.jpg">
@@ -28,7 +28,7 @@
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="AWAC AI Agent Plugins — Claude Code &amp; Codex CLI">
-    <meta name="twitter:description" content="Ten plugins for Claude Code and Codex CLI: crash forensics, multi-agent code review, project tracking, clip making.">
+    <meta name="twitter:description" content="11 plugins for Claude Code and Codex CLI: crash forensics, multi-agent code review, project tracking, clip making.">
     <meta name="twitter:image" content="https://ivan.nullptr.party/res/1000094492.jpg">
 
     <title>AWAC AI Agent Plugins — Ivan Lutsenko</title>
@@ -130,14 +130,15 @@
             transition: var(--transition);
             font-size: 0.85rem;
             letter-spacing: 0.5px;
-            min-height: 40px;
+            min-width: 44px;
+            min-height: 44px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
         }
 
-        .lang-btn:hover { background-color: rgba(253, 246, 227, 0.15); transform: translateY(-1px); }
-        .lang-btn.active { background-color: rgba(253, 246, 227, 0.25); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+        .lang-btn:hover:not(.active) { background-color: rgba(253, 246, 227, 0.15); transform: translateY(-1px); }
+        .lang-btn.active { background-color: var(--text-light); color: var(--dark-green); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
 
         /* Hero */
         header.hero {
@@ -180,7 +181,7 @@
             background: var(--bg-light);
             color: var(--dark-green);
             padding: 0.7rem 1.6rem;
-            border-radius: 999px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
             box-shadow: var(--shadow-sm);
@@ -189,6 +190,13 @@
         }
 
         .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+        nav a:focus-visible,
+        nav button:focus-visible {
+            outline: 3px solid var(--text-light);
+            outline-offset: 3px;
+            border-radius: 6px;
+        }
 
         .btn-ghost {
             background: transparent;
@@ -390,6 +398,8 @@
             header.hero { padding: 6rem 1.2rem 3rem; }
             section { padding: 2.5rem 1.2rem; }
             .plugin { padding: 1.3rem; }
+            /* Commands people copy must be readable whole; the aligned demos keep scrolling */
+            #install pre, #contributing pre { white-space: pre-wrap; overflow-wrap: anywhere; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -426,41 +436,41 @@
     </nav>
 
     <header class="hero">
-        <h1>🧩 AWAC AI Agent Plugins</h1>
+        <h1>AWAC AI Agent Plugins</h1>
 
-        <p data-lang="en" class="active">Ten plugins I use daily as an Android Tech Lead — crash forensics, multi-agent code review, project tracking, plugin porting, clip making. Most of them are dual-target: the same plugin runs in Claude Code and in Codex CLI.</p>
-        <p data-lang="uk">Десять плагінів, якими я користуюсь щодня як Android Tech Lead — форензика крашів, мультиагентний код-рев'ю, трекінг проєктів, портування плагінів, нарізка кліпів. Більшість із них dual-target: той самий плагін працює і в Claude Code, і в Codex CLI.</p>
-        <p data-lang="ru">Десять плагинов, которыми я пользуюсь каждый день как Android Tech Lead — форензика крашей, мультиагентный код-ревью, трекинг проектов, портирование плагинов, нарезка клипов. Большинство из них dual-target: один и тот же плагин работает и в Claude Code, и в Codex CLI.</p>
+        <p data-lang="en" class="active">11 plugins I use daily as an Android Tech Lead — crash forensics, multi-agent code review, project tracking, plugin porting, clip making. Most of them are dual-target: the same plugin runs in Claude Code and in Codex CLI.</p>
+        <p data-lang="uk">11 плагінів, якими я користуюсь щодня як Android Tech Lead — форензика крашів, мультиагентний код-рев'ю, трекінг проєктів, портування плагінів, нарізка кліпів. Більшість із них dual-target: той самий плагін працює і в Claude Code, і в Codex CLI.</p>
+        <p data-lang="ru">11 плагинов, которыми я пользуюсь каждый день как Android Tech Lead — форензика крашей, мультиагентный код-ревью, трекинг проектов, портирование плагинов, нарезка клипов. Большинство из них dual-target: один и тот же плагин работает и в Claude Code, и в Codex CLI.</p>
 
         <div class="hero-badges active" data-lang="en">
-            <span>10 plugins</span>
+            <span>11 plugins</span>
             <span>Claude Code + Codex CLI</span>
             <span>Sub-agents · Hooks · MCP servers</span>
             <span>MIT</span>
         </div>
         <div class="hero-badges" data-lang="uk">
-            <span>10 плагінів</span>
+            <span>11 плагінів</span>
             <span>Claude Code + Codex CLI</span>
             <span>Субагенти · Хуки · MCP-сервери</span>
             <span>MIT</span>
         </div>
         <div class="hero-badges" data-lang="ru">
-            <span>10 плагинов</span>
+            <span>11 плагинов</span>
             <span>Claude Code + Codex CLI</span>
             <span>Субагенты · Хуки · MCP-серверы</span>
             <span>MIT</span>
         </div>
 
         <p>
-            <a class="btn" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">
-                <span data-lang="en" class="active">View on GitHub</span>
-                <span data-lang="uk">Дивитись на GitHub</span>
-                <span data-lang="ru">Смотреть на GitHub</span>
-            </a>
-            <a class="btn btn-ghost" href="#install">
+            <a class="btn" href="#install">
                 <span data-lang="en" class="active">Install</span>
                 <span data-lang="uk">Встановлення</span>
                 <span data-lang="ru">Установка</span>
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" target="_blank" rel="noopener">
+                <span data-lang="en" class="active">View on GitHub</span>
+                <span data-lang="uk">Дивитись на GitHub</span>
+                <span data-lang="ru">Смотреть на GitHub</span>
             </a>
         </p>
     </header>
@@ -614,7 +624,7 @@
                     <span class="tag tag-beta" data-lang="en">Beta</span>
                     <span class="tag tag-beta" data-lang="uk">Бета</span>
                     <span class="tag tag-beta" data-lang="ru">Бета</span>
-                    <span class="tag tag-ver" data-plugin="talk-deck">v0.3.0</span>
+                    <span class="tag tag-ver" data-plugin="talk-deck">v0.5.0</span>
                     <span class="tag tag-target" data-plugin="talk-deck" data-lang="en">Claude Code + Codex</span>
                     <span class="tag tag-target" data-plugin="talk-deck" data-lang="uk">Claude Code + Codex</span>
                     <span class="tag tag-target" data-plugin="talk-deck" data-lang="ru">Claude Code + Codex</span>
@@ -662,7 +672,7 @@ $ <span class="k">codex plugin add</span> combined-review@awac-ai-agent-plugins
 $ <span class="k">codex plugin marketplace list</span>   <span class="c"># marketplaces and their roots</span>
 $ <span class="k">codex plugin list</span>                <span class="c"># plugins and install status</span></pre>
 
-            <p class="active" style="margin-top:1rem;color:#52616b;font-size:0.92rem;" data-lang="en">Claude Code commands are converted into Codex skills under <code class="inline">skills/generated-from-commands/</code>, agents into <code class="inline">skills/generated-from-agents/</code>. The exceptions are <em>Locale Notifications</em>, <em>Nyan Progress</em> and <em>Push Gate</em> — Claude Code only. The old repository slug <code class="inline">awac-claude-code-plugins</code> still works for existing installations.</p>
+            <p class="note active" data-lang="en">Claude Code commands are converted into Codex skills under <code class="inline">skills/generated-from-commands/</code>, agents into <code class="inline">skills/generated-from-agents/</code>. The exceptions are <em>Locale Notifications</em>, <em>Nyan Progress</em> and <em>Push Gate</em> — Claude Code only. The old repository slug <code class="inline">awac-claude-code-plugins</code> still works for existing installations.</p>
             <p class="note" data-lang="uk">Команди Claude Code конвертуються в скіли Codex у <code class="inline">skills/generated-from-commands/</code>, агенти — у <code class="inline">skills/generated-from-agents/</code>. Винятки — <em>Locale Notifications</em>, <em>Nyan Progress</em> і <em>Push Gate</em>, лише для Claude Code. Старий слаг репозиторію <code class="inline">awac-claude-code-plugins</code> досі працює для наявних інсталяцій.</p>
             <p class="note" data-lang="ru">Команды Claude Code конвертируются в скилы Codex в <code class="inline">skills/generated-from-commands/</code>, агенты — в <code class="inline">skills/generated-from-agents/</code>. Исключения — <em>Locale Notifications</em>, <em>Nyan Progress</em> и <em>Push Gate</em>, только для Claude Code. Старый слаг репозитория <code class="inline">awac-claude-code-plugins</code> по-прежнему работает для уже установленных копий.</p>
         </div>
@@ -702,9 +712,9 @@ $ <span class="k">codex plugin list</span>                <span class="c"># plug
             <p class="sub-label" data-lang="uk">Пайплайн</p>
             <p class="sub-label" data-lang="ru">Пайплайн</p>
 
-            <p class="active" data-lang="en">Four steps, each its own sub-agent, ending in a deterministic quality gate — the report is rejected if the forensics section is missing or the fix is not code-level.</p>
-            <p data-lang="uk">Чотири кроки, кожен — окремий субагент, наприкінці детермінований quality gate: звіт відхиляється, якщо немає секції форензики або фікс не на рівні коду.</p>
-            <p data-lang="ru">Четыре шага, каждый — отдельный субагент, в конце детерминированный quality gate: отчёт отклоняется, если нет секции форензики или фикс не на уровне кода.</p>
+            <p class="active" data-lang="en">Four steps: three sub-agents, then a deterministic script as the quality gate — the report is rejected if the forensics section is missing or the fix is not code-level.</p>
+            <p data-lang="uk">Чотири кроки: три субагенти, наприкінці детермінований скрипт як quality gate — звіт відхиляється, якщо немає секції форензики або фікс не на рівні коду.</p>
+            <p data-lang="ru">Четыре шага: три субагента, в конце детерминированный скрипт как quality gate — отчёт отклоняется, если нет секции форензики или фикс не на уровне кода.</p>
 
 <pre><span class="p">&gt;</span> <span class="k">/crash-report</span> ca8f7f21e3b4...
 
@@ -856,9 +866,9 @@ scope map · evidence rule · falsifiability gate on every Critical</pre>
                 <span class="tag tag-target" data-plugin="obsidian-tracker" data-lang="ru">Claude Code + Codex</span>
             </div>
 
-            <p class="plugin-desc active" data-lang="en">Makes an Obsidian vault the single source of truth for what you are working on: projects, a kanban board, bugs, architecture decision records and session logs. Hooks record sessions, actions and commits on their own — the tracking survives <code class="inline">/compact</code>.</p>
-            <p class="plugin-desc" data-lang="uk">Робить сховище Obsidian єдиним джерелом правди про те, над чим ви працюєте: проєкти, канбан-дошка, баги, записи архітектурних рішень і логи сесій. Хуки самі фіксують сесії, дії та коміти — трекінг переживає <code class="inline">/compact</code>.</p>
-            <p class="plugin-desc" data-lang="ru">Делает хранилище Obsidian единственным источником правды о том, над чем вы работаете: проекты, канбан-доска, баги, записи архитектурных решений и логи сессий. Хуки сами фиксируют сессии, действия и коммиты — трекинг переживает <code class="inline">/compact</code>.</p>
+            <p class="plugin-desc active" data-lang="en">Makes an Obsidian vault the single source of truth for what you are working on: projects, a kanban board, bugs, architecture decision records and session logs. Hooks record sessions, actions and commits on their own — the tracking survives <code class="inline">/compact</code>. The auto-tracking hooks are Claude Code only.</p>
+            <p class="plugin-desc" data-lang="uk">Робить сховище Obsidian єдиним джерелом правди про те, над чим ви працюєте: проєкти, канбан-дошка, баги, записи архітектурних рішень і логи сесій. Хуки самі фіксують сесії, дії та коміти — трекінг переживає <code class="inline">/compact</code>. Хуки автотрекінгу працюють лише в Claude Code.</p>
+            <p class="plugin-desc" data-lang="ru">Делает хранилище Obsidian единственным источником правды о том, над чем вы работаете: проекты, канбан-доска, баги, записи архитектурных решений и логи сессий. Хуки сами фиксируют сессии, действия и коммиты — трекинг переживает <code class="inline">/compact</code>. Хуки автотрекинга работают только в Claude Code.</p>
 
             <p class="sub-label active" data-lang="en">A session</p>
             <p class="sub-label" data-lang="uk">Сесія</p>
@@ -955,14 +965,14 @@ session saved: 41 min, 12 actions, 2 commits, 1 decision</pre>
 <pre><span class="c"># one-shot conversion, interactively</span>
 <span class="p">&gt;</span> Convert plugins/obsidian-tracker to Codex
 
-<span class="c"># deterministic marketplace reconciliation</span>
-$ <span class="k">cross_port.py</span> marketplace attach --source claude-code
-$ <span class="k">cross_port.py</span> marketplace sync
-$ <span class="k">cross_port.py</span> marketplace check
+<span class="c"># deterministic marketplace reconciliation, from the clone root</span>
+$ <span class="k">python3 plugins/plugin-cross-port/scripts/cross_port.py</span> marketplace attach --source claude-code
+$ <span class="k">python3 plugins/plugin-cross-port/scripts/cross_port.py</span> marketplace sync
+$ <span class="k">python3 plugins/plugin-cross-port/scripts/cross_port.py</span> marketplace check
 
 <span class="c"># semantic adaptations: plan first, then apply atomically</span>
-$ <span class="k">cross_port.py</span> plugin adapt plugins/example
-$ <span class="k">cross_port.py</span> plugin adapt plugins/example --apply</pre>
+$ <span class="k">python3 plugins/plugin-cross-port/scripts/cross_port.py</span> plugin adapt plugins/example
+$ <span class="k">python3 plugins/plugin-cross-port/scripts/cross_port.py</span> plugin adapt plugins/example --apply</pre>
             <!-- screenshot slot: drop res/plugins/plugin-cross-port.png in place, then uncomment
             <img class="shot" src="res/plugins/plugin-cross-port.png" alt="Cross-port marketplace check" loading="lazy">
             -->
@@ -1011,9 +1021,9 @@ $ <span class="k">cross_port.py</span> plugin adapt plugins/example --apply</pre
                 <span class="tag tag-target" data-plugin="push-gate" data-lang="ru">Только Claude Code</span>
             </div>
 
-            <p class="plugin-desc active" data-lang="en">Asks before every git push the model runs, in Claude Code's own question dialog: a click confirms that one command, anything else refuses it. Built as a mod with function hooks, so prefix tricks like git -C &lt;path&gt; push do not slip past it.</p>
-            <p class="plugin-desc" data-lang="uk">Питає перед кожним git push, який запускає модель, у власному діалозі питань Claude Code: клік підтверджує саме цю команду, будь-що інше її відхиляє. Зроблено як мод на function hooks, тож префіксні трюки на кшталт git -C &lt;path&gt; push повз нього не проходять.</p>
-            <p class="plugin-desc" data-lang="ru">Спрашивает перед каждым git push, который запускает модель, в собственном диалоге вопросов Claude Code: клик подтверждает именно эту команду, всё остальное её отклоняет. Сделано как мод на function hooks, поэтому префиксные трюки вроде git -C &lt;path&gt; push мимо него не проходят.</p>
+            <p class="plugin-desc active" data-lang="en">Asks before every git push the model runs, in Claude Code's own question dialog: a click confirms that one command, anything else refuses it. Built as a mod with function hooks, so prefix tricks like git -C &lt;path&gt; push do not slip past it. It is not a wall: a push from a script file, a git hook, an API call or another agent never reaches it. Requires Claude Code 2.1.308+ with function hooks.</p>
+            <p class="plugin-desc" data-lang="uk">Питає перед кожним git push, який запускає модель, у власному діалозі питань Claude Code: клік підтверджує саме цю команду, будь-що інше її відхиляє. Зроблено як мод на function hooks, тож префіксні трюки на кшталт git -C &lt;path&gt; push повз нього не проходять. Це не стіна: пуш із файлу скрипта, git-хука, виклику API чи іншого агента мод не бачить. Потрібен Claude Code 2.1.308+ із function hooks.</p>
+            <p class="plugin-desc" data-lang="ru">Спрашивает перед каждым git push, который запускает модель, в собственном диалоге вопросов Claude Code: клик подтверждает именно эту команду, всё остальное её отклоняет. Сделано как мод на function hooks, поэтому префиксные трюки вроде git -C &lt;path&gt; push мимо него не проходят. Это не стена: пуш из файла скрипта, git-хука, вызова API или другого агента мод не видит. Нужен Claude Code 2.1.308+ с function hooks.</p>
 
 <pre><span class="p">&gt;</span> git -C ~/repo push origin main
 
@@ -1036,9 +1046,9 @@ $ <span class="k">cross_port.py</span> plugin adapt plugins/example --apply</pre
                 <span class="tag tag-target" data-plugin="auto-theme" data-lang="ru">Claude Code + Codex</span>
             </div>
 
-            <p class="plugin-desc active" data-lang="en">Your terminal agent follows macOS appearance. Switch the system to dark and the next prompt is already dark — in Claude Code <em>and</em> in Codex. Bundles two custom themes: <code class="inline">gruvbox-light</code> and <code class="inline">sunset-drive</code>.</p>
-            <p class="plugin-desc" data-lang="uk">Ваш термінальний агент слідує за оформленням macOS. Перемкнули систему в темну — наступний промпт уже темний, і в Claude Code, <em>і</em> в Codex. У комплекті дві власні теми: <code class="inline">gruvbox-light</code> і <code class="inline">sunset-drive</code>.</p>
-            <p class="plugin-desc" data-lang="ru">Ваш терминальный агент следует за оформлением macOS. Переключили систему в тёмную — следующий промпт уже тёмный, и в Claude Code, <em>и</em> в Codex. В комплекте две свои темы: <code class="inline">gruvbox-light</code> и <code class="inline">sunset-drive</code>.</p>
+            <p class="plugin-desc active" data-lang="en">Your terminal agent follows macOS appearance. Switch the system to dark and the next prompt is already dark — in Claude Code <em>and</em> in Codex. In Codex the hook is registered once by hand, see the plugin README. Bundles two custom themes: <code class="inline">gruvbox-light</code> and <code class="inline">sunset-drive</code>.</p>
+            <p class="plugin-desc" data-lang="uk">Ваш термінальний агент слідує за оформленням macOS. Перемкнули систему в темну — наступний промпт уже темний, і в Claude Code, <em>і</em> в Codex. У Codex хук один раз реєструється вручну, див. README плагіна. У комплекті дві власні теми: <code class="inline">gruvbox-light</code> і <code class="inline">sunset-drive</code>.</p>
+            <p class="plugin-desc" data-lang="ru">Ваш терминальный агент следует за оформлением macOS. Переключили систему в тёмную — следующий промпт уже тёмный, и в Claude Code, <em>и</em> в Codex. В Codex хук один раз регистрируется вручную, см. README плагина. В комплекте две свои темы: <code class="inline">gruvbox-light</code> и <code class="inline">sunset-drive</code>.</p>
 
             <p class="sub-label active" data-lang="en">How it works</p>
             <p class="sub-label" data-lang="uk">Як працює</p>
@@ -1152,9 +1162,9 @@ $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"
                     <span data-lang="ru">История последних 200 промптов питает <code class="inline">/redraw</code></span>
                 </li>
                 <li>
-                    <span data-lang="en" class="active">macOS only in 0.1.1</span>
-                    <span data-lang="uk">У 0.1.1 лише macOS</span>
-                    <span data-lang="ru">В 0.1.1 только macOS</span>
+                    <span data-lang="en" class="active">macOS only</span>
+                    <span data-lang="uk">Лише macOS</span>
+                    <span data-lang="ru">Только macOS</span>
                 </li>
             </ul>
         </article>
@@ -1197,15 +1207,15 @@ $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"
                 <span class="tag tag-beta active" data-lang="en">Beta</span>
                 <span class="tag tag-beta" data-lang="uk">Бета</span>
                 <span class="tag tag-beta" data-lang="ru">Бета</span>
-                <span class="tag tag-ver" data-plugin="talk-deck">v0.3.0</span>
+                <span class="tag tag-ver" data-plugin="talk-deck">v0.5.0</span>
                 <span class="tag tag-target active" data-plugin="talk-deck" data-lang="en">Claude Code + Codex</span>
                 <span class="tag tag-target" data-plugin="talk-deck" data-lang="uk">Claude Code + Codex</span>
                 <span class="tag tag-target" data-plugin="talk-deck" data-lang="ru">Claude Code + Codex</span>
             </div>
 
-            <p class="plugin-desc active" data-lang="en">Talk decks on top of the Craft skill: a fresh holiday theme for every talk, the author's defaults, a themed Harold on the closing slide, a PDF for organizers and a card on the author's site. A static check runs after every edit inside a deck.</p>
-            <p class="plugin-desc" data-lang="uk">Деки доповідей поверх скіла Craft: нова святкова тема на кожну доповідь, дефолти автора, тематичний Гарольд на фінальному слайді, PDF для організаторів і картка на сайті автора. Після кожної правки в деку запускається статична перевірка.</p>
-            <p class="plugin-desc" data-lang="ru">Деки докладов поверх скилла Craft: свежая праздничная тема на каждый доклад, дефолты автора, тематический Гарольд на финальном слайде, PDF для организаторов и карточка на сайте автора. После каждой правки в деке запускается статическая проверка.</p>
+            <p class="plugin-desc active" data-lang="en">Talk decks on top of the Craft skill: a fresh holiday theme for every talk, the author's defaults, a themed Harold on the closing slide, a PDF for organizers and a card on the author's site. In Claude Code a static check runs after every edit inside a deck; in Codex the command skills run the checks themselves.</p>
+            <p class="plugin-desc" data-lang="uk">Деки доповідей поверх скіла Craft: нова святкова тема на кожну доповідь, дефолти автора, тематичний Гарольд на фінальному слайді, PDF для організаторів і картка на сайті автора. У Claude Code після кожної правки в деку запускається статична перевірка; у Codex перевірки запускають самі скіли команд.</p>
+            <p class="plugin-desc" data-lang="ru">Деки докладов поверх скилла Craft: свежая праздничная тема на каждый доклад, дефолты автора, тематический Гарольд на финальном слайде, PDF для организаторов и карточка на сайте автора. В Claude Code после каждой правки в деке запускается статическая проверка; в Codex проверки запускают сами скиллы команд.</p>
 
 <pre><span class="p">&gt;</span> <span class="k">/deck-new</span> CI/CD in a bank --date 2026-12-20
 <span class="p">&gt;</span> <span class="k">/deck-harold</span> place     <span class="c"># Harold onto the closing slide</span>
@@ -1235,17 +1245,18 @@ $ <span class="k">defaults read</span> -g AppleLocale            <span class="c"
         </article>
     </section>
 
-    <section class="band">
+    <section class="band" id="contributing">
         <div class="band-inner">
             <h2 data-lang="en" class="active">Contributing &amp; local development</h2>
             <h2 data-lang="uk">Контриб'ют і локальна розробка</h2>
             <h2 data-lang="ru">Контрибьют и локальная разработка</h2>
 
-            <p class="section-lead active" data-lang="en">After cloning, enable the git hooks — they run the plugin tests before every push.</p>
-            <p class="section-lead" data-lang="uk">Після клонування увімкніть git-хуки — вони ганяють тести плагінів перед кожним пушем.</p>
-            <p class="section-lead" data-lang="ru">После клонирования включите git-хуки — они гоняют тесты плагинов перед каждым пушем.</p>
+            <p class="section-lead active" data-lang="en">After cloning, enable the git hooks: pre-commit regenerates the Codex targets of the plugins you changed, pre-push runs the obsidian-tracker tests when that plugin is in the push.</p>
+            <p class="section-lead" data-lang="uk">Після клонування увімкніть git-хуки: pre-commit перегенеровує Codex-цілі змінених плагінів, pre-push ганяє тести obsidian-tracker, коли цей плагін є в пуші.</p>
+            <p class="section-lead" data-lang="ru">После клонирования включите git-хуки: pre-commit перегенерирует Codex-цели изменённых плагинов, pre-push гоняет тесты obsidian-tracker, когда этот плагин есть в пуше.</p>
 
 <pre>$ <span class="k">git clone</span> https://github.com/IvanLutsenko/awac-ai-agent-plugins
+$ <span class="k">cd</span> awac-ai-agent-plugins
 $ <span class="k">git config</span> core.hooksPath .githooks</pre>
 
             <p class="note">

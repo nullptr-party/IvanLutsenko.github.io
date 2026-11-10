@@ -230,6 +230,11 @@
             color: var(--text-light);
         }
 
+        /* Out of the flex flow on both layouts, so it adds no gap slot to the menu */
+        .close-menu-item {
+            display: none;
+        }
+
         /* Mobile Controls Container */
         .mobile-controls {
             display: none; /* Hidden on desktop */
@@ -275,19 +280,21 @@
             transition: var(--transition);
             font-size: 0.9rem;
             letter-spacing: 0.5px;
+            min-width: 44px;
             min-height: 44px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
         }
 
-        .lang-btn:hover {
+        .lang-btn:hover:not(.active) {
             background-color: rgba(253, 246, 227, 0.15);
             transform: translateY(-1px);
         }
 
         .lang-btn.active {
-            background-color: rgba(253, 246, 227, 0.25);
+            background-color: var(--text-light);
+            color: var(--dark-green);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -552,6 +559,8 @@
             transition: var(--transition);
             position: relative;
             flex: 0 1 340px;
+            display: flex;
+            flex-direction: column;
         }
 
         .video-card:hover {
@@ -668,6 +677,16 @@
 
         .video-info {
             padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* The visible language block carries the text and the buttons */
+        .video-info > [data-lang] {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .video-title {
@@ -682,7 +701,12 @@
         }
 
         .video-info .resource-buttons {
-            margin-top: 1rem;
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+
+        .video-info .download-btn {
+            flex: 1 1 100%;
         }
 
         /* Plugins Section */
@@ -712,7 +736,7 @@
             background: var(--card-surface);
             border: 1px solid var(--card-border);
             border-radius: 999px;
-            padding: 0.3rem 0.9rem;
+            padding: 0.55rem 0.9rem;
             font-size: 0.88rem;
             color: var(--accent-green);
             font-weight: 600;
@@ -820,14 +844,16 @@
         }
 
         @media (max-width: 768px) {
-            /* The mobile navbar is two rows (~102px), so the desktop 80px offset
-               dropped anchor targets underneath it */
             html {
-                scroll-padding-top: 110px;
+                scroll-padding-top: 84px; /* mobile navbar is ~70px */
             }
 
             nav {
-                padding: 1rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .nav-brand {
+                font-size: 1.15rem;
             }
 
             .mobile-controls {
@@ -857,11 +883,15 @@
                 display: flex; /* Show nav menu when mobile-open class is present */
             }
 
-            .close-menu {
-                display: block; /* Show close button when mobile menu is open */
+            .close-menu-item {
+                display: block;
                 position: absolute;
                 top: 1rem;
                 right: 1rem;
+            }
+
+            .close-menu {
+                display: block; /* Show close button when mobile menu is open */
             }
 
             .close-menu svg {
@@ -870,7 +900,8 @@
                 color: var(--text-light);
             }
 
-            nav a {
+            /* Menu links only — the brand is a nav a too */
+            nav ul a {
                 font-size: 1.25rem;
                 padding: 1rem 2rem;
             }
@@ -914,7 +945,8 @@
                 display: block;
                 text-align: center;
             }
-            #about .profile-container { margin-bottom: 2rem; }
+            #about .profile-container { margin-bottom: 1.25rem; }
+            #about .profile-image { width: 112px; height: 112px; }
             #about .bio { margin-left: auto; margin-right: auto; }
         }
 
@@ -938,6 +970,12 @@
             outline: 3px solid var(--accent-green);
             outline-offset: 3px;
             border-radius: 6px;
+        }
+
+        /* The green ring disappears on the green navbar */
+        nav a:focus-visible,
+        nav button:focus-visible {
+            outline-color: var(--text-light);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -965,9 +1003,9 @@
     <!-- Navigation -->
     <nav id="navbar">
         <a href="#about" class="nav-brand">
-            <span data-lang="en" class="active">Portfolio</span>
-            <span data-lang="uk">Портфоліо</span>
-            <span data-lang="ru">Портфолио</span>
+            <span data-lang="en" class="active">Ivan Lutsenko</span>
+            <span data-lang="uk">Іван Луценко</span>
+            <span data-lang="ru">Иван Луценко</span>
         </a> <!-- Brand on the left -->
 
         <!-- Mobile controls (language switcher + menu toggle) -->
@@ -978,15 +1016,17 @@
                 <button class="lang-btn" data-lang-switch="uk" aria-pressed="false" aria-label="Switch language to Ukrainian">UK</button>
                 <button class="lang-btn" data-lang-switch="ru" aria-pressed="false" aria-label="Switch language to Russian">RU</button>
             </div>
-            <button class="menu-toggle" id="menuToggle" aria-label="Open menu"> <!-- Menu toggle for mobile -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu"> <!-- Menu toggle for mobile -->
                 <svg><use href="#menu-icon"></use></svg>
             </button>
         </div>
 
         <ul id="navMenu">
-            <button class="close-menu" id="closeMenu" aria-label="Close menu">
-                <svg><use href="#close-icon"></use></svg>
-            </button>
+            <li class="close-menu-item">
+                <button class="close-menu" id="closeMenu" aria-label="Close menu">
+                    <svg><use href="#close-icon"></use></svg>
+                </button>
+            </li>
             <li>
                 <a href="#about">
                     <span data-lang="en" class="active">About</span>
@@ -1072,24 +1112,24 @@
     <!-- Plugins Section -->
     <section id="plugins">
         <!-- English Title -->
-        <h2 data-lang="en" class="active">🧩 AI Agent Plugins</h2>
+        <h2 data-lang="en" class="active">AI Agent Plugins</h2>
         <!-- Ukrainian Title -->
-        <h2 data-lang="uk">🧩 Плагіни для AI-агентів</h2>
+        <h2 data-lang="uk">Плагіни для AI-агентів</h2>
         <!-- Russian Title -->
-        <h2 data-lang="ru">🧩 Плагины для AI-агентов</h2>
+        <h2 data-lang="ru">Плагины для AI-агентов</h2>
 
         <div class="plugins-feature">
             <!-- English -->
             <div data-lang="en" class="active">
-                <p class="plugins-lead">AWAC — a marketplace of ten plugins I built for Claude Code and Codex CLI and use every day: Crashlytics crash forensics with git blame, multi-agent code review, an Obsidian-backed project tracker, a vertical-video clip maker. Most of them are dual-target — the same plugin runs in both CLIs. Open source, MIT.</p>
+                <p class="plugins-lead">AWAC — a marketplace of 11 plugins I built for Claude Code and Codex CLI and use every day: Crashlytics crash forensics with git blame, multi-agent code review, an Obsidian-backed project tracker, a vertical-video clip maker. Most of them are dual-target — the same plugin runs in both CLIs. Open source, MIT.</p>
             </div>
             <!-- Ukrainian -->
             <div data-lang="uk">
-                <p class="plugins-lead">AWAC — маркетплейс із десяти плагінів, які я написав для Claude Code і Codex CLI та використовую щодня: форензика крашів Crashlytics із git blame, мультиагентний код-рев'ю, трекер проєктів на Obsidian, нарізач вертикальних відео. Більшість dual-target — той самий плагін працює в обох CLI. Відкритий код, MIT.</p>
+                <p class="plugins-lead">AWAC — маркетплейс із 11 плагінів, які я написав для Claude Code і Codex CLI та використовую щодня: форензика крашів Crashlytics із git blame, мультиагентний код-рев'ю, трекер проєктів на Obsidian, нарізач вертикальних відео. Більшість dual-target — той самий плагін працює в обох CLI. Відкритий код, MIT.</p>
             </div>
             <!-- Russian -->
             <div data-lang="ru">
-                <p class="plugins-lead">AWAC — маркетплейс из десяти плагинов, которые я написал для Claude Code и Codex CLI и использую каждый день: форензика крашей Crashlytics с git blame, мультиагентный код-ревью, трекер проектов на Obsidian, нарезатель вертикальных видео. Большинство dual-target — один и тот же плагин работает в обоих CLI. Открытый код, MIT.</p>
+                <p class="plugins-lead">AWAC — маркетплейс из 11 плагинов, которые я написал для Claude Code и Codex CLI и использую каждый день: форензика крашей Crashlytics с git blame, мультиагентный код-ревью, трекер проектов на Obsidian, нарезатель вертикальных видео. Большинство dual-target — один и тот же плагин работает в обоих CLI. Открытый код, MIT.</p>
             </div>
 
             <ul class="plugin-chips">
@@ -1101,21 +1141,24 @@
                 <li><a href="plugins.html#drawbridge">Drawbridge</a></li>
                 <li><a href="plugins.html#plugin-cross-port">Plugin Cross Port</a></li>
                 <li><a href="plugins.html#clip-maker">Clip Maker</a></li>
+                <li><a href="plugins.html#push-gate">Push Gate</a></li>
+                <li><a href="plugins.html#talk-deck">Talk Deck</a></li>
+                <li><a href="plugins.html#nyan-progress">Nyan Progress</a></li>
             </ul>
 
             <!-- English -->
             <div class="resource-buttons active" data-lang="en">
-                <a href="plugins.html" class="download-btn">Explore all 10 plugins</a>
+                <a href="plugins.html" class="download-btn">Explore all 11 plugins</a>
                 <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">View on GitHub</a>
             </div>
             <!-- Ukrainian -->
             <div class="resource-buttons" data-lang="uk">
-                <a href="plugins.html" class="download-btn">Подивитись усі 10 плагінів</a>
+                <a href="plugins.html" class="download-btn">Подивитись усі 11 плагінів</a>
                 <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">Дивитись на GitHub</a>
             </div>
             <!-- Russian -->
             <div class="resource-buttons" data-lang="ru">
-                <a href="plugins.html" class="download-btn">Посмотреть все 10 плагинов</a>
+                <a href="plugins.html" class="download-btn">Посмотреть все 11 плагинов</a>
                 <a href="https://github.com/IvanLutsenko/awac-ai-agent-plugins" class="download-btn secondary" target="_blank" rel="noopener">Смотреть на GitHub</a>
             </div>
         </div>
@@ -1243,8 +1286,8 @@
                         <h3 class="video-title">CI/CD: A Love Story</h3>
                         <p class="video-description">Getting into Android CI/CD from scratch, the 4-year evolution of CI/CD at a bank, and my take on building a delivery support and control system. For lazy mobile devs, the DevOps who sympathize with them, and anyone shaping the mobile SDLC. Presented at Qazcode Android Meetup.</p>
                         <div class="resource-buttons">
-                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
-                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
+                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">Slides: NY Cyberpunk</a>
+                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Slides: Цаһан Сар</a>
                         </div>
                     </div>
                     <!-- Ukrainian -->
@@ -1252,8 +1295,8 @@
                         <h3 class="video-title">CI/CD: Історія кохання</h3>
                         <p class="video-description">Знайомство з CI/CD в Android з нуля, еволюція CI/CD у банку за 4 роки та моє бачення побудови системи підтримки й контролю доставки. Для лінивих мобільників, співчутливих їм девопсів і всіх, хто вибудовує мобільний SDLC. Виступ на Qazcode Android Meetup.</p>
                         <div class="resource-buttons">
-                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
-                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
+                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">Слайди: NY Cyberpunk</a>
+                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Слайди: Цаһан Сар</a>
                         </div>
                     </div>
                     <!-- Russian -->
@@ -1261,8 +1304,8 @@
                         <h3 class="video-title">CI/CD: История любви</h3>
                         <p class="video-description">Знакомство с CI/CD в Android с нуля, эволюция CI/CD в банке за 4 года и моё видение построения системы поддержки и контроля доставки. Для ленивых мобильщиков, сочувствующих им девопсов и всех, кто выстраивает мобильный SDLC. Выступление на Qazcode Android Meetup.</p>
                         <div class="resource-buttons">
-                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">NY Cyberpunk Edition</a>
-                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Цаһан Сар Edition</a>
+                            <a href="res/ci-cd-lovestory.html" class="download-btn" target="_blank" rel="noopener">Слайды: NY Cyberpunk</a>
+                            <a href="res/ci-cd-lovestory-tsagan-sar.html" class="download-btn secondary" target="_blank" rel="noopener">Слайды: Цаһан Сар</a>
                         </div>
                     </div>
                 </div>
@@ -1421,7 +1464,7 @@
                 </div>
             </a>
 
-            <a href="https://www.tiktok.com/@permaliadastra?_t=ZM-90cLd8TUUA7&_r=1" target="_blank" rel="noopener" class="social-card">
+            <a href="https://www.tiktok.com/@permaliadastra" target="_blank" rel="noopener" class="social-card">
                 <svg><use href="#tiktok-icon"></use></svg>
                 <div class="social-info">
                     <div class="social-name">TikTok</div>
@@ -1437,17 +1480,17 @@
         <!-- English -->
         <div data-lang="en" class="active">
             <p>&copy; 2026 Ivan Lutsenko</p>
-            <p class="footer-note">Crafted with elegance and minimalism — built with Claude Code &amp; Gemini</p>
+            <p class="footer-note">Built with Claude Code &amp; Gemini</p>
         </div>
         <!-- Ukrainian -->
         <div data-lang="uk">
             <p>&copy; 2026 Іван Луценко</p>
-            <p class="footer-note">Створено з елегантністю та мінімалізмом — за допомогою Claude Code та Gemini</p>
+            <p class="footer-note">Зроблено за допомогою Claude Code та Gemini</p>
         </div>
         <!-- Russian -->
         <div data-lang="ru">
             <p>&copy; 2026 Иван Луценко</p>
-            <p class="footer-note">Создано с элегантностью и минимализмом — с помощью Claude Code и Gemini</p>
+            <p class="footer-note">Сделано с помощью Claude Code и Gemini</p>
         </div>
     </footer>
 
@@ -1504,10 +1547,22 @@
 
             menuToggle.addEventListener('click', () => {
                 navMenu.classList.add('mobile-open');
+                menuToggle.setAttribute('aria-expanded', 'true');
                 document.body.style.overflow = 'hidden';
+                closeMenu.focus();
             });
 
-            closeMenu.addEventListener('click', closeMobileMenu);
+            closeMenu.addEventListener('click', () => {
+                closeMobileMenu();
+                menuToggle.focus();
+            });
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && navMenu.classList.contains('mobile-open')) {
+                    closeMobileMenu();
+                    menuToggle.focus();
+                }
+            });
 
             navLinks.forEach(link => {
                 link.addEventListener('click', closeMobileMenu);
@@ -1515,6 +1570,7 @@
 
             function closeMobileMenu() {
                 navMenu.classList.remove('mobile-open');
+                menuToggle.setAttribute('aria-expanded', 'false');
                 document.body.style.overflow = '';
             }
         }

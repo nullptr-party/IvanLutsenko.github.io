@@ -7,7 +7,8 @@ name: sync-plugins
 
 on:
   schedule:
-    - cron: '17 6 * * *'
+    # Ежечасно: GitHub задерживал суточный запуск на 7–10 часов.
+    - cron: '17 * * * *'
   workflow_dispatch:
   push:
     branches: [master]

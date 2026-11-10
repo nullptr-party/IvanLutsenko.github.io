@@ -2,9 +2,10 @@
 """Keep plugins.html in step with the awac-ai-agent-plugins marketplace manifests.
 
 Rewrites the facts that are mechanical (version numbers, Claude Code / Codex target
-tags). Everything else on the page is hand-written prose in three languages, so the
-script does not touch it — it *verifies* it instead and fails loudly when the page
-and the manifests disagree about which plugins exist or how many there are.
+tags, the plugin count written as a digit). Everything else on the page is hand-written
+prose in three languages, so the script does not touch it — it *verifies* it instead and
+fails loudly when the page and the manifests disagree about which plugins exist, or when
+the count is spelled out as a word.
 
 Usage:
     python3 scripts/sync-plugins.py            # fetch manifests from GitHub, rewrite
@@ -34,13 +35,23 @@ TARGET_LABELS = {
     "ru": ("Claude Code + Codex", "Только Claude Code"),
 }
 
-# Word forms of the plugin count that appear in prose and meta tags. The script only
-# checks these — rewriting Russian and Ukrainian numerals is not worth the machinery.
-COUNT_WORDS = {
-    8: ["eight plugins", "Eight plugins", "8 plugins",
-        "восьми плагинов", "восьми плагінів", "Восемь плагинов", "Вісім плагінів",
-        "8 плагинов", "8 плагінів"],
-}
+# The plugin count is written as a digit on the pages ("11 plugins", "11 плагинов",
+# "11 плагінів") so it can be rewritten like a version. A spelled-out numeral next to
+# the noun is a hand edit that would silently go stale, so it fails the run.
+# ponytail: the noun form is not inflected — at 21 ("21 плагин") fix the prose by hand.
+# ponytail: every "<digit> plugins" on these pages is taken for the total; a different
+# number of plugins ("3 plugins use hooks") must be worded another way, see CLAUDE.md.
+_GAP = r"(?: |&nbsp;|\u00a0)"
+_NOUN = r"(?:plugins|плагинов|плагінів)\b"
+COUNT_RE = re.compile(rf"\b\d+(?={_GAP}{_NOUN})", re.IGNORECASE)
+# Numerals 2–20 in the forms that stand before the noun; "." is any apostrophe.
+SPELLED_RE = re.compile(
+    r"\b(?:two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\w+teen|twenty"
+    r"|двух|трёх|трех|четырёх|четырех|пять|пяти|шесть|шести|семь|семи|восемь|восьми"
+    r"|девять|девяти|десять|десяти|\w+надцать|\w+надцати|двадцать|двадцати"
+    r"|двох|трьох|чотирьох|п.ять|п.яти|шість|сім|вісім|дев.ять|дев.яти"
+    r"|\w+надцять|\w+надцяти|двадцять|двадцяти)" + _GAP + _NOUN,
+    re.IGNORECASE)
 
 
 def load_manifests(local: str | None) -> tuple[dict, dict]:
@@ -93,6 +104,15 @@ def rewrite(html: str, facts: dict[str, dict]) -> tuple[str, list[str]]:
         r' data-lang="(?P<lang>en|uk|ru)">(?P<body>[^<]*)</span>',
         target_sub, html)
 
+    want_count = str(len(facts))
+
+    def count_sub(m):
+        if m.group(0) != want_count:
+            changes.append(f"число плагинов {m.group(0)} -> {want_count}")
+        return want_count
+
+    html = COUNT_RE.sub(count_sub, html)
+
     return html, changes
 
 
@@ -112,16 +132,10 @@ def verify(html: str, path: Path, facts: dict[str, dict]) -> list[str]:
                 f"{path.name}: на странице есть, в манифесте нет: {', '.join(extra)} "
                 f"— плагин удалён или переименован")
 
-    expected = len(facts)
-    for count, words in COUNT_WORDS.items():
-        if count == expected:
-            continue
-        for w in words:
-            if w in html:
-                problems.append(
-                    f"{path.name}: текст говорит про {count} плагинов ({w!r}), "
-                    f"а в манифесте их {expected}")
-                break
+    for m in SPELLED_RE.finditer(html):
+        problems.append(
+            f"{path.name}: число плагинов написано словом ({m.group(0)!r}) — "
+            f"замените на цифру, иначе оно не синхронизируется")
     return problems
 
 
