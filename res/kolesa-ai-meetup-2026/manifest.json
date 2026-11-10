@@ -1,7 +1,7 @@
 {
   "name": "kolesa-ai-meetup-2026",
   "title": "Читать логи и MR? А агенты зачем?",
-  "built": "2026-11-05T14:23:40+00:00",
+  "built": "2026-11-10T07:09:20+00:00",
   "craft": "1.0.0",
   "source": {
     "commit": null,
@@ -62,8 +62,8 @@
       "sha256": "d7f07f8a308ce0a7287d79a65a85cfbc0f4741ef426bf1a3902d24392cc71723"
     },
     "index.html": {
-      "bytes": 48547,
-      "sha256": "258e36e1556bd985cc87b821f473c0e2f62fb995bef2ad0057f2f50ab88a068d"
+      "bytes": 48614,
+      "sha256": "e8b6b9f55c53fd4e5f10d12746f189df2f398e2cb2b0f4e7cbe724ba54398a60"
     },
     "media/crashlytics-issue.png": {
       "bytes": 388415,
@@ -100,6 +100,10 @@
     "media.js": {
       "bytes": 13613,
       "sha256": "2571c68ab8fb762833615c8b03730d9117f77556ec2203ea56c67d22178b739f"
+    },
+    "rehearsal.js": {
+      "bytes": 9107,
+      "sha256": "bd0c0b13f1dcd083a7d9991f556b34cebd25881d7da6891a1a51034128fd4f55"
     },
     "report-lang.js": {
       "bytes": 538,
